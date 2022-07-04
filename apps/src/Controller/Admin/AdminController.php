@@ -16,7 +16,6 @@ class AdminController extends AppController
         $this->modelName = Inflector::camelize($this->name);
         // Viewに渡す
         $this->set('ModelName', $this->modelName);
-        $this->Auth->deny(['index', 'logout']);
     }
 
 

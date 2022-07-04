@@ -85,7 +85,7 @@ class AppController extends Controller
 
         if ($prefix === 'admin') {
             $this->auth_storage_key = 'Auth.Admin';
-            $this->viewBuilder()->setLayout('default');
+            $this->viewBuilder()->setLayout('common');
         } else {
 
             $this->viewBuilder()->setLayout('simple');
