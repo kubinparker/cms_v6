@@ -275,7 +275,7 @@ return [
              */
             'username' => 'root',
             'password' => 'root',
-            'database' => 'cms_v6_',
+            'database' => 'cms_v6',
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */
