@@ -1,0 +1,277 @@
+/* List */
+#list {
+	height:500px;
+	overflow:auto;
+}
+#list_body {
+	width:780px;
+	margin:20px auto;
+}
+#list_body th {
+	text-align:center;
+	border-bottom:1px solid #ccc;
+}
+div.unread {
+	color:#f00;
+}
+div.accept {
+	color:#000;
+}
+div.sended {
+	color:#888;
+}
+div.cancel {
+	color:#ccc;
+}
+.list1 {
+	border-right:1px dotted #ccc;
+	border-bottom:1px solid #ccc;
+	padding:3px auto;
+	text-align:center;
+}
+.list2 {
+	border-right:1px dotted #ccc;
+	border-bottom:1px solid #ccc;
+	padding:3px auto 3px 5px;
+	text-align:left;
+}
+.list3 {
+	border-bottom:1px solid #ccc;
+	padding:3px auto;
+	text-align:center;
+}
+.list2 a, .list2 a:visited {
+	text-decoration:underline;
+	font-weight:bold;
+	color:#27739F;
+}
+.list2 a:hover {
+	text-decoration:underline;
+	font-weight:bold;
+	color:#D22912;
+}
+.list_foot {padding-top:10px;}
+.list_foot span {
+	font-weight:bold;
+	color:#27739F;
+}
+.visi, .unvisi {
+	width:63px;
+}
+.visi a, .unvisi a {
+	display:block;
+	text-align:center;
+	line-height:25px;
+	color:#ffffff;
+	text-decoration:none;
+}
+.visi {background:url(/admin/common/images/visi.png) no-repeat;}
+.unvisi {background:url(/admin/common/images/unvisi.png) no-repeat;}
+.unvisible {background-color:#ccc;}
+
+/* ボタンきりかえ */
+
+.btn_today a,
+.btn_netshop a{
+	width: 70px;
+	height: 25px;
+	text-indent:-9999px; line-height:0; text-decoration:none; font-size:0; display:block; cursor:pointer;}
+
+.btn_today .visi,
+.btn_today .unvisi,
+.btn_netshop .visi,
+.btn_netshop .unvisi {
+	width: 70px;
+	height: 25px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.btn_today .visi{background:url(/admin/common/images/btn1.png) no-repeat;}
+.btn_today .unvisi{background:url(/admin/common/images/btn1b.png) no-repeat;}
+.btn_netshop .visi{background:url(/admin/common/images/btn2.png) no-repeat;}
+.btn_netshop .unvisi{background:url(/admin/common/images/btn2b.png) no-repeat;}
+
+/* //ボタンきりかえ */
+
+
+.prev {
+	display:block;
+	margin:2px;
+	font-size:0;
+	text-indent:-9999px;
+}
+.prev a {
+	display:block;
+	width:22px;
+	height:22px;
+	text-decoration:none;
+	background:url(/admin/common/images/prev.gif) no-repeat;
+}
+.prev a:hover {background-position:0 -22px;}
+.prev a:active {background-position:0 -44px;}
+
+.ctr {
+	padding:5px 0;
+}
+.ctr ul {
+	display:block;
+	list-style-type:none;
+}
+.ctr ul li {
+	display:inline;
+}
+ul.ctrlis {
+	display:block;
+	width:105px;
+	margin:0 auto;
+	list-style-type:none;
+}
+ul.ctrlis li {
+	display:block;
+	margin:2px;
+	float:left;
+	font-size:0;
+	text-indent:-9999px;
+}
+ul.ctrlis li a, ul.ctrlis li.non {
+	display:block;
+	width:22px;
+	height:22px;
+	text-decoration:none;
+}
+.cttop a, .ctup a, .ctdown a, .ctend a {
+	background:url(/admin/common/images/ctr.gif) no-repeat;
+}
+.ctup a {background-position:-22px 0;}
+.ctdown a {background-position:-44px 0;}
+.ctend a {background-position:-66px 0;}
+
+.cttop a:hover {background-position:0 -22px;}
+.ctup a:hover {background-position:-22px -22px;}
+.ctdown a:hover {background-position:-44px -22px;}
+.ctend a:hover {background-position:-66px -22px;}
+
+.cttop a:active {background-position:0 -44px;}
+.ctup a:active {background-position:-22px -44px;}
+.ctdown a:active {background-position:-44px -44px;}
+.ctend a:active {background-position:-66px -44px;}
+
+
+/**** edit ****/
+div.detailToolber {width:70%;}
+#tag {position:relative; text-align:left;}
+#palette {position:relative; text-align:left; width:600px;}
+#palette1 {
+	display:none;
+	width:150px;
+	position:absolute;
+	overflow:visible;
+	top:0px;
+	left:220px;
+}
+#tag ul {
+	display:block;
+	width:310px;
+	height:23px;
+	float:left;
+	position:relative;
+}
+#tag li {
+	display:block;
+	width:31px;
+	height:23px;
+	float:left;
+	font-size:0;
+	text-indent:-9999px;
+}
+#tag li a, #tag li a:hover, #tag li a:visited {
+	display:block;
+	width:31px;
+	height:23px;
+}
+#tag1, #tag2, #tag3, #tag4, #tag5, #tag6, #tag7, #tag8, #tag9, #tag10 {background:url(/admin/common/images/tag.gif) no-repeat;}
+#tag1 a:hover, #tag2 a:hover, #tag3 a:hover, #tag4 a:hover, #tag5 a:hover,
+#tag6 a:hover, #tag7 a:hover, #tag8 a:hover, #tag9 a:hover, #tag10 a:hover {
+	background:url(/admin/common/images/tag_o.gif) no-repeat;
+}
+#tag1, #tag1 a:hover {background-position:0 0;}
+#tag2, #tag2 a:hover {background-position:-31px 0;}
+#tag3, #tag3 a:hover {background-position:-62px 0;}
+#tag4, #tag4 a:hover {background-position:-93px 0;}
+#tag5, #tag5 a:hover {background-position:-124px 0;}
+#tag6, #tag6 a:hover {background-position:-155px 0;}
+#tag7, #tag7 a:hover {background-position:-186px 0;}
+#tag8, #tag8 a:hover {background-position:-217px 0;}
+#tag9, #tag9 a:hover {background-position:-248px 0;}
+#tag10, #tag10 a:hover {background-position:-279px 0;}
+
+#tag strong {
+	display:block;
+	line-height:23px;
+	font-size:11px;
+	font-weight:normal;
+}
+.tag strong {
+	display:block;
+	line-height:23px;
+	font-size:11px;
+	font-weight:normal;
+}
+
+.tag {position:relative; text-align:left;}
+.tag ul {
+	display:block;
+	width:310px;
+	height:23px;
+	float:left;
+	position:relative;
+}
+.tag li {
+	display:block;
+	width:31px;
+	height:23px;
+	float:left;
+	font-size:0;
+	text-indent:-9999px;
+}
+.tag li a, .tag li a:hover, .tag li a:visited {
+	display:block;
+	width:31px;
+	height:23px;
+}
+
+.tag1, .tag2, .tag3, .tag4, .tag5, .tag6, .tag7, .tag8, .tag9, .tag10, .tag11, .tag12 {background:url(/admin/common/images/tag.gif) no-repeat;}
+.tag1 a:hover, .tag2 a:hover, .tag3 a:hover, .tag4 a:hover, .tag5 a:hover,
+.tag6 a:hover, .tag7 a:hover, .tag8 a:hover, .tag9 a:hover, .tag10 a:hover,
+.tag11 a:hover,.tag12 a:hover{
+	background:url(/admin/common/images/tag_o.gif) no-repeat;
+}
+.tag1, .tag1 a:hover {background-position:0 0;}
+.tag2, .tag2 a:hover {background-position:-31px 0;}
+.tag3, .tag3 a:hover {background-position:-62px 0;}
+.tag4, .tag4 a:hover {background-position:-93px 0;}
+.tag5, .tag5 a:hover {background-position:-124px 0;}
+.tag6, .tag6 a:hover {background-position:-155px 0;}
+.tag7, .tag7 a:hover {background-position:-186px 0;}
+.tag8, .tag8 a:hover {background-position:-217px 0;}
+.tag9, .tag9 a:hover {background-position:-248px 0;}
+.tag10, .tag10 a:hover {background-position:-279px 0;}
+.tag11, .tag11 a:hover {background-position:-310px 0;}
+.tag12, .tag12 a:hover {background-position:-341px 0;}
+
+.tag strong {
+	display:block;
+	line-height:23px;
+	font-size:11px;
+	font-weight:normal;
+}
+
+.error-message {
+	color:#e00;
+}
+span.attent {
+	color: #FF0000;
+	padding-top: 3px;
+	padding-left: 10px;
+}
