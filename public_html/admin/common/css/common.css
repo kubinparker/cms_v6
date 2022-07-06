@@ -1,14 +1,7 @@
 @charset "utf-8";
-/* ===================================================================
-	common.css
-=================================================================== */
 
-/*----------------------------------------------------
-	共通
-----------------------------------------------------*/
 html {
 	font-size: 14px;
-	/*10px*/
 }
 
 body,
@@ -36,26 +29,12 @@ a:hover,
 a:hover img {
 	color: #404d63;
 	text-decoration: underline;
-	/*
-	filter: alpha(opacity=80);
-	-ms-filter: "alpha(opacity=80)";
-	opacity: .80;
-*/
 }
 
 a:hover {
 	text-decoration: none;
 }
 
-a:hover,
-a:hover img,
-.img_hover:hover {
-	/*
-	filter: alpha(opacity=80);
-	-ms-filter: "alpha(opacity=80)";
-	opacity: .80;
-*/
-}
 
 a {
 	outline: none;
@@ -95,7 +74,6 @@ select {
 	box-sizing: border-box;
 }
 
-/* clearfix (micro) */
 .clearfix:before,
 .clearfix:after {
 	content: ' ';
@@ -175,7 +153,6 @@ input[type="checkbox"]:checked+label::after {
 }
 
 #redactor-modal input[type="checkbox"] {
-	/*display: unset!important;*/
 	display: block !important;
 	float: left !important;
 	margin-right: 1rem !important;
@@ -232,9 +209,7 @@ select {
 	vertical-align: middle;
 	font-size: inherit;
 	color: inherit;
-	/*-webkit-appearance: button;*/
 	-moz-appearance: button;
-	/*appearance: button;*/
 
 	padding-top: 7px;
 	padding-bottom: 7px;
@@ -744,12 +719,17 @@ header .status span.username em {
 	height: 10px;
 }
 
-#content .error,
+#content .message.error,
 #flashMessage {
 	padding: 10px 40px;
 	background: #d04543;
 	color: #fff;
 }
+
+/* #content div.error {
+	background: transparent;
+	padding: 0px;
+} */
 
 /* content inner */
 #content .content_inr {
@@ -962,6 +942,7 @@ header .status span.username em {
 }
 
 #content .content_inr .box .form_area table.vertical_table input[type="text"],
+#content .content_inr .box .form_area table.vertical_table input[type="email"],
 #content .content_inr .box .form_area table.vertical_table input[type="password"],
 #content .content_inr .box .form_area table.vertical_table textarea {
 	width: 70%;

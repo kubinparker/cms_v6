@@ -41,9 +41,9 @@ class AdminController extends AppController
         if ($this->request->is('post') || $this->request->is('put')) {
             $this->loadModel('Users');
             $users = $this->Auth->identify();
-            if ($users) $this->Auth->setUser($users);
+            if ($users && $users['status'] == 'publish') $this->Auth->setUser($users);
 
-            if (empty($users) || !$users) {
+            if (empty($users) || !$users || $users['status'] != 'publish') {
                 $this->Flash->set('アカウント名またはパスワードが違います', [
                     'key' => 'login_fail',
                     'element' => 'error'
@@ -63,11 +63,7 @@ class AdminController extends AppController
     {
         parent::setList();
 
-        $list['user_menu_list'] = [
-            'コンテンツ' => []
-        ];
-
-        $list['user_menu_list']['設定'] = [['コンテンツ設定' => '/admin/configs']];
+        $list = [];
 
         if (!empty($list)) $this->set(array_keys($list), $list);
 

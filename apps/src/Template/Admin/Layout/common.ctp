@@ -11,6 +11,7 @@
         "/admin/common/css/normalize",
         "/admin/common/css/font",
         "/admin/common/css/common",
+        "/admin/common/css/cms",
         "/admin/common/css/cms_theme",
         "/admin/common/css/bootstrap.min",
         "/admin/common/css/jquery.datetimepicker",

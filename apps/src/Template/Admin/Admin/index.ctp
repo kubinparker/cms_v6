@@ -23,13 +23,15 @@
 	<?php foreach ($user_menu_list as $title => $menu) : ?>
 		<div class="box">
 			<h3 style="margin-bottom:20px;"><?= html_decode($title); ?></h3>
-			<?php foreach ($menu as $m) : ?>
-				<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
-					<?php foreach ($m as $name => $link) : ?>
-						<a href="<?= $link; ?>" class="btn_send btn_search" style="width:130px;text-align:center;"><?= h($name); ?></a>
-					<?php endforeach; ?>
-				</div>
-			<?php endforeach; ?>
+			<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
+				<?php foreach ($menu as $slug => $name) : ?>
+					<?= $this->Html->link(
+						$name,
+						['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
+						['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
+					); ?>
+				<?php endforeach; ?>
+			</div>
 		</div>
 	<?php endforeach; ?>
 </div>

@@ -19,6 +19,8 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\Core\Configure;
+use App\Model\Entity\User;
+use Cake\Filesystem\File;
 
 /**
  * Application Controller
@@ -175,11 +177,272 @@ class AppController extends Controller
     }
 
 
+    /**
+     * 追加、編集
+     *@param integer $id
+     *@param \ArrayObject $option the options to use for the save operation
+     *@param \ArrayObject $options the options to use for query
+     * */
+    protected function _edit($id = null, $option = [], $options = [])
+    {
+        $option = array_merge(
+            [
+                'conditions' => [],
+                'saveAll' => false,
+                'saveMany' => false,
+                'callback' => null,
+                'redirect' => ['controller' => $this->modelName, 'action' => 'index']
+            ],
+            $option
+        );
+        extract($option);
+
+        $data = $id &&  $this->_detail($id, $conditions, $options) ? $this->_detail($id, $conditions, $options) : $this->{$this->modelName}->newEntity();
+
+        if ($this->request->is(['post', 'put']) && $this->request->getData()) {
+            if ($saveMany) $data = $this->{$this->modelName}->patchEntity($data, $this->request->getData(), ['fields' => $saveMany]);
+            else $data = $this->{$this->modelName}->patchEntity($data, $this->request->getData());
+
+            if (empty($data->getErrors())) {
+                if ($this->{$this->modelName}->save($data)) {
+                    if ($callback) $callback($data);
+
+                    if ($this->request->is('ajax')) {
+                        echo json_encode(['success' => true]);
+                        exit();
+                    }
+                    if ($redirect) $this->redirect($redirect);
+                }
+            } else {
+                $this->set('list_errors', $data->getErrors());
+
+                $this->Flash->set('正しく入力されていない項目があります。', [
+                    'key' => 'post_fail',
+                    'element' => 'error'
+                ]);
+            }
+        }
+        $this->set('data', $data);
+        $this->set('entity', $data);
+        return $data;
+    }
+
+
+    /**
+     * 追加、編集
+     * 
+     *@param integer $id
+     *@param \ArrayObject $cond
+     * */
+    protected function _detail($id = null, $cond = [], $options = [])
+    {
+        $cond = empty($cond) && !is_null($id) ? [$this->modelName . '.id' => $id] : $cond;
+
+        if (empty($cond)) return null;
+
+        $mapper = function ($table, $key, $mapReduce) {
+            if ($table->attaches) $table->attaches = json_decode($table->attaches, true);
+            $mapReduce->emit($table, $key);
+        };
+
+        $reducer = function ($table, $key, $mapReduce) {
+            $mapReduce->emit($table, $key);
+        };
+
+        $options = array_merge(
+            [
+                'conditions' => $cond,
+            ],
+            $options
+        );
+
+        $data = $this->{$this->modelName}
+            ->find('all', $options)
+            ->mapReduce($mapper, $reducer);
+
+        $assoctiation = $this->{$this->modelName}->associations()->keys();
+        if ($assoctiation) $data = $data->contain($assoctiation);
+        $data = $data->first();
+
+        $this->set(compact('data'));
+        $this->set($this->{$this->modelName}->getTable(), $data);
+        return $data;
+    }
+
+
+    /**
+     * 一覧
+     * 
+     * @param \ArrayObject $cond
+     * @param \ArrayObject $options
+     * */
+    protected function _lists($cond = [], $options = [])
+    {
+        $primary_key = $this->{$this->modelName}->getPrimaryKey();
+        $this->paginate = array_merge(
+            [
+                'order' => [$this->modelName . '.' . $primary_key . ' DESC'],
+                'limit' => 10,
+                'paramType' => 'querystring',
+            ],
+            $options
+        );
+
+        $mapper = function ($table, $key, $mapReduce) {
+            if ($table->attaches) $table->attaches = json_decode($table->attaches, true);
+            $mapReduce->emit($table, $key);
+        };
+
+        $reducer = function ($table, $key, $mapReduce) {
+            $mapReduce->emit($table, $key);
+        };
+
+        if ($cond) $options['conditions'] = $cond;
+
+        if ($this->paginate['limit'] === null) {
+            unset(
+                $options['limit'],
+                $options['paramType']
+            );
+
+            $lists = $this->{$this->modelName}
+                ->find('all', $options)
+                ->mapReduce($mapper, $reducer);
+        } else $lists = $this->{$this->modelName}->find('all')->mapReduce($mapper, $reducer);
+
+        $this->set('total_count', $lists->count());
+        $datas = ($this->paginate['limit'] === null) ? $lists->toArray() : $this->paginate($lists, $options);
+        $this->set($this->{$this->modelName}->getTable(), $datas);
+        return $datas;
+    }
+
+
+    /**
+     * 削除
+     * @param integer $id
+     * @param string $type
+     * @param \ArrayObject $options
+     */
+    protected function _delete($id, $type, $columns = null, $options = [])
+    {
+        $option = array_merge(
+            ['redirect' => null],
+            $options
+        );
+        extract($option);
+
+        $data = $this->_detail($id);
+        if ($data && in_array($type, ['image', 'file', 'content'])) {
+            if ($type === 'image' && isset($this->{$this->modelName}->attaches['images'][$columns])) {
+                if (isset($data->attaches[$columns])) {
+                    foreach ($data->attaches[$columns] as $_) {
+                        $str_split = str_split($_);
+                        $str_split[0] = ($str_split[0] === DS) ? '' : DS;
+                        $_file = new File(WWW_ROOT . implode('', $str_split));
+                        if ($_file->exists()) $_file->delete();
+                    }
+                }
+                $data->{$columns} = null;
+                $this->{$this->modelName}->save($data);
+            } else if ($type === 'file' && isset($this->{$this->modelName}->attaches['files'][$columns])) {
+                if (isset($data->attaches[$columns])) {
+                    $str_split = str_split($data->attaches[$columns]);
+                    $str_split[0] = ($str_split[0] === DS) ? '' : DS;
+                    $_file = new File(WWW_ROOT . implode('', $str_split));
+                    if ($_file->exists()) $_file->delete();
+
+                    $data->{$columns} = null;
+                    $data->{$columns . '_name'} = null;
+                    $data->{$columns . '_size'} = null;
+                    $this->{$this->modelName}->save($data);
+                }
+            } else if ($type === 'content') {
+                $image_index = array_keys($this->{$this->modelName}->attaches['images']);
+                $file_index = array_keys($this->{$this->modelName}->attaches['files']);
+
+                $arr_file = array_merge($image_index, $file_index);
+                foreach ($arr_file as $idx) {
+                    if (!isset($data->attaches[$idx])) continue;
+                    $data->attaches[$idx] = !is_array($data->attaches[$idx]) ? [$data->attaches[$idx]] : $data->attaches[$idx];
+
+                    foreach ($data->attaches[$idx] as $_) {
+                        $str_split = str_split($_);
+                        $str_split[0] = ($str_split[0] === DS) ? '' : DS;
+                        $_file = new File(WWW_ROOT . implode('', $str_split));
+                        if ($_file->exists()) $_file->delete();
+                    }
+                }
+                $this->{$this->modelName}->delete($data);
+                $id = null;
+            }
+        }
+
+        if ($redirect !== false) {
+            if (is_null($redirect) || $redirect === true) $redirect = $id ? ['action' => 'edit', $id] : ['action' => 'index'];
+            $this->redirect($redirect);
+        }
+
+        return true;
+    }
+
+
+    /**
+     * 順番並び替え
+     * @param integer $id
+     * @param string $pos
+     * @param \ArrayObject $options
+     * */
+    protected function _position($id, $pos, $options = [])
+    {
+        $options = array_merge([
+            'redirect' => ['action' => 'index', '#' => 'content-' . $id]
+        ], $options);
+        extract($options);
+
+        if ($this->_detail($id)) $this->{$this->modelName}->movePosition($id, $pos);
+
+        if ($redirect)  $this->redirect($redirect);
+    }
+
+
+    /**
+     * 掲載中/下書き トグル
+     * @param integer $id
+     * @param \ArrayObject $options
+     * */
+    protected function _enable($id, $options = [])
+    {
+        $options = array_merge([
+            'redirect' => ['action' => 'index', '#' => 'content-' . $id]
+        ], $options);
+        extract($options);
+
+        if ($data = $this->_detail($id)) {
+            $status = $data->status != 'publish' ? 'publish' : 'draft';
+            $model = $this->{$this->modelName};
+            $model->updateAll([$model->aliasField('status') => $status], [$model->aliasField($model->getPrimaryKey()) => $id]);
+        }
+        if ($redirect) $this->redirect($redirect);
+    }
+
+
     protected function setList()
     {
         $list = [];
 
+        $list['role_list'] = User::$role_list;
         $list['user_site_list'] = [];
+
+        $list['user_menu_list'] = [
+            'コンテンツ' => []
+        ];
+
+        if ($this->isLogin() && in_array($this->Session->read($this->auth_storage_key)['role'], [User::ROLE_DEVELOP, User::ROLE_ADMIN], true)) {
+            $list['user_site_list']['users'] = 'ユーザ管理';
+
+            $list['user_menu_list']['設定']['configs'] = 'コンテンツ設定';
+            $list['user_menu_list']['コンテンツ']['users'] = 'ユーザ管理';
+        }
 
         if (!empty($list)) $this->set(array_keys($list), $list);
         $this->list = $list;

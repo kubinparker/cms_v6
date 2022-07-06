@@ -7,7 +7,7 @@ use App\Controller\AppController;
 use Cake\Utility\Inflector;
 
 
-class ConfigsController extends AppController
+class UsersController extends AppController
 {
 
     public function beforeFilter(Event $event)
@@ -22,14 +22,22 @@ class ConfigsController extends AppController
     public function index()
     {
         $this->setList();
+        parent::_lists([], ['limit' => null]);
+    }
+
+
+    public function edit($id = null)
+    {
+        $this->setList();
+        parent::_edit($id);
     }
 
 
     protected function setList()
     {
         parent::setList();
-        $list = [];
 
+        $list = [];
         if (!empty($list)) $this->set(array_keys($list), $list);
 
         $this->list = $list;
