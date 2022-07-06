@@ -69,3 +69,4 @@
 </body>
 
 </html>
+<?php exit() ?>

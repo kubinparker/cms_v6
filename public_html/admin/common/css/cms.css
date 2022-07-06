@@ -536,3 +536,9 @@ span.attent {
 	padding-top: 3px;
 	padding-left: 10px;
 }
+.management_part +label{
+	user-select: none;
+}
+.checkbox-inline{
+	display: inline-block;
+}

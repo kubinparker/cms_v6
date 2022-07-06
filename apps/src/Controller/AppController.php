@@ -34,6 +34,13 @@ class AppController extends Controller
 {
     public $auth_storage_key = '';
 
+    public $font_config = [
+        ['name' => '新着情報', 'options' => ['一覧', '詳細']],
+        ['name' => 'お問い合わせ', 'options' => ['入力・確認・完了', '保存']]
+    ];
+
+    public $admin_config = [];
+
     /**
      * Initialization hook method.
      *
@@ -95,6 +102,9 @@ class AppController extends Controller
         // 準備
         $this->_prepare();
         $this->getAuthComponent();
+
+        $this->set('font_config', $this->font_config);
+        $this->set('admin_config', $this->admin_config);
     }
 
 
