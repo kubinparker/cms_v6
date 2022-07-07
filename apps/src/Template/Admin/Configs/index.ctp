@@ -48,7 +48,10 @@
 							'label' => ['class' => 'mar_r20'],
 							'hiddenField' => false
 						]);
+						if (isset($config->getErrors()['management_part'])) :
 						?>
+							<div class="error-message"><?= array_values($config->getErrors()['management_part'])[0] ?></div>
+						<?php endif ?>
 					</td>
 				</tr>
 			</table>

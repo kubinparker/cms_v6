@@ -31,10 +31,9 @@ class ConfigsController extends AppController
             $data['management_part'] = !isset($data['management_part']) ? [] : $data['management_part'];
             if ($config->execute($data)) {
             } else {
-                dd($config->getErrors());
+                // dd($config->getErrors('management_part'));
             }
         }
-        // dd($config->getData('management_part'));
         $this->set('config', $config);
     }
 
