@@ -4,6 +4,7 @@ namespace App\Model\Behavior;
 
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
+use Cake\Filesystem\Folder;
 use Cake\ORM\Behavior;
 
 /**
@@ -105,10 +106,10 @@ class MyBehavior extends Behavior
         $path_default_temp = $this->_pathDefaultTemplate();
 
         $this->buildController($path_default_temp['controller']);
-        // $this->buildTemplate($path_default_temp['template']);
+        $this->buildTemplate($path_default_temp['template']);
         // $this->buildModel($path_default_temp['model']);
-        // $this->buildForm($path_default_temp['form']);
-        // $this->buildEmailTemplate($path_default_temp['email']);
+        $this->buildForm($path_default_temp['form']);
+        $this->buildEmailTemplate($path_default_temp['email']);
     }
 
 
@@ -128,11 +129,11 @@ class MyBehavior extends Behavior
             if ($this->font_type == $this::$TYPE_BLOG) {
 
                 $listPath['controller'][] =  DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt');
-                $listPath['template'][] = DEFAULT_FRONT_TEMP . 'template/index.txt';
+                $listPath['template']['index'] = DEFAULT_FRONT_TEMP . 'template/index.txt';
 
                 if ($this->is_detail_page) {
                     $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
-                    $listPath['template'][] = DEFAULT_FRONT_TEMP . 'template/detail.txt';
+                    $listPath['template']['detail'] = DEFAULT_FRONT_TEMP . 'template/detail.txt';
                 }
             } else if ($this->font_type == $this::$TYPE_FORM) {
 
@@ -141,12 +142,17 @@ class MyBehavior extends Behavior
                 else $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index.txt';
 
                 if ($this->is_form_3_step || $this->is_form_3_step_save) {
-                    $listPath['template'][] = DEFAULT_FRONT_TEMP . 'template/form_confirm.txt';
-                    $listPath['template'][] = DEFAULT_FRONT_TEMP . 'template/form_complete.txt';
+                    $listPath['template']['confirm'] = DEFAULT_FRONT_TEMP . 'template/form_confirm.txt';
+                    $listPath['template']['complete'] = DEFAULT_FRONT_TEMP . 'template/form_complete.txt';
                 }
-                $listPath['template'][] = DEFAULT_FRONT_TEMP . 'template/form_index.txt';
+                $listPath['template']['index'] = DEFAULT_FRONT_TEMP . 'template/form_index.txt';
+
                 // template mail
+                $listPath['email'][''] = DEFAULT_FRONT_TEMP . 'mail/user.txt';
+                $listPath['email']['_admin'] = DEFAULT_FRONT_TEMP . 'mail/admin.txt';
+
                 // class form
+                $listPath['form'][] = DEFAULT_FRONT_TEMP . 'form/form.txt';
             }
         }
 
@@ -158,12 +164,31 @@ class MyBehavior extends Behavior
     {
         $slug = ucfirst($this->slug);
         $content = '';
-        foreach ($listPath as $p) $content .= file_get_contents($p, true);
-
+        foreach ($listPath as $p) $content .= __(file_get_contents($p, true), $slug);
         $controller = __(file_get_contents(DEFAULT_FRONT_TEMP . 'controller/common.txt', true), $slug, $content);
-
         $file = APP . 'Controller/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+    }
+
+
+    protected function buildTemplate($listPath)
+    {
+        $slug = ucfirst($this->slug);
+        $folder = APP . 'Template/' . $slug . '/';
+        if (!is_dir($folder)) (new Folder())->create($folder, 0777);
+        foreach ($listPath as $file_name => $path) file_put_contents($folder . $file_name . '.ctp', file_get_contents($path, true));
+    }
+
+
+    protected function buildEmailTemplate($listPath)
+    {
+        foreach ($listPath as $file_name => $path) file_put_contents(APP . 'Template/Email/text/' . $this->slug . $file_name . '.ctp', file_get_contents($path, true));
+    }
+
+
+    protected function buildForm($listPath)
+    {
+        foreach ($listPath as $file_name => $path) file_put_contents(APP . 'Form/' . ucfirst($this->slug) . 'Form.php', file_get_contents($path, true));
     }
 
 

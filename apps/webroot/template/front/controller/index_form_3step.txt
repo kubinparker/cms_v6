@@ -1,7 +1,7 @@
 public function index($is_complete = false)
     &=
         $this->setHeadTitle('お問い合わせ');
-
+        use App\Form\{0}Form;
         $forms = new {0}Form();
         $view = $is_complete ? 'complete' : 'index';
         if ($is_complete) $this->render($view);
@@ -23,4 +23,3 @@ public function index($is_complete = false)
             $this->render($view);
         =&
     =&
-
