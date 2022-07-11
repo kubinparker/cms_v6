@@ -54,6 +54,8 @@ class AppController extends Controller
     {
         parent::initialize();
         $this->loadComponent('Flash');
+        $this->loadComponent('My');
+
         $this->Session = $this->getRequest()->getSession();
         $this->viewBuilder()->setLayout(false);
 

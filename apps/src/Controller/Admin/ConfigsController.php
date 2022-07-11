@@ -30,8 +30,18 @@ class ConfigsController extends AppController
             $data = $this->request->getData();
             $data['management_part'] = !isset($data['management_part']) ? [] : $data['management_part'];
             if ($config->execute($data)) {
+
+                foreach ($data['management_part'] as $pos) {
+                    // front
+                    if (0 === intval($pos)) {
+                        $this->My->setFrontType($data['font_type']);
+                        $this->My->setSlug($data['slug']);
+                        $this->My->createTemplate();
+                    }
+                }
+                dd($data);
             } else {
-                // dd($config->getErrors('management_part'));
+                dd($config->getErrors('management_part'));
             }
         }
         $this->set('config', $config);
