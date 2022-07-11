@@ -1,0 +1,26 @@
+public function index($is_complete = false)
+    &=
+        $this->viewBuilder()->setLayout('default');
+        $this->setHeadTitle('お問い合わせ');
+
+        $forms = new {0}Form();
+        $view = $is_complete ? 'complete' : 'index';
+        if ($is_complete) $this->render($view);
+        else &=
+            $data = null;
+            if ($this->request->is('post')) &=
+                $data = $this->request->getData();
+                $forms->validate($this->request->getData());
+                if (empty($forms->getErrors())) &=
+                    $is_confirm_success = isset($data['is_confirm_success']) && intval($data['is_confirm_success']) == 1;
+                    if ($is_confirm_success == false) $view = 'confirm';
+                    else &=
+                        $forms->execute($data);
+                        $this->redirect(['action' => 'index', 'complete']);
+                    =&
+                =& else $this->set('error', $forms->getErrors());
+            =&
+            $this->set(compact('forms', 'data'));
+            $this->render($view);
+        =&
+    =&

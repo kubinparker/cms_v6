@@ -85,14 +85,14 @@
 					<tr>
 						<td>ページタイトル<span class="attent">※必須</span></td>
 						<td>
-							<?= $this->Form->control('title', ['label' => false, 'label' => false]); ?>
+							<?= $this->Form->control('_title', ['label' => false, 'label' => false]); ?>
 							<span>※100文字以内で入力してください</span>
 						</td>
 					</tr>
 					<tr>
 						<td>Slug<span class="attent">※必須</span></td>
 						<td>
-							<?= $this->Form->control('slug', ['label' => false]); ?>
+							<?= $this->Form->control('_slug', ['label' => false]); ?>
 							<span>※15文字以内で入力してください</span>
 						</td>
 					</tr>
