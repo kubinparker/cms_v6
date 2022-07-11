@@ -1,0 +1,1 @@
+<img src="/admin/common/images/cms/contact_confirm_default.png">

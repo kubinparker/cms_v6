@@ -18,6 +18,7 @@ class {0}Controller extends AppController
         $this->set('ModelName', $this->modelName);
     =&
 
+
     {1}
 =&
 ?>

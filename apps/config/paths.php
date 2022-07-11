@@ -88,3 +88,18 @@ define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'c
  */
 define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
+
+/*
+ * Path to the default FRONT template.
+ */
+define('DEFAULT_FRONT_TEMP', WEBROOT . 'template/front' . DS);
+
+/*
+ * Path to the default ADMIN template.
+ */
+define('DEFAULT_ADMIN_TEMP', WEBROOT . 'template/admin' . DS);
+
+/*
+ * Path to the default ADMIN template.
+ */
+define('TEMPLATE_PATH', APP . 'Template' . DS);

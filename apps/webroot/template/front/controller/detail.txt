@@ -1,0 +1,7 @@
+    public function detail($id = null)
+    &=
+        $cond = [];
+        $options = [];
+        parent::_detail($id, $cond, $options);
+    =&
+

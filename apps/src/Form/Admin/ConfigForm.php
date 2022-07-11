@@ -19,14 +19,12 @@ class ConfigForm extends Form
     {
         $validator
             ->notEmptyString('title', 'ご入力してください')
-            // ->notEmpty('title', 'ご入力してください')
             ->notBlank('title', 'ご入力してください')
             ->minLength('title', 2, '２文字以上でご入力してください')
             ->maxLength('title', 50, '５０文字以上でご入力してください');
 
         $validator
             ->notEmptyString('slug', 'ご入力してください')
-            // ->notEmpty('slug', 'ご入力してください')
             ->notBlank('slug', 'ご入力してください')
             ->minLength('slug', 2, '２文字以上でご入力してください')
             ->maxLength('slug', 15, '１５文字以上でご入力してください');

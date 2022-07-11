@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use Cake\Event\Event;
-use App\Controller\AppController;
+use App\Controller\Admin\AppController;
 use Cake\Utility\Inflector;
 
 

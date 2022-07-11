@@ -1,0 +1,7 @@
+public function index()
+    &=
+        $cond = [];
+        $options = [];
+        parent::_lists($cond, $options);
+    =&
+

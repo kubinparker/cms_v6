@@ -20,7 +20,7 @@
 			'formGroup' => '{{input}}{{label}}',
 			'checkboxWrapper' => '<div class="checkbox checkbox-inline">{{label}}</div>'
 		]); ?>
-		<?= $this->Form->create($config, ['type' => 'file', 'id' => 'frm-form']); ?>
+		<?= $this->Form->create($entity, ['type' => 'file', 'id' => 'frm-form']); ?>
 		<div class="table_area form_area">
 			<table class="vertical_table table__meta">
 				<tr>
@@ -46,11 +46,12 @@
 							'multiple' => 'checkbox',
 							'class' => 'management_part',
 							'label' => ['class' => 'mar_r20'],
-							'hiddenField' => false
+							'hiddenField' => false,
+							'default' => 0
 						]);
-						if (isset($config->getErrors()['management_part'])) :
+						if (isset($entity->getErrors()['management_part'])) :
 						?>
-							<div class="error-message"><?= array_values($config->getErrors()['management_part'])[0] ?></div>
+							<div class="error-message"><?= array_values($entity->getErrors()['management_part'])[0] ?></div>
 						<?php endif ?>
 					</td>
 				</tr>
