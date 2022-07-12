@@ -1,5 +1,5 @@
 <tr>
-    <td>Textarea</td>
+    <td>Textarea <span class="remove_item" onclick="removeItem(this, 'textarea')"></span></td>
     <td>
         <div>
             <textarea rows="4" cols="100"></textarea>

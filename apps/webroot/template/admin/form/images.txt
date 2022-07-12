@@ -1,5 +1,5 @@
 <tr>
-    <td>Image</td>
+    <td>Image <span class="remove_item" onclick="removeItem(this, '_images')"></span></td>
     <td class="edit_image_area">
         <input type="file" accept="image/jpeg,image/png,image/gif">										
         <div class="remark">※jpeg , jpg , gif , png ファイルのみ</div>

@@ -1,5 +1,5 @@
 <tr>
-    <td>Input date</td>
+    <td>Input date <span class="remove_item" onclick="removeItem(this, 'input_date')"></span></td>
     <td>
         <div>
             <input type="date">

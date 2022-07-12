@@ -72,3 +72,23 @@
 .list-box-item li span {
     user-select: none;
 }
+
+.admin_table .remove_item::after {
+    width: 25px;
+    height: 25px;
+    content: 'x';
+    position: absolute;
+    right: 0;
+    color: red;
+    top: 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.admin_table .remove_item {
+    display: inline-block !important;
+}
+
+.admin_table td:nth-of-type(1) {
+    position: relative;
+}

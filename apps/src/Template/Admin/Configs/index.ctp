@@ -83,20 +83,20 @@
 	function renderCkeditor() {
 		DecoupledEditor
 			.create(document.querySelector('#editor'), {
-
-				// 言語　（include ja.js　ファイル）
 				language: 'ja'
 			}).then(editor => {
-				// Toolbarの定義
 				const toolbarContainer = document.querySelector('#toolbar-container');
 				toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-
-				// 更新・登録ボタン
-				// handleSaveButton(editor);
 			})
-			.catch(function(error) {
-				// console.log(error);
-			});
+			.catch(function(error) {});
+	}
+
+
+	function removeItem(e, type) {
+		$(e).parents('tr').remove();
+		var b = $(`li.${type} b`),
+			countB = parseInt(b.text());
+		b.text(countB - 1);
 	}
 
 
@@ -120,6 +120,7 @@
 				$('.list-box-item-content table').append(resp.data);
 				if (type == 'textarea_editor') renderCkeditor();
 				b.text(countB + 1);
+				$(".list-box-item-content").scrollTop($(".list-box-item-content")[0].scrollHeight);
 			}
 		});
 	}
