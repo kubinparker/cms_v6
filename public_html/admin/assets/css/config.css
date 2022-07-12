@@ -24,7 +24,9 @@
 
 .list-box-item li {
     border-bottom: 1px solid #d9e3ed;
-    line-height: 40px;
+    line-height: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .list-box-item.active {
@@ -51,4 +53,22 @@
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.list-box-item li .plus_icon {
+    padding: 0px 8px;
+    cursor: pointer;
+    border: 1px dashed #c7c7c7;
+    position: absolute;
+    right: 0;
+    top: 5px;
+}
+
+
+.list-box-item li {
+    position: relative;
+}
+
+.list-box-item li span {
+    user-select: none;
 }

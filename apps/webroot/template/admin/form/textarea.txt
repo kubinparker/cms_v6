@@ -1,0 +1,9 @@
+<tr>
+    <td>Textarea</td>
+    <td>
+        <div>
+            <textarea rows="4" cols="100"></textarea>
+            {0}
+        </div>						
+    </td>
+</tr>

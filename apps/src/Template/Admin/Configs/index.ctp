@@ -2,6 +2,8 @@
 <?= $this->Html->css([
 	"/admin/assets/css/config.css",
 ]); ?>
+<script src="/admin/common/js/ckeditor.js"></script>
+<script src="/admin/common/js/ja.js"></script>
 <?php $this->end(); ?>
 
 <div class="title_area">
@@ -76,6 +78,52 @@
 			location.href = url;
 		}
 	}
+
+
+	function renderCkeditor() {
+		DecoupledEditor
+			.create(document.querySelector('#editor'), {
+
+				// 言語　（include ja.js　ファイル）
+				language: 'ja'
+			}).then(editor => {
+				// Toolbarの定義
+				const toolbarContainer = document.querySelector('#toolbar-container');
+				toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+
+				// 更新・登録ボタン
+				// handleSaveButton(editor);
+			})
+			.catch(function(error) {
+				// console.log(error);
+			});
+	}
+
+
+	function addItem(e, type) {
+		var $this = $(e),
+			parentLi = $this.parents('li'),
+			b = parentLi.find('b'),
+			countB = parseInt(b.text());
+
+		if (type == 'textarea_editor' && countB >= 1) return false;
+
+		$.ajax({
+			url: '/admin/configs/getItem',
+			type: 'post',
+			data: {
+				'type': type
+			},
+			dataType: 'json',
+			success: function(resp) {
+				if (!resp.success) return false;
+				$('.list-box-item-content table').append(resp.data);
+				if (type == 'textarea_editor') renderCkeditor();
+				b.text(countB + 1);
+			}
+		});
+	}
+
 
 	$(function() {
 		$('.submitButton').on('click', evt => $('#frm-form').submit());

@@ -3,6 +3,7 @@
     <td>
         <div>
             <input type="text">
+            {0}
         </div>						
     </td>
 </tr>
