@@ -167,7 +167,7 @@ class MyBehavior extends Behavior
                 $listPath['form'][] = DEFAULT_FRONT_TEMP . 'form/form.txt';
             }
         }
-        if ($this->is_admin) {
+        if ($this->is_admin && $this->data_item) {
             foreach ($this->data_item as $item) {
                 $listPath['formItem'][] = DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt';
             }
@@ -190,6 +190,7 @@ class MyBehavior extends Behavior
 
     protected function buildTemplate($listPath)
     {
+        if (empty($listPath)) return false;
         $slug = ucfirst($this->slug);
         $folder = APP . 'Template/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
@@ -215,8 +216,10 @@ class MyBehavior extends Behavior
         $content = '';
         foreach ($listPath as $p) $content .= __(file_get_contents($p, true), '');
         $ctp = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'edit.txt', true), $content);
-        $file = APP . 'Template/Admin/' . $slug . '/edit.ctp';
-        file_put_contents($file, $ctp);
+        $folder = APP . 'Template/Admin/' . $slug . '/';
+        if (!is_dir($folder)) (new Folder())->create($folder, 0777);
+        $file = $folder. 'edit.ctp';
+        file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $ctp));
     }
 
 
