@@ -2,7 +2,7 @@
     <td>Textarea editor <span class="remove_item" onclick="removeItem(this, 'textarea_editor')"></span></td>
     <td>
         <div id="toolbar-container"></div>
-        <div id="editor" style="border: 1px solid #ccc !important;"><?= '' ?></div>
+        <div id="editor" style="border: 1px solid #ccc !important;"><?= "" ?></div>
         <textarea style="display:none;" id="event-content"></textarea>
         {0}
     </td>

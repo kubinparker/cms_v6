@@ -36,6 +36,8 @@ class MyBehavior extends Behavior
     public $is_list_page = false;
     public $is_detail_page = false;
 
+    public $data_item = [];
+
 
     public function setSlug($slug)
     {
@@ -84,6 +86,11 @@ class MyBehavior extends Behavior
         $this->is_form_3_step_save = $bool;
     }
 
+    public function setDataFormItem($data_item)
+    {
+        $this->data_item = $data_item;
+    }
+
 
     protected function __setConfig(EntityInterface $entity)
     {
@@ -98,11 +105,14 @@ class MyBehavior extends Behavior
 
         $this->setIsForm3Step($entity->font_type_options_1 && in_array(strval($this::$FORM_3_STEP), $entity->font_type_options_1, true));
         $this->setIsForm3StepSave($entity->font_type_options_1 && in_array(strval($this::$FORM_3_STEP_SAVE), $entity->font_type_options_1, true));
+
+        $this->setDataFormItem($entity->data_item);
     }
 
 
     protected function __runBuild()
     {
+
         $path_default_temp = $this->_pathDefaultTemplate();
 
         $this->buildController($path_default_temp['controller']);
@@ -110,6 +120,7 @@ class MyBehavior extends Behavior
         // $this->buildModel($path_default_temp['model']);
         $this->buildForm($path_default_temp['form']);
         $this->buildEmailTemplate($path_default_temp['email']);
+        $this->buildDataItem($path_default_temp['formItem']);
     }
 
 
@@ -122,7 +133,8 @@ class MyBehavior extends Behavior
             'template' => [],
             'model' => [],
             'form' => [],
-            'email' => []
+            'email' => [],
+            'formItem' => []
         ];
 
         if ($this->is_front) {
@@ -155,6 +167,11 @@ class MyBehavior extends Behavior
                 $listPath['form'][] = DEFAULT_FRONT_TEMP . 'form/form.txt';
             }
         }
+        if ($this->is_admin && $this->data_item) {
+            foreach ($this->data_item as $item) {
+                $listPath['formItem'][] = DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt';
+            }
+        }
 
         return $listPath;
     }
@@ -173,6 +190,7 @@ class MyBehavior extends Behavior
 
     protected function buildTemplate($listPath)
     {
+        if (empty($listPath)) return false;
         $slug = ucfirst($this->slug);
         $folder = APP . 'Template/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
@@ -189,6 +207,19 @@ class MyBehavior extends Behavior
     protected function buildForm($listPath)
     {
         foreach ($listPath as $file_name => $path) file_put_contents(APP . 'Form/' . ucfirst($this->slug) . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents($path, true), ucfirst($this->slug))));
+    }
+
+
+    protected function buildDataItem($listPath)
+    {
+        $slug = ucfirst($this->slug);
+        $content = '';
+        foreach ($listPath as $p) $content .= __(file_get_contents($p, true), '');
+        $ctp = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'edit.txt', true), $content);
+        $folder = APP . 'Template/Admin/' . $slug . '/';
+        if (!is_dir($folder)) (new Folder())->create($folder, 0777);
+        $file = $folder. 'edit.ctp';
+        file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $ctp));
     }
 
 
