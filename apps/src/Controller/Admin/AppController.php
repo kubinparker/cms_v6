@@ -299,21 +299,27 @@ class AppController extends BaseController
     {
         $list = [];
 
+        $ds = $this->loadModel('configs')->find('all')->toArray();
+
+        $role = $this->Session->read($this->auth_storage_key)['role'];
+        $this->set('role', $role);
+
         $list['role_list'] = User::$role_list;
         $list['user_site_list'] = [];
 
         $list['user_menu_list'] = [
-            'コンテンツ' => []
+            '管理' => []
         ];
 
         if ($this->isLogin() && in_array($this->Session->read($this->auth_storage_key)['role'], [User::ROLE_DEVELOP, User::ROLE_ADMIN], true)) {
             $list['user_site_list']['users'] = 'ユーザ管理';
 
             $list['user_menu_list']['設定']['configs'] = 'コンテンツ設定';
-            $list['user_menu_list']['コンテンツ']['users'] = 'ユーザ管理';
+            $list['user_menu_list']['管理']['users'] = 'ユーザ管理';
         }
 
         if (!empty($list)) $this->set(array_keys($list), $list);
+        $this->set('ds', $ds);
         $this->list = $list;
         return $list;
     }

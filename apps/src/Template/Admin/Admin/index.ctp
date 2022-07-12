@@ -19,19 +19,35 @@
 		</ul>
 	</div>
 </div>
+
 <div class="content_inr">
 	<?php foreach ($user_menu_list as $title => $menu) : ?>
+		<?php if (empty($menu)) continue; ?>
 		<div class="box">
 			<h3 style="margin-bottom:20px;"><?= html_decode($title); ?></h3>
 			<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
 				<?php foreach ($menu as $slug => $name) : ?>
 					<?= $this->Html->link(
-						$name,
-						['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
-						['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
-					); ?>
+								$name,
+								['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
+								['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
+							); ?>
 				<?php endforeach; ?>
 			</div>
 		</div>
 	<?php endforeach; ?>
+
+
+	<div class="box">
+		<h3 style="margin-bottom:20px;">コンテンツ</h3>
+		<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
+			<?php foreach ($ds as $menu) : ?>
+				<?= $this->Html->link(
+						$menu->title,
+						[],
+						['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
+					); ?>
+			<?php endforeach; ?>
+		</div>
+	</div>
 </div>
