@@ -1,9 +1,9 @@
 <tr>
-    <td>Input datetime</td>
+    <td>File</td>
     <td>
-        <div>
-            <input type="datetime-local">
-            {0}
-        </div>						
+        <input type="file" name="files[]" multiple="multiple" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">                        
+        <div class="remark">※ pdf, csv, xlsx, xls, doc, docx ファイルのみ</div>
+        <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>
+        {0}
     </td>
 </tr>

@@ -4,5 +4,6 @@
         <div id="toolbar-container"></div>
         <div id="editor" style="border: 1px solid #ccc !important;"><?= '' ?></div>
         <textarea style="display:none;" id="event-content"></textarea>
+        {0}
     </td>
 </tr>

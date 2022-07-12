@@ -1,9 +1,15 @@
 <tr>
-    <td>Input datetime</td>
+    <td>Checkbox</td>
     <td>
-        <div>
-            <input type="datetime-local">
-            {0}
-        </div>						
+        <div class="checkbox">
+            <input type="checkbox" name="checkbox" value="0" id="checkbox-0"><label class="mar_r20" for="checkbox-0">Checkbox 1</label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" name="checkbox" value="1" id="checkbox-1"><label class="mar_r20" for="checkbox-1">Checkbox 2</label>
+        </div>	
+        <div class="checkbox">
+            <input type="checkbox" name="checkbox" value="2" id="checkbox-2"><label class="mar_r20" for="checkbox-2">Checkbox 3</label>
+        </div>	
+        {0}				
     </td>
 </tr>
