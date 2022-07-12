@@ -39,6 +39,19 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `created`, `modified`, `username`, `password`, `name`, `email`, `status`, `role`) VALUES
 (1, '2022-07-04 17:49:36', NULL, 'admin', '$2y$10$hp8PDeHBvG26x7c6nB.iVuB0rl0FGZXtirB15wnHWfwJ5GYKVMd0C', 'Admin', 'develop+cms6_admin@caters.co.jp', 'publish', 0);
 
+
+--
+-- Table structure for table `config`
+--
+
+CREATE TABLE `configs` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(20) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -49,6 +62,14 @@ INSERT INTO `users` (`id`, `created`, `modified`, `username`, `password`, `name`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
+
+--
+-- Indexes for table `configs`
+--
+ALTER TABLE `configs`
+  ADD PRIMARY KEY (`id`);
+
+
 --
 -- AUTO_INCREMENT for dumped tables
 --
@@ -58,3 +79,11 @@ ALTER TABLE `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+
+
+--
+-- AUTO_INCREMENT for table `configs`
+--
+ALTER TABLE `configs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
