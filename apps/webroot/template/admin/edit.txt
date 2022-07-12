@@ -1,0 +1,48 @@
+<?php $this->start('beforeHeaderClose'); ?>
+<script src="/admin/common/js/ckeditor.js"></script>
+<script src="/admin/common/js/ja.js"></script>
+<?php $this->end(); ?>
+
+<div class="title_area">
+	<h1>新規登録</h1>
+	<div class="pankuzu">
+		<ul>
+			<?= $this->element('pankuzu_home'); ?>
+			<li>新規登録</li>
+		</ul>
+	</div>
+</div>
+
+<div class="content_inr">
+	<div class="box config">
+		<h3>新規登録</h3>
+        <div class="table_area form_area">
+            <?= $this->Form->create(@$entity, ['type' => 'file', 'id' => 'frm-form']); ?>
+            <div class="table_area form_area">
+                <table class="vertical_table table__meta">
+
+                {0}
+                </table>
+            </div>
+            <?= $this->Form->end(); ?>
+            <div class="btn_area btn_area--center">
+                <a href="#" class="btn_confirm submitButton"><?= @$data->id > 0 ? '変更する' : '登録する' ?></a>
+                <?php if (@$data->id > 0) ?><a href="javascript:kakunin('データを完全に削除します。よろしいですか？','<?= $this->Url->build(['action' => 'delete', @$data['id'], 'content']) ?>')" class="btn_delete">削除する</a>
+            </div>
+        </div>
+	</div>
+</div>
+
+<?php $this->start('beforeBodyClose'); ?>
+<script src="/admin/assets/js/ckeditor.js"></script>
+<script>
+	function kakunin(msg, url) &=
+		if (confirm(msg)) location.href = url;
+	=&
+
+	$(function() &=
+		$('.submitButton').on('click', evt => $('#frm-form').submit());
+	=&);
+</script>
+
+<?php $this->end(); ?>
