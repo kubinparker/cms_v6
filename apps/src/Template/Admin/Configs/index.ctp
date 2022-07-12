@@ -1,5 +1,7 @@
 <?php $this->start('beforeHeaderClose'); ?>
-
+<?= $this->Html->css([
+	"/admin/assets/css/config.css",
+]); ?>
 <?php $this->end(); ?>
 
 <div class="title_area">
@@ -47,7 +49,7 @@
 							'class' => 'management_part',
 							'label' => ['class' => 'mar_r20'],
 							'hiddenField' => false,
-							'default' => 0
+							'default' => 1
 						]);
 						if (isset($entity->getErrors()['management_part'])) :
 						?>
@@ -57,49 +59,8 @@
 				</tr>
 			</table>
 		</div>
-		<div class="box box-id-0">
-			<h3>表側</h3>
-			<div class="table_area">
-				<table>
-					<tr>
-						<?php foreach ($font_config as $key => $type) : ?>
-							<td class="w-50 pad_b25 position_relative">
-								<?= $this->Form->radio('font_type', [$key => ''], ['label' => false, 'hiddenField' => false, 'default' => 0]); ?>
-								<label for="font-type-<?= $key ?>"><img src="/admin/common/images/cms/<?= $key == 0 ? 'info' : 'contact' ?>_default.png"></label>
-								<div class="position_absolute position_bottom_<?= $key ?>">
-									<?= $this->Form->select('font_type_options_' . $key, $type['options'], [
-										'multiple' => 'checkbox',
-										'label' => ['class' => 'mar_r20'],
-										'hiddenField' => false
-									]); ?>
-								</div>
-							</td>
-						<?php endforeach; ?>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="box box-id-1 display_none">
-			<h3>管理側</h3>
-			<div class="table_area">
-				<table class="vertical_table table__meta">
-					<tr>
-						<td>ページタイトル<span class="attent">※必須</span></td>
-						<td>
-							<?= $this->Form->control('_title', ['label' => false, 'label' => false]); ?>
-							<span>※100文字以内で入力してください</span>
-						</td>
-					</tr>
-					<tr>
-						<td>Slug<span class="attent">※必須</span></td>
-						<td>
-							<?= $this->Form->control('_slug', ['label' => false]); ?>
-							<span>※15文字以内で入力してください</span>
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
+		<?= $this->element('user_config') ?>
+		<?= $this->element('admin_config') ?>
 		<?= $this->Form->end(); ?>
 		<div class="btn_area btn_area--center">
 			<a href="#" class="btn_confirm submitButton">作成する</a>
@@ -123,6 +84,10 @@
 			var box = $(`.box-id-${$(this).val()}`);
 			if ($(this).is(':checked')) box.removeClass('display_none');
 			else box.addClass('display_none');
+		});
+
+		$('.list-box-item .btn').click(function() {
+			$(this).parent('.list-box-item').toggleClass('active');
 		});
 	});
 </script>

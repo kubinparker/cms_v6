@@ -1,0 +1,54 @@
+.admin-box {
+    width: 100%;
+    height: 555px;
+    border: 1px solid #d9e3ed;
+}
+
+.admin-box::after {
+    height: 1px;
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.list-box-item {
+    position: relative;
+    height: 100%;
+    width: 0px;
+    transition: width .7s;
+    padding: 10px;
+    padding-top: 35px;
+    background: #edf6fa;
+    float: left;
+}
+
+.list-box-item li {
+    border-bottom: 1px solid #d9e3ed;
+    line-height: 40px;
+}
+
+.list-box-item.active {
+    width: 200px;
+}
+
+.list-box-item-content {
+    width: 100%;
+    height: 100%;
+    float: left;
+    transition: width .7s;
+    padding: 15px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+
+.list-box-item.active+.list-box-item-content {
+    width: calc(100% - 200px);
+    border-left: 1px solid #d9e3ed;
+}
+
+.list-box-item .icon-icn_menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

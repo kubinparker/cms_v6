@@ -43,16 +43,10 @@ class UsersController extends AppController
         $this->list = $list;
         return $list;
     }
-    public function deleteUser($id)
-    {
-        $this->loadModel('users');
-        $delete = $this->users->find()
-        ->where(array('Users.id' => $id))
-        ->first();
 
-        if ($delete) {
-            $this->Users->delete($delete);
-            return $this->redirect(['action' => 'index']);
-        }
+
+    public function delete($id)
+    {
+        parent::_delete($id, 'content');
     }
 }

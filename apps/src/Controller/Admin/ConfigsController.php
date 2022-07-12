@@ -23,6 +23,9 @@ class ConfigsController extends AppController
     public function index()
     {
         $this->setList();
+        if ($this->request->is('post')) {
+            dd($this->request->getData());
+        }
         parent::_edit(0);
     }
 

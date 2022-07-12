@@ -1,0 +1,8 @@
+<tr>
+    <td>Input text</td>
+    <td>
+        <div>
+            <input type="text">
+        </div>						
+    </td>
+</tr>

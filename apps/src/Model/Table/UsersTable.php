@@ -11,7 +11,7 @@ use App\Model\Entity\User;
 
 class UsersTable extends Table
 {
-
+    public $attaches = ['images' => [], 'files' => []];
 
     public function beforeSave(Event $event)
     {
