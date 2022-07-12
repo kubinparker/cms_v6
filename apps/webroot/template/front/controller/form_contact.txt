@@ -10,10 +10,10 @@ use Cake\Mailer\TransportFactory;
 use App\Utils\CustomUtility;
 
 class {0}Form extends Form
-&=
+=&
 
     protected function _buildSchema(Schema $schema)
-    &=
+    =&
         return $schema
             ->addField('name', 'string')
             ->addField('kana', 'string')
@@ -25,7 +25,7 @@ class {0}Form extends Form
     =&
 
     public function _buildValidator(Validator $validator)
-    &=
+    =&
 
         $validator
             ->notBlank('name1', '※お名前をご入力ください')
@@ -39,8 +39,8 @@ class {0}Form extends Form
                 'kana1',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            if (!preg_match("/^[\x&=30a1=&-\x&=30fc=&　 ]+$/u", $value)) &=
+                        'rule' => function ($value, $context) =&
+                            if (!preg_match("/^[\x=&30a1}-\x{30fc}　 ]+$/u", $value)) =&
                                 return '※フリガナをご入力ください';
                             =&
                             return true;
@@ -58,9 +58,9 @@ class {0}Form extends Form
                 'email',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            $v  = str_replace(['&nbsp;', ' ', ' '], "", $value);
-                            if (!preg_match("/^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]&=2,=&$/u", $v)) &=
+                        'rule' => function ($value, $context) =&
+                            $v  = str_replace(['&nbsp;', ' ', ' '], '', $value);
+                            if (!preg_match("/^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/u", $v)) =&
                                 return '※メールアドレスを正しくご入力ください';
                             =&
                             return true;
@@ -85,8 +85,8 @@ class {0}Form extends Form
                 'grade',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            if (intval($value) == 0) &=
+                        'rule' => function ($value, $context) =&
+                            if (intval($value) == 0) =&
                                 return '※選択してください。';
                             =&
                             return true;
@@ -101,8 +101,8 @@ class {0}Form extends Form
                 'privacy',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            if (intval($value) == 0) &=
+                        'rule' => function ($value, $context) =&
+                            if (intval($value) == 0) =&
                                 return '同意してください';
                             =&
                             return true;
@@ -118,9 +118,9 @@ class {0}Form extends Form
                 'teleph',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            $v  = str_replace(['&nbsp;', '　', ' '], "", $value);
-                            if (!preg_match("/(^0[0-9]&=10,12=&$)/u", $v)) &=
+                        'rule' => function ($value, $context) =&
+                            $v  = str_replace(['&nbsp;', '　', ' '], '', $value);
+                            if (!preg_match("/(^0[0-9{&10,12}$)/u", $v)) =&
                                 return '電話番号を半角数字で正しく入力してください';
                             =&
                             return true;
@@ -137,9 +137,9 @@ class {0}Form extends Form
                 'phone',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            $v  = str_replace(['&nbsp;', '　', ' '], "", $value);
-                            if (!preg_match("/(^0[0-9]&=10,12=&$)/u", $v)) &=
+                        'rule' => function ($value, $context) =&
+                            $v  = str_replace(['&nbsp;', '　', ' '], '', $value);
+                            if (!preg_match("/(^0[0-9]{10,12}$)/u", $v)) =&
                                 return '電話番号を半角数字で正しく入力してください';
                             =&
                             return true;
@@ -155,9 +155,9 @@ class {0}Form extends Form
                 'age',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            $v  = str_replace(['&nbsp;', '　', ' '], "", $value);
-                            if (!preg_match("/(^[1-9]&=2,3=&$)/u", $v)) &=
+                        'rule' => function ($value, $context) =&
+                            $v  = str_replace(['&nbsp;', '　', ' '], '', $value);
+                            if (!preg_match("/(^[1-9]{2,3}$)/u", $v)) =&
                                 return '年齢を半角数字で正しく入力してください';
                             =&
                             return true;
@@ -172,8 +172,8 @@ class {0}Form extends Form
                 'dormitory',
                 [
                     'custom' => [
-                        'rule' => function ($value, $context) &=
-                            if (intval($value) == 0) &=
+                        'rule' => function ($value, $context) =&
+                            if (intval($value) == 0) =&
                                 return '※選択してください。';
                             =&
                             return true;
@@ -186,7 +186,7 @@ class {0}Form extends Form
     =&
 
     protected function execute($data, $type)
-    &=
+    =&
         // 文字化け対応
         $data['body'] = CustomUtility::_preventGarbledCharacters($data['body']);
 
@@ -211,7 +211,7 @@ class {0}Form extends Form
             ->setViewVars(['value' => $data])
             ->setFrom(['@caters.co.jp' => 'ABC'])
             ->setTo($data['email'])
-            ->setSubject('XXXXX')
+            ->setSubject('XXXXX)
             ->send();
 
         return true;
