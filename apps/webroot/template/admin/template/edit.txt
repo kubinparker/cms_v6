@@ -4,10 +4,11 @@
 <?php $this->end(); ?>
 
 <div class="title_area">
-	<h1>新規登録</h1>
+	<h1>{0}管理</h1>
 	<div class="pankuzu">
 		<ul>
 			<?= $this->element('pankuzu_home'); ?>
+			<li><?= $this->Html->link('一覧画面',['action'=>'index']); ?></li>
 			<li>新規登録</li>
 		</ul>
 	</div>
@@ -20,8 +21,7 @@
             <?= $this->Form->create(@$entity, ['type' => 'file', 'id' => 'frm-form']); ?>
             <div class="table_area form_area">
                 <table class="vertical_table table__meta">
-
-                {0}
+                {1}
                 </table>
             </div>
             <?= $this->Form->end(); ?>
@@ -34,15 +34,5 @@
 </div>
 
 <?php $this->start('beforeBodyClose'); ?>
-<script src="/admin/assets/js/ckeditor.js"></script>
-<script>
-	function kakunin(msg, url) &=
-		if (confirm(msg)) location.href = url;
-	=&
-
-	$(function() &=
-		$('.submitButton').on('click', evt => $('#frm-form').submit());
-	=&);
-</script>
-
+<script src="/admin/assets/js/common.js"></script>
 <?php $this->end(); ?>

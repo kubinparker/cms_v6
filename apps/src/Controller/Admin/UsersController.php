@@ -33,6 +33,12 @@ class UsersController extends AppController
     }
 
 
+    public function delete($id)
+    {
+        parent::_delete($id, 'content');
+    }
+
+
     protected function setList()
     {
         parent::setList();
@@ -42,11 +48,5 @@ class UsersController extends AppController
 
         $this->list = $list;
         return $list;
-    }
-
-
-    public function delete($id)
-    {
-        parent::_delete($id, 'content');
     }
 }

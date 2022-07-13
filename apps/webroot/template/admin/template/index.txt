@@ -1,0 +1,137 @@
+<?php 
+$key = 0;
+$count = 2;
+?>
+
+<div class="title_area">
+	<h1>{0}管理</h1>
+	<div class="pankuzu">
+		<ul>
+			<?= $this->element('pankuzu_home'); ?>
+			<li><span>{0}管理</span></li>
+		</ul>
+	</div>
+</div>
+
+<div class="content_inr">
+	<div class="box">
+		<h3 class="box__caption--count">
+            <span>登録一覧</span>
+            <span class="count"><?= $count?>件の登録</span>
+        </h3>
+		<div class="btn_area" style="margin-top:10px;">
+            <?= $this->Html->link('新規登録',['action'=>'edit'],['class'=>'btn_confirm btn_post']); ?>
+        </div>
+		<div class="table_area">
+			<table class="table__list" style="table-layout: fixed;">
+				<colgroup>
+					<col style="width: 135px;">
+					<col style="width: 200px;">
+					<col>
+					<col>
+					<col>
+					<col style="width: 120px;">
+					<col style="width: 350px;">
+				</colgroup>
+				<tr>
+					<th>ステイタス</th>
+					<th style="text-align:center;">開催日</th>
+					<th>項目１</th>
+					<th>項目２</th>
+					<th>項目３</th>
+					<th style="text-align:center;">確認</th>
+					<th style="text-align:center;">順序の変更</th>
+				</tr>
+                <tr class="visible" id="content-0">
+                    <td>
+                        <div class="visi">
+                            <?= $this->Html->link('掲載中',['action'=>'enable', 0],['class'=>'scroll_pos']); ?>
+                        </div>
+                    </td>
+                    <td style="text-align:center;">YYYY/mm/dd</td>
+                    <td><?= $this->Html->link('サンプル1',['action'=>'edit', 0]); ?></td>
+                    <td><?= $this->Html->link('サンプル2',['action'=>'edit', 0]); ?></td>
+                    <td><?= $this->Html->link('サンプル3',['action'=>'edit', 0]); ?></td>
+                    <td>
+                        <div class="prev">
+                            <a href="/{1}/0?preview=on" target="_blank">プレビュー</a>
+                        </div>
+                    </td>
+                    <td>
+                        <ul class="ctrlis">
+                            <?php if (!$this->Paginator->hasPrev() && $key == 0): ?>
+                                <li class="non">&nbsp;</li>
+                                <li class="non">&nbsp;</li>
+                            <?php else: ?>
+                                <li class="cttop">
+                                    <?= $this->Html->link('top', ['action' => 'position', 0, 'top'], ['class' => 'scroll_pos'])?>
+                                </li>
+                                <li class="ctup">
+                                    <?= $this->Html->link('top', ['action' => 'position', 0, 'up'], ['class' => 'scroll_pos'])?>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if (!$this->Paginator->hasNext() && $key == $count - 1): ?>
+                                <li class="non">&nbsp;</li>
+                                <li class="non">&nbsp;</li>
+                            <?php else: ?>
+                                <li class="ctdown">
+                                    <?= $this->Html->link('top', ['action' => 'position', 0, 'down'], ['class' => 'scroll_pos'])?>
+                                </li>
+                                <li class="ctend">
+                                    <?= $this->Html->link('bottom', ['action' => 'position', 0, 'bottom'], ['class' => 'scroll_pos'])?>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </td>
+                </tr>
+                <tr class="unvisible" id="content-1">
+                    <td>
+                        <div class="unvisi">
+                            <?= $this->Html->link('下書き',['action'=>'enable', 1],['class'=>'scroll_pos']); ?>
+                        </div>
+                    </td>
+                    <td style="text-align:center;">YYYY/mm/dd</td>
+                    <td><?= $this->Html->link('サンプル1',['action'=>'edit', 1]); ?></td>
+                    <td><?= $this->Html->link('サンプル2',['action'=>'edit', 1]); ?></td>
+                    <td><?= $this->Html->link('サンプル3',['action'=>'edit', 1]); ?></td>
+                    <td>
+                        <div class="prev">
+                            <a href="/{1}/1?preview=on" target="_blank">プレビュー</a>
+                        </div>
+                    </td>
+                    <td>
+                        <ul class="ctrlis">
+                            <?php if (!$this->Paginator->hasPrev() && $key == 0): ?>
+                                <li class="non">&nbsp;</li>
+                                <li class="non">&nbsp;</li>
+                            <?php else: ?>
+                                <li class="cttop">
+                                    <?= $this->Html->link('top', ['action' => 'position', 1, 'top'], ['class' => 'scroll_pos'])?>
+                                </li>
+                                <li class="ctup">
+                                    <?= $this->Html->link('top', ['action' => 'position', 1, 'up'], ['class' => 'scroll_pos'])?>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if (!$this->Paginator->hasNext() && $key == $count - 1): ?>
+                                <li class="non">&nbsp;</li>
+                                <li class="non">&nbsp;</li>
+                            <?php else: ?>
+                                <li class="ctdown">
+                                    <?= $this->Html->link('top', ['action' => 'position', 1, 'down'], ['class' => 'scroll_pos'])?>
+                                </li>
+                                <li class="ctend">
+                                    <?= $this->Html->link('bottom', ['action' => 'position', 1, 'bottom'], ['class' => 'scroll_pos'])?>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </td>
+                </tr>
+			</table>
+		</div>
+		<div class="btn_area" style="margin-top:10px;">
+            <?= $this->Html->link('新規登録',['action'=>'edit'],['class'=>'btn_confirm btn_post']); ?>
+        </div>
+	</div>
+</div>

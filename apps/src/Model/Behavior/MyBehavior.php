@@ -16,6 +16,7 @@ use Cake\ORM\Behavior;
 class MyBehavior extends Behavior
 {
     public $slug;
+    public $title = '';
     public $font_type = 0;
 
     static $TYPE_BLOG = 0;
@@ -42,6 +43,12 @@ class MyBehavior extends Behavior
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+
+    public function setHeading($title)
+    {
+        $this->title = $title;
     }
 
 
@@ -95,6 +102,7 @@ class MyBehavior extends Behavior
     protected function __setConfig(EntityInterface $entity)
     {
         $this->setSlug($entity->slug);
+        $this->setHeading($entity->title);
         $this->setFrontType($entity->font_type);
 
         $this->setIsFront($entity->management_part && in_array(strval($this::$FRONT), $entity->management_part, true));
@@ -120,7 +128,8 @@ class MyBehavior extends Behavior
         // $this->buildModel($path_default_temp['model']);
         $this->buildForm($path_default_temp['form']);
         $this->buildEmailTemplate($path_default_temp['email']);
-        $this->buildDataItem($path_default_temp['formItem']);
+
+        $this->buildForAdmin();
     }
 
 
@@ -140,18 +149,18 @@ class MyBehavior extends Behavior
         if ($this->is_front) {
             if ($this->font_type == $this::$TYPE_BLOG) {
 
-                $listPath['controller'][] =  DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt');
+                $listPath['controller']['front'][] =  DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt');
                 $listPath['template']['index'] = DEFAULT_FRONT_TEMP . 'template/index.txt';
 
                 if ($this->is_detail_page) {
-                    $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
+                    $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
                     $listPath['template']['detail'] = DEFAULT_FRONT_TEMP . 'template/detail.txt';
                 }
             } else if ($this->font_type == $this::$TYPE_FORM) {
 
-                if ($this->is_form_3_step_save) $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step_save.txt';
-                else if ($this->is_form_3_step) $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step.txt';
-                else $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index.txt';
+                if ($this->is_form_3_step_save) $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step_save.txt';
+                else if ($this->is_form_3_step) $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step.txt';
+                else $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/index.txt';
 
                 if ($this->is_form_3_step || $this->is_form_3_step_save) {
                     $listPath['template']['confirm'] = DEFAULT_FRONT_TEMP . 'template/form_confirm.txt';
@@ -165,11 +174,6 @@ class MyBehavior extends Behavior
 
                 // class form
                 $listPath['form'][] = DEFAULT_FRONT_TEMP . 'form/form.txt';
-            }
-        }
-        if ($this->is_admin && $this->data_item) {
-            foreach ($this->data_item as $item) {
-                $listPath['formItem'][] = DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt';
             }
         }
 
@@ -206,20 +210,34 @@ class MyBehavior extends Behavior
 
     protected function buildForm($listPath)
     {
-        foreach ($listPath as $file_name => $path) file_put_contents(APP . 'Form/' . ucfirst($this->slug) . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents($path, true), ucfirst($this->slug))));
+        foreach ($listPath as $path) file_put_contents(APP . 'Form/' . ucfirst($this->slug) . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents($path, true), ucfirst($this->slug))));
     }
 
 
-    protected function buildDataItem($listPath)
+    protected function buildForAdmin()
     {
+        if (!$this->is_admin) return;
         $slug = ucfirst($this->slug);
-        $content = '';
-        foreach ($listPath as $p) $content .= __(file_get_contents($p, true), '');
-        $ctp = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'edit.txt', true), $content);
+
+        // controller
+        $controller = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'controller/common.txt', true), $slug);
+        $file = APP . 'Controller/Admin/' . $slug . 'Controller.php';
+        file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+
+        //template folder
         $folder = APP . 'Template/Admin/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
-        $file = $folder. 'edit.ctp';
-        file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $ctp));
+
+        // edit file content
+        $edit_content = '';
+        if ($this->data_item) foreach ($this->data_item as $item) $edit_content .= __(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), '');
+
+        $edit = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/edit.txt', true), $edit_content);
+        file_put_contents($folder . 'edit.ctp', $edit);
+
+        // index file content
+        $index = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/index.txt', true), $this->title, $this->slug);
+        file_put_contents($folder . 'index.ctp', $index);
     }
 
 

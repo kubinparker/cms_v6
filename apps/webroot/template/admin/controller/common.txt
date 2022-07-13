@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Controller\Admin;
+
+use Cake\Event\Event;
+use App\Controller\Admin\AppController;
+use Cake\Utility\Inflector;
+
+
+class {0}Controller extends AppController
+&=
+
+    public function beforeFilter(Event $event)
+    &=
+        parent::beforeFilter($event);
+        $this->modelName = Inflector::camelize($this->name);
+        
+        $this->set('ModelName', $this->modelName);
+        $this->setList();
+    =&
+
+
+    public function index()
+    &=
+        $conditions = [];
+        $options = ['limit' => null];
+        parent::_lists($conditions, $options);
+    =&
+
+
+    public function edit($id = null)
+    &=
+        $option = [];
+        $options = [];
+        parent::_edit($id, $option, $options);
+    =&
+
+
+    public function delete($id, $type="content")
+    &=
+        $columns = null;
+        $options = [];
+        parent::_delete($id, $type, $columns, $options);
+    =&
+
+
+    public function position($id, $pos)
+    &=
+        $options = [];
+        parent::_position($id, $pos, $options);
+    =&
+
+
+    public function enable($id)
+    &=
+        $options = [];
+        parent::_enable($id, $options);
+    =&
+
+    
+    protected function setList()
+    &=
+        parent::setList();
+
+        $list = [];
+        if (!empty($list)) $this->set(array_keys($list), $list);
+
+        $this->list = $list;
+        return $list;
+    =&
+=&
+?>

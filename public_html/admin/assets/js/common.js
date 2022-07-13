@@ -1,3 +1,9 @@
+function kakunin ( msg, url )
+{
+    if ( confirm( msg ) ) location.href = url;
+}
+
+
 function handleSaveButton ( editor )
 {
     $( '.submitButton' ).on( 'click', evt =>
@@ -33,6 +39,7 @@ function handleSaveButton ( editor )
 
 $( function ()
 {
+    $( '.submitButton' ).on( 'click', evt => $( '#frm-form' ).submit() );
     /**
          * CKeditor 設定
          */
