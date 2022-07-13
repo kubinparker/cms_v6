@@ -149,18 +149,18 @@ class MyBehavior extends Behavior
         if ($this->is_front) {
             if ($this->font_type == $this::$TYPE_BLOG) {
 
-                $listPath['controller']['front'][] =  DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt');
+                $listPath['controller'][] =  DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt');
                 $listPath['template']['index'] = DEFAULT_FRONT_TEMP . 'template/index.txt';
 
                 if ($this->is_detail_page) {
-                    $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
+                    $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
                     $listPath['template']['detail'] = DEFAULT_FRONT_TEMP . 'template/detail.txt';
                 }
             } else if ($this->font_type == $this::$TYPE_FORM) {
 
-                if ($this->is_form_3_step_save) $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step_save.txt';
-                else if ($this->is_form_3_step) $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step.txt';
-                else $listPath['controller']['front'][] = DEFAULT_FRONT_TEMP . 'controller/index.txt';
+                if ($this->is_form_3_step_save) $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step_save.txt';
+                else if ($this->is_form_3_step) $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step.txt';
+                else $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index.txt';
 
                 if ($this->is_form_3_step || $this->is_form_3_step_save) {
                     $listPath['template']['confirm'] = DEFAULT_FRONT_TEMP . 'template/form_confirm.txt';
@@ -232,7 +232,7 @@ class MyBehavior extends Behavior
         $edit_content = '';
         if ($this->data_item) foreach ($this->data_item as $item) $edit_content .= __(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), '');
 
-        $edit = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/edit.txt', true), $edit_content);
+        $edit = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/edit.txt', true), $this->title, $edit_content);
         file_put_contents($folder . 'edit.ctp', $edit);
 
         // index file content
