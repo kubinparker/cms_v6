@@ -89,7 +89,7 @@ class AppController extends BaseController
     {
         if (!$this->isLogin()) {
             $prefix = $this->request->getParam('prefix');
-            $this->redirect(strtolower(__('/{prefix}', ['prefix' => $prefix])));
+            return $this->redirect(strtolower(__('/{prefix}', ['prefix' => $prefix])));
         }
     }
 
@@ -179,6 +179,13 @@ class AppController extends BaseController
                     'key' => 'post_fail',
                     'element' => 'error'
                 ]);
+            }
+        } else {
+            if ($this->Session->check('code_upload')) {
+                // 仮パスをRemove
+                system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, 'upload_tmp/' . $this->Session->read('code_upload')])));
+                system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, 'upload_file_tmp/' . $this->Session->read('code_upload')])));
+                $this->Session->delete('code_upload');
             }
         }
         $this->set('data', $data);
@@ -359,14 +366,13 @@ class AppController extends BaseController
     }
 
 
-
     protected function setList()
     {
         $list = [];
 
         $ds = $this->loadModel('configs')->find('all')->toArray();
 
-        $role = $this->Session->read($this->auth_storage_key)['role'];
+        $role = @$this->Session->read($this->auth_storage_key)['role'];
 
         $list['ds'] = $ds;
         $list['role'] = $role;
@@ -382,6 +388,7 @@ class AppController extends BaseController
             $list['user_menu_list']['設定']['configs'] = 'コンテンツ設定';
             $list['user_menu_list']['管理']['users'] = 'ユーザ管理';
         }
+        if ($this->Session->check('code_upload')) $this->{$this->modelName}->code_upload = $this->Session->read('code_upload');
 
         if (!empty($list)) $this->set(array_keys($list), $list);
         $this->list = $list;

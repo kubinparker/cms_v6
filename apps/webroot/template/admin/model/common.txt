@@ -5,12 +5,21 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use Cake\Event\Event;
+use Cake\Datasource\EntityInterface;
+use App\Model\Table\AppTable;
 
-class {0}Table extends Table
+
+class {0}Table extends AppTable
 &=
     public function validationDefault(Validator $validator)
     &=
         // any validation
         return $validator;
+    =&
+
+    public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
+    &=
+        parent::afterSave($event, $entity, new \ArrayObject(['slug' => "{0}"]));
     =&
 =&
