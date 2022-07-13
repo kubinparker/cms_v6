@@ -36,7 +36,8 @@ class AppController extends BaseController
 
     public $font_config = [
         ['name' => '新着情報', 'options' => ['一覧', '詳細']],
-        ['name' => 'お問い合わせ', 'options' => ['入力・確認・完了', '保存']]
+        ['name' => 'お問い合わせ', 'options' => ['入力・確認・完了']]
+        // ['name' => 'お問い合わせ', 'options' => ['入力・確認・完了', '保存']]
     ];
 
     public $admin_config = [];

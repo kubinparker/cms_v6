@@ -2,10 +2,11 @@
 
 namespace App\Model\Behavior;
 
-use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
-use Cake\Filesystem\Folder;
 use Cake\ORM\Behavior;
+use Cake\Filesystem\Folder;
+use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Position Behavior.
@@ -223,6 +224,16 @@ class MyBehavior extends Behavior
         $controller = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'controller/common.txt', true), $slug);
         $file = APP . 'Controller/Admin/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+
+        // model
+        $model = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/common.txt', true), $slug);
+        $file = APP . 'Model/Table/' . $slug . 'Table.php';
+        file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $model));
+
+        // table
+        $table = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/table.txt', true), $this->slug);
+        $connection = ConnectionManager::get('default');
+        $connection->execute($table);
 
         //template folder
         $folder = APP . 'Template/Admin/' . $slug . '/';

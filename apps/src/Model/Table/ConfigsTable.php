@@ -2,11 +2,8 @@
 
 namespace App\Model\Table;
 
-use Cake\Event\Event;
 use Cake\ORM\Table;
-use Cake\Datasource\EntityInterface;
 use Cake\Validation\Validator;
-use Cake\ORM\TableRegistry;
 
 
 class ConfigsTable extends Table

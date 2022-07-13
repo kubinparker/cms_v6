@@ -120,6 +120,7 @@
 
 
 	$(function() {
+		$('.submitButton').on('click', evt => $('#frm-form').submit());
 
 		$('.management_part').change(function() {
 			var box = $(`.box-id-${$(this).val()}`);
