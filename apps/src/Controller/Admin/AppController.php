@@ -295,6 +295,70 @@ class AppController extends BaseController
         if ($redirect) $this->redirect($redirect);
     }
 
+    /**
+     * Ckeditorからイメージのアップロード
+     * */
+    public function uploadImageEvent()
+    {
+        if ($this->request->is(['post', 'put'])) {
+            $upload_file = (array) $this->request->getData('upload');
+            $data = $this->__uploadTmp('upload_tmp', 'upload', [$upload_file]);
+            echo json_encode($data[0]);
+            exit();
+        }
+        return $this->redirect(['prefix' => 'admin', 'controller' => 'Admin', 'action' => 'logout']);
+    }
+
+    /**
+     * Ckeditorからファイルのアップロード
+     * */
+    public function uploadFiles()
+    {
+        if ($this->request->is(['post', 'put'])) {
+            $upload_file = (array) $this->request->getData('files');
+            $data = $this->__uploadTmp('upload_file_tmp', 'files', $upload_file);
+            echo json_encode(['success' => true, 'data' => $data]);
+            exit();
+        }
+        return $this->redirect(['prefix' => 'user', 'controller' => 'users', 'action' => 'logout']);
+    }
+
+
+    protected function __uploadTmp($tmpFolder = 'upload_tmp', $type, $datas)
+    {
+        if (!$this->Session->check('code_upload')) $this->Session->write('code_upload', md5(round(microtime(true) * 10000)));
+
+        $folder_name = $this->Session->read('code_upload');
+
+        $exts = $type == 'files' ? ['pdf', 'csv', 'xlsx', 'xls', 'doc', 'docx'] : ['jpg', 'jpeg', 'gif', 'png'];
+
+        $upload_file = $datas;
+        $return = [];
+
+        for ($i = 0; $i < count($upload_file); $i++) {
+            $upload = $upload_file[$i];
+            if (!empty($upload['tmp_name']) && $upload['error'] === UPLOAD_ERR_OK) {
+
+                $ext = strtolower(substr(strrchr($upload['name'], '.'), 1));
+
+                if (in_array($ext, $exts)) {
+
+                    $newname = __('{0}_{1}.{2}', [$folder_name, round(microtime(true) * 10000), $ext]);
+                    $dir = __('{0}{1}/{2}', [WWW_ROOT, $tmpFolder, $folder_name]);
+
+                    if (!is_dir($dir)) (new \Cake\Filesystem\Folder())->create($dir, 0777);
+
+                    move_uploaded_file($upload['tmp_name'], $dir . '/' . $newname);
+                    chmod($dir . '/' . $newname, 0777);
+
+                    $return[] = ['url' => __('/{0}/{1}/{2}', [$tmpFolder, $folder_name, $newname]), 'original_name' => $upload['name'], 'class' => $ext, 'element' => [$upload['name']]];
+                }
+            }
+        }
+        return $return;
+    }
+
+
 
     protected function setList()
     {
