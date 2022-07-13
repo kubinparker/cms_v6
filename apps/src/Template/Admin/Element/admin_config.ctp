@@ -1,10 +1,11 @@
 <div class="box box-id-0">
 	<h3>管理側</h3>
-	<div class="table_area">
+	<div class="table_area form_area">
 		<div class="admin-box">
 			<div class="list-box-item active">
 				<span class="link_menu btn off icon-icn_menu"></span>
 				<ul>
+					<li class="_label"><span>Label（<b>0</b>）</span><span class="icon plus_icon" onclick="addItem(this,'label')">+</span></li>
 					<li class="input_text"><span>Input text（<b>0</b>）</span><span class="icon plus_icon" onclick="addItem(this,'input_text')">+</span></li>
 					<li class="input_date"><span>Input date（<b>0</b>）</span><span class="icon plus_icon" onclick="addItem(this,'input_date')">+</span></li>
 					<li class="input_datetime"><span>Input datetime（<b>0</b>）</span><span class="icon plus_icon" onclick="addItem(this,'input_datetime')">+</span></li>

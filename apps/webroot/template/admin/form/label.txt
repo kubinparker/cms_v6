@@ -1,0 +1,4 @@
+<tr>
+    <td>Label <span class="remove_item" onclick="removeItem(this, '_label')"></span></td>
+    <td>新規 {0}</td>
+</tr>
