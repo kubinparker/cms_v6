@@ -6,7 +6,6 @@ use Cake\Mailer\Email;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Validation\Validator;
-use Cake\Mailer\TransportFactory;
 use App\Utils\CustomUtility;
 
 class {0}Form extends Form
@@ -185,7 +184,7 @@ class {0}Form extends Form
         return $validator;
     =&
 
-    protected function execute($data, $type)
+    public function execute(array $data)
     &=
         // 文字化け対応
         $data['body'] = CustomUtility::_preventGarbledCharacters($data['body']);
@@ -194,11 +193,11 @@ class {0}Form extends Form
         $info_email = new Email();
         $info_email->setCharset('ISO-2022-JP-MS');
         $info_email
-            ->template('admin_' . $type)
+            ->template('{0}_admin')
             ->emailFormat('text')
             ->setViewVars(['value' => $data])
-            ->setFrom(['@caters.co.jp' => 'ABC'])
-            ->setTo('@caters.co.jp')
+            ->setFrom(['example@caters.co.jp' => 'ABC'])
+            ->setTo('example@caters.co.jp')
             ->setSubject('XXXXX')
             ->send();
 
@@ -206,10 +205,10 @@ class {0}Form extends Form
         $thank_email = new Email();
         $info_email->setCharset('ISO-2022-JP-MS');
         $thank_email
-            ->template($type)
+            ->template({0})
             ->emailFormat('text')
             ->setViewVars(['value' => $data])
-            ->setFrom(['@caters.co.jp' => 'ABC'])
+            ->setFrom(['example@caters.co.jp' => 'ABC'])
             ->setTo($data['email'])
             ->setSubject('XXXXX')
             ->send();
