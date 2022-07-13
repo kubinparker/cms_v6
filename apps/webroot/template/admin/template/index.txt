@@ -54,7 +54,7 @@ $count = 2;
                     <td><?= $this->Html->link('サンプル3',['action'=>'edit', 0]); ?></td>
                     <td>
                         <div class="prev">
-                            <a href="/{1}/0?preview=on" target="_blank">プレビュー</a>
+                            <a href="/{1}/detail/0?preview=on" target="_blank">プレビュー</a>
                         </div>
                     </td>
                     <td>
