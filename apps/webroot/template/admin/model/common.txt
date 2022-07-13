@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Model\Table;
+
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+
+class {0}Table extends Table
+&=
+    public function validationDefault(Validator $validator)
+    &=
+        // any validation
+        return $validator;
+    =&
+=&

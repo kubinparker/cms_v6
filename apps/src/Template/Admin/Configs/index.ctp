@@ -51,7 +51,7 @@
 							'class' => 'management_part',
 							'label' => ['class' => 'mar_r20'],
 							'hiddenField' => false,
-							'default' => 1
+							'default' => 0
 						]);
 						if (isset($entity->getErrors()['management_part'])) :
 						?>
