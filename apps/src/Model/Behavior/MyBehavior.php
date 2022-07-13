@@ -210,7 +210,7 @@ class MyBehavior extends Behavior
 
     protected function buildForm($listPath)
     {
-        foreach ($listPath as $path) file_put_contents(APP . 'Form/' . ucfirst($this->slug) . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents($path, true), ucfirst($this->slug))));
+        foreach ($listPath as $path) file_put_contents(APP . 'Form/' . ucfirst($this->slug) . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents($path, true), [ucfirst($this->slug), $this->slug])));
     }
 
 

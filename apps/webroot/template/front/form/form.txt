@@ -193,7 +193,7 @@ class {0}Form extends Form
         $info_email = new Email();
         $info_email->setCharset('ISO-2022-JP-MS');
         $info_email
-            ->template('{0}_admin')
+            ->template("{1}_admin")
             ->emailFormat('text')
             ->setViewVars(['value' => $data])
             ->setFrom(['example@caters.co.jp' => 'ABC'])
@@ -205,7 +205,7 @@ class {0}Form extends Form
         $thank_email = new Email();
         $info_email->setCharset('ISO-2022-JP-MS');
         $thank_email
-            ->template({0})
+            ->template("{1}")
             ->emailFormat('text')
             ->setViewVars(['value' => $data])
             ->setFrom(['example@caters.co.jp' => 'ABC'])
