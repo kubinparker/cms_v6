@@ -84,3 +84,39 @@ ALTER TABLE `configs`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+--
+-- Table structure for table `attached`
+--
+
+CREATE TABLE `attached` (
+  `id` int(11) NOT NULL,
+  `table_id` int(11) NOT NULL COMMENT 'Slugに合わせてテーブルのID',
+  `slug` varchar(20) NOT NULL,
+  `file_name` varchar(255) NOT NULL COMMENT 'ファイル名',
+  `original_file_name` varchar(255) NOT NULL COMMENT '元ファイル名',
+  `extension` varchar(4) NOT NULL COMMENT 'ファイル拡大',
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `attached`
+--
+ALTER TABLE `attached`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `attached`
+--
+ALTER TABLE `attached`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
