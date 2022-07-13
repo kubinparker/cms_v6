@@ -73,13 +73,6 @@
 <?php $this->start('beforeBodyClose'); ?>
 
 <script>
-	function kakunin(msg, url) {
-		if (confirm(msg)) {
-			location.href = url;
-		}
-	}
-
-
 	function renderCkeditor() {
 		DecoupledEditor
 			.create(document.querySelector('#editor'), {
@@ -127,7 +120,6 @@
 
 
 	$(function() {
-		$('.submitButton').on('click', evt => $('#frm-form').submit());
 
 		$('.management_part').change(function() {
 			var box = $(`.box-id-${$(this).val()}`);
