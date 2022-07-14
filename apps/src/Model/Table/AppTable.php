@@ -12,14 +12,19 @@ use Cake\ORM\TableRegistry;
 class AppTable extends Table
 {
     public $code_upload = null;
+    public $slug = null;
 
     public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
     {
-        if (is_null($this->code_upload) || !$this->code_upload || !isset($options["slug"])) return;
+        if (is_null($this->code_upload) || !$this->code_upload || is_null($this->slug)) return;
+
+
         $_id = $entity->id;
         $hash_code = $this->code_upload;
 
-        $slug = $options["slug"];
+        $slug = $this->slug;
+
+        $this->slug = null;
 
         // Ckeditorの各ファイル
         $files_in_content = @$entity->_files;
@@ -58,9 +63,9 @@ class AppTable extends Table
         $tmp_file = $this->__upload($dir_file, $tmp_upload_file, $data_file, 'files');
 
         if ($entity->content) {
-            foreach ($tmp_file['files_in_content'] as $tmp) {
+            foreach ($tmp_file['files_in_content'] as $tmp)
                 $entity->content = str_replace($tmp[1], $tmp[0], $entity->content);
-            }
+
             $this->save($entity);
         }
 

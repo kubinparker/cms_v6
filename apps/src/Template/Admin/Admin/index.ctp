@@ -49,7 +49,7 @@
 			<?php foreach ($ds as $menu) : ?>
 				<?= $this->Html->link(
 					$menu->title,
-					[],
+					['prefix' => 'admin', 'controller' => strtolower($menu->slug), 'action' => 'index'],
 					['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
 				); ?>
 			<?php endforeach; ?>
