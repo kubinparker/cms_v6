@@ -120,7 +120,20 @@
 
 
 	$(function() {
-		$('.submitButton').on('click', evt => $('#frm-form').submit());
+		$('.submitButton').on('click', evt => {
+			if ($("#title").val().replace(/^\s+|\s+$/gm, '') == '' || $("#slug").val().replace(/^\s+|\s+$/gm, '') == '') {
+				alert('ページタイトル又はSlugを記入していません。')
+				return false;
+			}
+
+			var thisRegex = new RegExp('/^[a-zA-Z0-9]+$/u');
+
+			if (!thisRegex.test($("#slug").val())) {
+				alert('※Slugはアンファーベストと数字だけで入力してください。')
+				return false;
+			}
+			$('#frm-form').submit();
+		});
 
 		$('.management_part').change(function() {
 			var box = $(`.box-id-${$(this).val()}`);
