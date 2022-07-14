@@ -12,6 +12,11 @@ class ConfigsTable extends Table
     public function initialize(array $config)
     {
         $this->addBehavior('My');
+
+        $this->hasMany('Attached')
+            ->setForeignKey('slug')
+            ->setBindingKey('slug')
+            ->setDependent(true);
     }
 
     public function validationDefault(Validator $validator)

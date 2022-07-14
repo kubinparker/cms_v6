@@ -3,8 +3,11 @@
 namespace App\Controller\Admin;
 
 use Cake\Event\Event;
-use App\Controller\Admin\AppController;
+use App\Model\Entity\User;
 use Cake\Utility\Inflector;
+use Cake\Datasource\ConnectionManager;
+use App\Controller\Admin\AppController;
+
 
 class ConfigsController extends AppController
 {
@@ -35,6 +38,47 @@ class ConfigsController extends AppController
         }
         echo json_encode($result);
         exit();
+    }
+
+
+    public function clearConfig()
+    {
+        $role = @$this->Session->read($this->auth_storage_key)['role'];
+        if (!in_array($role, [User::ROLE_DEVELOP], true)) $this->redirect('/admin');
+
+        $config = $this->{$this->modelName}->find('all')
+            ->where(['is_default' => 0])
+            ->toArray();
+
+        foreach ($config as $cf) {
+            $slug = ucfirst($cf->slug);
+
+            // remove
+            $files = [
+                // controller
+                APP . 'Controller/Admin/' . $slug . 'Controller.php',
+                APP . 'Controller/' . $slug . 'Controller.php',
+                // form
+                APP . 'Form/' . $slug . 'Form.php',
+                // model
+                APP . 'Model/Table/' . $slug . 'Table.php',
+                // Template
+                APP . 'Template/' . $slug . '/',
+                APP . 'Template/Admin/' . $slug . '/',
+                // upload
+                WWW_ROOT . 'upload/' . $slug . '/'
+            ];
+
+            system(escapeshellcmd(__('rm -rf {0}', implode(' ', $files))));
+
+            // drop table
+            $connection = ConnectionManager::get('default');
+            $connection->execute('DROP TABLE IF EXISTS `' . $cf->slug . '`;');
+
+            // delete row in table config and in table attached by slug
+            $this->{$this->modelName}->delete($cf);
+        }
+        $this->redirect('/admin');
     }
 
 

@@ -126,7 +126,7 @@
 				return false;
 			}
 
-			var thisRegex = new RegExp('/^[a-zA-Z0-9]+$/u');
+			var thisRegex = new RegExp(/^[a-zA-Z0-9]+$/g);
 
 			if (!thisRegex.test($("#slug").val())) {
 				alert('※Slugはアンファーベストと数字だけで入力してください。')
