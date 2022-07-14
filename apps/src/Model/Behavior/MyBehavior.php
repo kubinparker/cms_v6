@@ -121,97 +121,74 @@ class MyBehavior extends Behavior
 
     protected function __runBuild()
     {
-
-        $path_default_temp = $this->_pathDefaultTemplate();
-
-        $this->buildController($path_default_temp['controller']);
-        $this->buildTemplate($path_default_temp['template']);
-        // $this->buildModel($path_default_temp['model']);
-        $this->buildForm($path_default_temp['form']);
-        $this->buildEmailTemplate($path_default_temp['email']);
-
+        $this->buildForFront();
         $this->buildForAdmin();
     }
 
-
-    protected function _pathDefaultTemplate()
+    protected function buildBlog()
     {
+        if ($this->font_type != $this::$TYPE_BLOG) return;
         $slug = ucfirst($this->slug);
 
-        $listPath = [
-            'controller' => [],
-            'template' => [],
-            'model' => [],
-            'form' => [],
-            'email' => [],
-            'formItem' => []
-        ];
+        // controller
+        $content_controller = [DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt')];
+        if ($this->is_detail_page) $content_controller[] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
 
-        if ($this->is_front) {
-            if ($this->font_type == $this::$TYPE_BLOG) {
-
-                $listPath['controller'][] =  DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt');
-                $listPath['template']['index'] = DEFAULT_FRONT_TEMP . 'template/index.txt';
-
-                if ($this->is_detail_page) {
-                    $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
-                    $listPath['template']['detail'] = DEFAULT_FRONT_TEMP . 'template/detail.txt';
-                }
-            } else if ($this->font_type == $this::$TYPE_FORM) {
-
-                if ($this->is_form_3_step_save) $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step_save.txt';
-                else if ($this->is_form_3_step) $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step.txt';
-                else $listPath['controller'][] = DEFAULT_FRONT_TEMP . 'controller/index.txt';
-
-                if ($this->is_form_3_step || $this->is_form_3_step_save) {
-                    $listPath['template']['confirm'] = DEFAULT_FRONT_TEMP . 'template/form_confirm.txt';
-                    $listPath['template']['complete'] = DEFAULT_FRONT_TEMP . 'template/form_complete.txt';
-                }
-                $listPath['template']['index'] = DEFAULT_FRONT_TEMP . 'template/form_index.txt';
-
-                // template mail
-                $listPath['email'][''] = DEFAULT_FRONT_TEMP . 'mail/user.txt';
-                $listPath['email']['_admin'] = DEFAULT_FRONT_TEMP . 'mail/admin.txt';
-
-                // class form
-                $listPath['form'][] = DEFAULT_FRONT_TEMP . 'form/form.txt';
-            }
-        }
-
-        return $listPath;
-    }
-
-
-    protected function buildController($listPath)
-    {
-        $slug = ucfirst($this->slug);
         $content = '';
-        foreach ($listPath as $p) $content .= __(file_get_contents($p, true), $slug);
+        foreach ($content_controller as $p) $content .= __(file_get_contents($p, true), $slug);
         $controller = __(file_get_contents(DEFAULT_FRONT_TEMP . 'controller/common.txt', true), $slug, $content);
         $file = APP . 'Controller/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
-    }
 
-
-    protected function buildTemplate($listPath)
-    {
-        if (empty($listPath)) return false;
-        $slug = ucfirst($this->slug);
+        // template
         $folder = APP . 'Template/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
-        foreach ($listPath as $file_name => $path) file_put_contents($folder . $file_name . '.ctp', file_get_contents($path, true));
+        file_put_contents($folder . 'index.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/index.txt', true));
+        if ($this->is_detail_page) file_put_contents($folder . 'detail.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/detail.txt', true));
     }
 
 
-    protected function buildEmailTemplate($listPath)
+    protected function buildForm()
     {
-        foreach ($listPath as $file_name => $path) file_put_contents(APP . 'Template/Email/text/' . $this->slug . $file_name . '.ctp', file_get_contents($path, true));
+        if ($this->font_type != $this::$TYPE_FORM) return;
+        $slug = ucfirst($this->slug);
+
+        // controller
+        $content_controller = [];
+        if ($this->is_form_3_step_save) $content_controller[] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step_save.txt';
+        else if ($this->is_form_3_step) $content_controller[] = DEFAULT_FRONT_TEMP . 'controller/index_form_3step.txt';
+        else $content_controller[] = DEFAULT_FRONT_TEMP . 'controller/index.txt';
+
+        $content = '';
+        foreach ($content_controller as $p) $content .= __(file_get_contents($p, true), $slug);
+        $controller = __(file_get_contents(DEFAULT_FRONT_TEMP . 'controller/common.txt', true), $slug, $content);
+        $file = APP . 'Controller/' . $slug . 'Controller.php';
+        file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+
+        // template
+        $folder = APP . 'Template/' . $slug . '/';
+        if (!is_dir($folder)) (new Folder())->create($folder, 0777);
+
+        file_put_contents($folder . 'index.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/form_index.txt', true));
+        if ($this->is_form_3_step || $this->is_form_3_step_save) {
+            file_put_contents($folder . 'confirm.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/form_confirm.txt', true));
+            file_put_contents($folder . 'complete.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/form_complete.txt', true));
+        }
+
+        // class form
+        file_put_contents(APP . 'Form/' .  $slug . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents(DEFAULT_FRONT_TEMP . 'form/form.txt', true), [$slug, $this->slug])));
+
+        // email template
+        file_put_contents(APP . 'Template/Email/text/' . $this->slug . '.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'mail/user.txt', true));
+        file_put_contents(APP . 'Template/Email/text/' . $this->slug . '_admin.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'mail/admin.txt', true));
     }
 
 
-    protected function buildForm($listPath)
+    protected function buildForFront()
     {
-        foreach ($listPath as $path) file_put_contents(APP . 'Form/' . ucfirst($this->slug) . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents($path, true), [ucfirst($this->slug), $this->slug])));
+        if (!$this->is_front) return;
+        $this->buildBlog();
+        $this->buildForm();
     }
 
 
