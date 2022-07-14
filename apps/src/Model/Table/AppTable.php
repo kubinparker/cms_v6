@@ -3,10 +3,13 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
-
+use Cake\ORM\Query;
 use Cake\Event\Event;
-use Cake\Datasource\EntityInterface;
+use Cake\Utility\Text;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\EntityInterface;
+use Cake\Database\Schema\TableSchemaInterface;
+
 
 
 class AppTable extends Table
@@ -16,7 +19,266 @@ class AppTable extends Table
 
     public $attaches = ['images' => [], 'files' => []];
 
-    public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
+
+    protected function _initializeSchema(TableSchemaInterface $schema)
+    {
+        if (isset($this->attaches['images']) && $this->attaches['images']) {
+            foreach ($this->attaches['images'] as $column => $_) {
+                $schema->setColumnType($column, 'binary');
+            }
+        }
+        if (isset($this->attaches['files']) && $this->attaches['files']) {
+            foreach ($this->attaches['files'] as $column => $_) {
+                $schema->setColumnType($column, 'binary');
+            }
+        }
+        return $schema;
+    }
+
+    /**
+     * Callback method that listens to the `beforeFind` event in the bound
+     * table. It modifies the passed query by eager loading the translated fields
+     * and adding a formatter to copy the values into the main table records.
+     *
+     * @param \Cake\Event\Event $event The beforeFind event that was fired.
+     * @param \Cake\ORM\Query $query Query
+     * @param \ArrayObject $options The options for the query
+     * @return void
+     */
+    public function beforeFind(Event $event, Query $query, \ArrayObject $options)
+    {
+        $images = $this->attaches['images'] ?? [];
+        $files = $this->attaches['files'] ?? [];
+        $fields = $this->getSchema()->columns();
+
+        if ($images || $files) {
+            $this->getSchema()->addColumn('attaches', [
+                'type' => 'json',
+            ]);
+
+            $b = '';
+            foreach ($images as $field => $info) {
+                $c = '';
+                foreach ($info['thumbnails'] as $thumb => $tinfo) {
+                    $c .= __(',"{thumb}", CONCAT("{path_image}",id,"{type}","{prefix}",{file_name})', [
+                        'thumb' => $thumb,
+                        'path_image' => DS . UPLOAD_BASE_URL . $this->getAlias() . DS,
+                        'type' => 'image' . DS,
+                        'prefix' => $tinfo['prefix'],
+                        'file_name' => $field
+                    ]);
+                }
+                $b .= __('{mark}"{field}", IF({file_name} = "" OR {file_name} IS NULL, NULL, JSON_OBJECT("0", CONCAT("{path_image}",id,"{type}",{file_name}){c}))', [
+                    'mark' => $b != '' ? ',' : '',
+                    'field' => $field,
+                    'path_image' => DS . UPLOAD_BASE_URL . $this->getAlias() . DS,
+                    'type' => 'image' . DS,
+                    'file_name' => $field,
+                    'c' => $c
+                ]);
+            }
+
+            $a = __('(JSON_OBJECT({0}))', $b);
+
+            $fields[$this->getAlias() . '__attaches'] = $a;
+        }
+        return $query->find('all')->select($fields);
+    }
+
+
+    public function beforeSave(Event $event, EntityInterface $entity, \ArrayObject $options)
+    {
+        $query = $this->find();
+        $ret = $query->select(['max_id' => $query->func()->max('id')])->first();
+
+        $id = $entity->isNew() ? $ret['max_id'] + 1 : $entity->id;
+        $entity->set('_id', $id);
+
+        $this->_uploadAttaches($entity);
+    }
+
+
+    /**
+     * 
+     * @param string $dir_file tmp_name
+     * @param string $dir_thumb_file new path file
+     * @param integer $max_width with
+     * @param integer $max_height height
+     * @param float $quality
+     */
+    public function generate_thumbnail($dir_file, $dir_thumb_file, $max_width, $max_height, $quality = 0.75)
+    {
+        // The original image must exist
+        if (is_file($dir_file)) {
+            // Let's create the directory if needed
+            $th_path = dirname($dir_thumb_file);
+            if (!is_dir($th_path))
+                mkdir($th_path, 0777, true);
+            // If the thumb does not aleady exists
+            if (!is_file($dir_thumb_file)) {
+                // Get Image size info
+                list($width_orig, $height_orig, $image_type) = @getimagesize($dir_file);
+                if (!$width_orig)
+                    return 2;
+                switch ($image_type) {
+                    case 1:
+                        $src_im = @imagecreatefromgif($dir_file);
+                        break;
+                    case 2:
+                        $src_im = @imagecreatefromjpeg($dir_file);
+                        break;
+                    case 3:
+                        $src_im = @imagecreatefrompng($dir_file);
+                        break;
+                }
+                if (!$src_im)
+                    return 3;
+
+
+                $aspect_ratio = (float) $height_orig / $width_orig;
+
+                $thumb_height = $max_height;
+                $thumb_width = round($thumb_height / $aspect_ratio);
+                if ($thumb_width > $max_width) {
+                    $thumb_width    = $max_width;
+                    $thumb_height   = round($thumb_width * $aspect_ratio);
+                }
+
+                $width = intval($thumb_width);
+                $height = intval($thumb_height);
+                $dst_img = @imagecreatetruecolor($width, $height);
+                if (!$dst_img)
+                    return 4;
+                $success = @imagecopyresampled($dst_img, $src_im, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+                if (!$success)
+                    return 4;
+                switch ($image_type) {
+                    case 1:
+                        $success = @imagegif($dst_img, $dir_thumb_file);
+                        break;
+                    case 2:
+                        $success = @imagejpeg($dst_img, $dir_thumb_file, 100);
+                        break;
+                    case 3:
+                        $success = @imagepng($dst_img, $dir_thumb_file, intval($quality * 9));
+                        break;
+                }
+                if (!$success)
+                    return 4;
+            }
+            return 0;
+        }
+        return 1;
+    }
+
+
+    public function _uploadAttaches($entity)
+    {
+        $this->checkUploadDirectory();
+        $uuid = Text::uuid();
+
+        $data = $entity->extract($this->getSchema()->columns(), false);
+
+        if ($data) {
+            $id = $entity->_id ?? '';
+            $old_data = $entity->id ? $this->get($entity->id) : null;
+
+            $_att_images = $this->attaches['images'] ?? [];
+            $_att_files = $this->attaches['files'] ?? [];
+
+            //upload images
+            foreach ($_att_images as $columns => $imageConf) {
+                $image_name = @$data[$columns];
+
+                if ($image_name && $image_name['error'] === UPLOAD_ERR_OK) {
+
+                    $basedir = WWW_ROOT . UPLOAD_BASE_URL . $this->getAlias() . DS . $id . DS . 'image/';
+                    $original_file_name = $image_name['name'];
+                    $tmp_name = $image_name['tmp_name'];
+
+                    $ext = getExtension($original_file_name);
+                    $filepattern = $imageConf['file_name'];
+
+                    //画像 処理方法
+                    $convert_method = @$imageConf['method'];
+
+                    if (in_array($ext, $imageConf['extensions'])) {
+
+                        $newname = __('{0}_{1}.{2}', $this->getTable(), sprintf($filepattern, $id, $uuid), $ext);
+                        // resize images
+                        $error = $this->generate_thumbnail(
+                            $tmp_name,
+                            $basedir . $newname,
+                            $imageConf['width'],
+                            $imageConf['height'],
+                            $convert_method
+                        );
+
+                        if ($error == 0) $entity->{$columns} = $newname;
+
+                        //サムネイル
+                        if (@$imageConf['thumbnails']) {
+                            foreach ($imageConf['thumbnails'] as $suffix => $val) {
+                                //画像処理方法
+                                $convert_method = @$val['method'];
+                                //ファイル名
+                                $prefix = @$val['prefix'] ?? $suffix;
+                                $_newname = $prefix . $newname;
+                                //変換
+                                $this->generate_thumbnail(
+                                    $tmp_name,
+                                    $basedir . $_newname,
+                                    $val['width'],
+                                    $val['height'],
+                                    $convert_method
+                                );
+                            }
+                        }
+
+                        if (!$entity->isNew() && $old_data) {
+                            if (isset($old_data->attaches[$columns])) {
+                                foreach ($old_data->attaches[$columns] as $image_path) {
+                                    if ($image_path && is_file($basedir . $image_path)) {
+                                        @unlink($basedir . $image_path);
+                                    }
+                                }
+                                /// remove old thumbnails images
+                                if (isset($imageConf['thumbnails'])) {
+                                    foreach ($imageConf['thumbnails'] as $suffix => $val) {
+                                        $prefix = @$val['prefix'] ?? $suffix;
+                                        $_file = $basedir . $prefix . $image_path;
+                                        if (is_file($_file)) {
+                                            @unlink($_file);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * upload以下のフォルダを作成/書き込み権限のチェック
+     * 
+     * */
+    protected function checkUploadDirectory()
+    {
+        // フォルダを作成するかしないか、$this->uploadDirCreateの値が決める
+        // (new \Cake\Filesystem\Folder())->create($common_tmp, 0777);
+        // new Folder($this->path_images, $this->uploadDirCreate, $this->uploadDirMask);
+        // new Folder($this->path_file, $this->uploadDirCreate, $this->uploadDirMask);
+    }
+
+
+    /**
+     * upload以下のフォルダを作成/書き込み権限のチェック
+     * 
+     * */
+    protected function _uploadForCkEditor(EntityInterface $entity)
     {
         if (is_null($this->code_upload) || !$this->code_upload || is_null($this->slug)) return;
 
@@ -84,6 +346,12 @@ class AppTable extends Table
             $entities = $model_attached->newEntities($data_files);
             $model_attached->saveMany($entities);
         }
+    }
+
+
+    public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
+    {
+        $this->_uploadForCkEditor($entity);
         return true;
     }
 

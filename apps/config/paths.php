@@ -103,3 +103,6 @@ define('DEFAULT_ADMIN_TEMP', WEBROOT . 'template/admin' . DS);
  * Path to the default ADMIN template.
  */
 define('TEMPLATE_PATH', APP . 'Template' . DS);
+
+
+define('UPLOAD_BASE_URL', 'upload' . DS);

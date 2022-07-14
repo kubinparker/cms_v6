@@ -164,28 +164,31 @@ function removeFile ( e )
 
 function handleSaveButton ( editor )
 {
+
     $( '.submitButton' ).on( 'click', evt =>
     {
-        $( '#event-content' ).val( editor.getData() );
+        if ( editor )
+        {
+            $( '#event-content' ).val( editor.getData() );
 
-        const img_list = Array.from(
-            new DOMParser()
-                .parseFromString( editor.getData(), 'text/html' )
-                .querySelectorAll( 'img' )
-        )
-            .map( img => `<input type="hidden" name="image[]" value="${ img.getAttribute( 'src' ) }">` );
+            const img_list = Array.from(
+                new DOMParser()
+                    .parseFromString( editor.getData(), 'text/html' )
+                    .querySelectorAll( 'img' )
+            )
+                .map( img => `<input type="hidden" name="image[]" value="${ img.getAttribute( 'src' ) }">` );
 
 
-        const file_list = Array.from(
-            new DOMParser()
-                .parseFromString( editor.getData(), 'text/html' )
-                .querySelectorAll( 'a' )
-        )
-            .map( f => `<input type="hidden" name="_files[]" value="${ f.getAttribute( 'href' ) }">` );
+            const file_list = Array.from(
+                new DOMParser()
+                    .parseFromString( editor.getData(), 'text/html' )
+                    .querySelectorAll( 'a' )
+            )
+                .map( f => `<input type="hidden" name="_files[]" value="${ f.getAttribute( 'href' ) }">` );
 
-        $( '#frm-form' ).append( img_list.join( '' ) )
-        $( '#frm-form' ).append( file_list.join( '' ) )
-
+            $( '#frm-form' ).append( img_list.join( '' ) )
+            $( '#frm-form' ).append( file_list.join( '' ) )
+        }
         setTimeout( () =>
         {
             $( '#frm-form' ).submit();
@@ -292,6 +295,8 @@ $( function ()
         } )
         .catch( error =>
         {
-            console.error( error );
+            // console.log( error );
         } );
+
+    handleSaveButton( false );
 } );

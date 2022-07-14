@@ -5,6 +5,12 @@ function html_decode($text)
 }
 
 
+function getExtension($filename)
+{
+    return strtolower(substr(strrchr($filename, '.'), 1));
+}
+
+
 function getDateInMonthForCalendar($date = 'now')
 {
 

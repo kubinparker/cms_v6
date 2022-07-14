@@ -150,7 +150,7 @@ class AppController extends Controller
         if (empty($cond)) return null;
 
         $mapper = function ($table, $key, $mapReduce) {
-            if ($table->attaches) $table->attaches = json_decode($table->attaches, true);
+            if ($table->attaches) $table->attaches = json_decode($table->attaches, null);
             $mapReduce->emit($table, $key);
         };
 

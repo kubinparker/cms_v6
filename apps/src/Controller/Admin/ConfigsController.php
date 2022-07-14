@@ -24,7 +24,7 @@ class ConfigsController extends AppController
     public function index()
     {
         $this->setList();
-        parent::_edit(0);
+        parent::_edit(0, ['redirect' => '/admin']);
     }
 
 

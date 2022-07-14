@@ -22,9 +22,4 @@ class {0}Table extends AppTable
         // any validation
         return $validator;
     =&
-
-    public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
-    &=
-        parent::afterSave($event, $entity, $options);
-    =&
 =&
