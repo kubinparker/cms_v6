@@ -32,6 +32,10 @@ class ConfigsTable extends Table
                 [
                     'custom' => [
                         'rule' => function ($value, $context) {
+                            if (!preg_match("/^[a-zA-Z0-9]+$/u", $value)) {
+                                return '※アンファーベストと数字だけで入力してください。';
+                            }
+
                             if (
                                 $this->find(
                                     'all',
