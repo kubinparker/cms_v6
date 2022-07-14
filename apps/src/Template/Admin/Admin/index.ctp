@@ -8,6 +8,11 @@
 	.parent_link {
 		line-height: 1.4 !important
 	}
+
+	h3 a {
+		text-decoration: none !important;
+		color: #fff !important;
+	}
 </style>
 <?php $this->end() ?>
 <div class="title_area">
@@ -24,14 +29,14 @@
 	<?php foreach ($user_menu_list as $title => $menu) : ?>
 		<?php if (empty($menu)) continue; ?>
 		<div class="box">
-			<h3 style="margin-bottom:20px;"><?= html_decode($title); ?></h3>
+			<h3 style="margin-bottom:20px;"><?= $title == '設定' ? '<a href="/admin/configs/clear-config">設定</a>' : html_decode($title); ?></h3>
 			<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
 				<?php foreach ($menu as $slug => $name) : ?>
 					<?= $this->Html->link(
-								$name,
-								['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
-								['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
-							); ?>
+						$name,
+						['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
+						['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
+					); ?>
 				<?php endforeach; ?>
 			</div>
 		</div>
@@ -43,10 +48,10 @@
 		<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
 			<?php foreach ($ds as $menu) : ?>
 				<?= $this->Html->link(
-						$menu->title,
-						[],
-						['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
-					); ?>
+					$menu->title,
+					[],
+					['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
+				); ?>
 			<?php endforeach; ?>
 		</div>
 	</div>

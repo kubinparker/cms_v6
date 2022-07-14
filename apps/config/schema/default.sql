@@ -1,24 +1,6 @@
--- phpMyAdmin SQL Dump
--- version 4.9.3
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: Jul 13, 2022 at 08:08 AM
--- Server version: 5.7.26
--- PHP Version: 7.4.2
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
---
--- Database: `cms_v6`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `configs`
---
 
 CREATE TABLE `configs` (
   `id` int(11) NOT NULL,
@@ -28,11 +10,11 @@ CREATE TABLE `configs` (
   `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
+INSERT INTO `configs` (`id`, `title`, `slug`, `is_default`, `created`, `modified`) VALUES
+(NULL, '設定', 'configs', '1', CURRENT_TIMESTAMP, NULL),
+(NULL, '添付', 'attached', '1', CURRENT_TIMESTAMP, NULL),
+(NULL, 'ユーザー', 'users', '1', CURRENT_TIMESTAMP, NULL);
 
---
--- Table structure for table `users`
---
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -46,49 +28,26 @@ CREATE TABLE `users` (
   `role` int(11) NOT NULL DEFAULT '0' COMMENT '権限'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `users`
---
 
 INSERT INTO `users` (`id`, `created`, `modified`, `username`, `password`, `name`, `email`, `status`, `role`) VALUES
 (1, '2022-07-04 17:49:36', '2022-07-05 15:50:34', 'admin', '$2y$10$hp8PDeHBvG26x7c6nB.iVuB0rl0FGZXtirB15wnHWfwJ5GYKVMd0C', 'Admin', 'develop+cms6_admin@caters.co.jp', 'publish', 0);
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `configs`
---
 ALTER TABLE `configs`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `users`
---
+
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `configs`
---
 ALTER TABLE `configs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `users`
---
+
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-
---
--- Table structure for table `attached`
---
 
 CREATE TABLE `attached` (
   `id` int(11) NOT NULL,
@@ -101,22 +60,10 @@ CREATE TABLE `attached` (
   `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `attached`
---
 ALTER TABLE `attached`
   ADD PRIMARY KEY (`id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `attached`
---
 ALTER TABLE `attached`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

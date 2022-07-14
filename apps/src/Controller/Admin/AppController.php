@@ -370,7 +370,9 @@ class AppController extends BaseController
     {
         $list = [];
 
-        $ds = $this->loadModel('configs')->find('all')->toArray();
+        $ds = $this->loadModel('configs')->find('all')
+            ->where(['is_default' => 0])
+            ->toArray();
 
         $role = @$this->Session->read($this->auth_storage_key)['role'];
 

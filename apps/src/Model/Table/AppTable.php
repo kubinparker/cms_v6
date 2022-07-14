@@ -15,7 +15,7 @@ class AppTable extends Table
 
     public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
     {
-        if (is_null($this->code_upload) || !$this->code_upload) return;
+        if (is_null($this->code_upload) || !$this->code_upload || !isset($options["slug"])) return;
         $_id = $entity->id;
         $hash_code = $this->code_upload;
 
