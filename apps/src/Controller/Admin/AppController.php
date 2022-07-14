@@ -32,6 +32,11 @@ use App\Controller\AppController as BaseController;
  */
 class AppController extends BaseController
 {
+    const NEW_CONFIG = 0;
+    const DEFAULT_CONFIG = 1;
+    const PUBLISH_CONFIG = 2;
+
+
     public $auth_storage_key = '';
 
     public $font_config = [
@@ -371,7 +376,7 @@ class AppController extends BaseController
         $list = [];
 
         $ds = $this->loadModel('configs')->find('all')
-            ->where(['is_default' => 0])
+            ->where(['is_default !=' => self::DEFAULT_CONFIG])
             ->toArray();
 
         $role = @$this->Session->read($this->auth_storage_key)['role'];

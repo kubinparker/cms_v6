@@ -43,13 +43,13 @@ class ConfigsController extends AppController
 
     public function clearConfig()
     {
-        //メモ： 公開したら　全てSlugの is_default は１に変更する
+        //メモ： 公開したら　全てSlugの is_default は PUBLISH_CONFIG (2) に変更する
 
         $role = @$this->Session->read($this->auth_storage_key)['role'];
         if (!in_array($role, [User::ROLE_DEVELOP], true)) $this->redirect('/admin');
 
         $config = $this->{$this->modelName}->find('all')
-            ->where(['is_default' => 0])
+            ->where(['is_default' => self::NEW_CONFIG])
             ->toArray();
 
         foreach ($config as $cf) {
