@@ -14,6 +14,8 @@ class AppTable extends Table
     public $code_upload = null;
     public $slug = null;
 
+    public $attaches = ['images' => [], 'files' => []];
+
     public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
     {
         if (is_null($this->code_upload) || !$this->code_upload || is_null($this->slug)) return;
