@@ -1,9 +1,7 @@
 <tr>
     <td>File <span class="remove_item" onclick="removeItem(this, '_file')"></span></td>
     <td>
-        <input type="file" multiple="multiple" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">                        
-        <div class="remark">※ pdf, csv, xlsx, xls, doc, docx ファイルのみ</div>
-        <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>
+        <?= $this->element('form/file') ?>
         {0}
     </td>
 </tr>

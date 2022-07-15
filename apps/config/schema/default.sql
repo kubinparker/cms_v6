@@ -55,6 +55,7 @@ CREATE TABLE `attached` (
   `slug` varchar(20) NOT NULL,
   `file_name` varchar(255) NOT NULL COMMENT 'ファイル名',
   `original_file_name` varchar(255) NOT NULL COMMENT '元ファイル名',
+  `size` int(11) NULL,
   `extension` varchar(4) NOT NULL COMMENT 'ファイル拡大',
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP

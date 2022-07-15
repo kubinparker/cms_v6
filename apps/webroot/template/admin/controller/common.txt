@@ -32,6 +32,8 @@ class {0}Controller extends AppController
     &=
         $option = [];
         $options = [];
+        {contain}
+
         parent::_edit($id, $option, $options);
     =&
 

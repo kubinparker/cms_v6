@@ -1,0 +1,84 @@
+.row_file {
+    margin-top: 1em;
+}
+
+.row_file span {
+    margin-left: 20px;
+    padding: 3px 7px;
+    background: #ab3030;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+a.is_file {
+    position: relative;
+    padding: 5px 10px 3px 40px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    color: #333;
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 400;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    -webkit-transition: opacity .3s ease;
+    -o-transition: opacity .3s ease;
+    transition: opacity .3s ease;
+    will-change: opacity;
+    z-index: 0;
+    text-align: left;
+}
+
+.row_file .is_file {
+    display: inline-flex;
+    padding: 10px 25px 10px 50px;
+}
+
+a.is_file:before {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    content: "";
+}
+
+.row_file .is_file:before {
+    top: 7px;
+    left: 15px;
+}
+
+a.is_file.docx:before,
+a.is_file.doc:before {
+    background: url(/assets/img/common/doc.svg) no-repeat 50%;
+    background-size: contain;
+}
+
+a.is_file.pdf:before {
+    background: url(/assets/img/common/pdf.svg) no-repeat 50%;
+    background-size: contain;
+}
+
+a.is_file.xlsx:before,
+a.is_file.xls:before {
+    background: url(/assets/img/common/xls.svg) no-repeat 50%;
+    background-size: contain;
+}
+
+a.is_file.csv:before,
+.csv span:before {
+    background: url(/assets/img/common/file-csv-solid.svg) no-repeat 50%;
+    background-size: contain;
+}
+
+.csv span {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex
+}

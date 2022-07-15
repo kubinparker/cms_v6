@@ -47,6 +47,9 @@ class AppController extends BaseController
 
     public $admin_config = [];
 
+    public $file_extension = ['pdf', 'csv', 'xlsx', 'xls', 'doc', 'docx'];
+    public $image_extension = ['jpg', 'jpeg', 'gif', 'png'];
+
     /**
      * Initialization hook method.
      *
@@ -342,7 +345,7 @@ class AppController extends BaseController
 
         $folder_name = $this->Session->read('code_upload');
 
-        $exts = $type == 'files' ? ['pdf', 'csv', 'xlsx', 'xls', 'doc', 'docx'] : ['jpg', 'jpeg', 'gif', 'png'];
+        $exts = $type == 'files' ? $this->file_extension : $this->image_extension;
 
         $upload_file = $datas;
         $return = [];
@@ -363,11 +366,24 @@ class AppController extends BaseController
                     move_uploaded_file($upload['tmp_name'], $dir . '/' . $newname);
                     chmod($dir . '/' . $newname, 0777);
 
-                    $return[] = ['url' => __('/{0}/{1}/{2}', [$tmpFolder, $folder_name, $newname]), 'original_name' => $upload['name'], 'class' => $ext, 'element' => [$upload['name']]];
+                    $return[] = ['url' => __('/{0}/{1}/{2}', [$tmpFolder, $folder_name, $newname]), 'original_name' => $upload['name'], 'size' => $upload['size'], 'class' => $ext, 'element' => [$upload['name']]];
                 }
             }
         }
         return $return;
+    }
+
+
+    protected function _associations_attached()
+    {
+        return [
+            'AttachedFiles' => function ($q) {
+                return $q->where(['slug' => 'News']);
+            },
+            'AttachedImages' => function ($q) {
+                return $q->where(['slug' => 'News']);
+            }
+        ];
     }
 
 

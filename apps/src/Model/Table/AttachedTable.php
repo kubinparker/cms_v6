@@ -10,5 +10,6 @@ class AttachedTable extends Table
 {
     public function validationDefault(Validator $validator)
     {
+        return $validator;
     }
 }

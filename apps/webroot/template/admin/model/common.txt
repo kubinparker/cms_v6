@@ -3,9 +3,6 @@
 namespace App\Model\Table;
 
 use Cake\Validation\Validator;
-
-use Cake\Event\Event;
-use Cake\Datasource\EntityInterface;
 use App\Model\Table\AppTable;
 
 
@@ -15,6 +12,7 @@ class {0}Table extends AppTable
     public function initialize(array $config)
     &=
         $this->slug = "{0}";
+        {contain}
     =&
 
     public function validationDefault(Validator $validator)

@@ -197,13 +197,16 @@ class MyBehavior extends Behavior
         if (!$this->is_admin) return;
         $slug = ucfirst($this->slug);
 
+        $id_attached = ($this->data_item && (in_array('file', $this->data_item, true) || in_array('images', $this->data_item, true)));
+        $model_contain = $id_attached ? '$options["contain"] = $this->_associations_attached();' : '';
+
         // controller
-        $controller = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'controller/common.txt', true), $slug);
+        $controller = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'controller/common.txt', true), [$slug, 'contain' => $model_contain]);
         $file = APP . 'Controller/Admin/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
 
         // model
-        $model = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/common.txt', true), $slug);
+        $model = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/common.txt', true), [$slug, 'contain' => $model_contain]);
         $file = APP . 'Model/Table/' . $slug . 'Table.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $model));
 

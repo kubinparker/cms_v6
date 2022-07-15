@@ -143,11 +143,12 @@ function uploadFile ( e )
             if ( resp.success )
             {
                 for ( let i = 0; i < resp.data.length; i++ )
-                    $( e ).parent( 'td' ).append( `
+                    $( e ).parents( 'td' ).append( `
                         <p class="row_file">
                             <a class="is_file ${ resp.data[ i ].class }" href="${ resp.data[ i ].url }" target="_blank">${ resp.data[ i ].original_name }</a>
-                            <span onclick="removeFile(this)">X</span>
-                            <input type="hidden" name="__files[${ resp.data[ i ].original_name }]" value="${ resp.data[ i ].url }"/>
+                            <span onclick="removeFile(this)">削除</span>
+                            <input type="hidden" name="__files[${ resp.data[ i ].original_name }][path]" value="${ resp.data[ i ].url }"/>
+                            <input type="hidden" name="__files[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
                         </p>
                     `);
             }

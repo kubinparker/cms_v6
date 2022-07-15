@@ -16,6 +16,7 @@
         "/admin/common/css/bootstrap.min",
         "/admin/common/css/jquery.datetimepicker",
     ]); ?>
+    <?= $this->fetch('css'); ?>
 
     <?= $this->Html->script([
         "/admin/common/js/jquery-3.5.1.min",

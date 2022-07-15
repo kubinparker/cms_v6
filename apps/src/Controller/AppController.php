@@ -18,6 +18,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\Entity;
 
 /**
  * Application Controller
@@ -149,8 +150,26 @@ class AppController extends Controller
 
         if (empty($cond)) return null;
 
-        $mapper = function ($table, $key, $mapReduce) {
-            if ($table->attaches) $table->attaches = json_decode($table->attaches, null);
+        $modelName = $this->modelName;
+
+        $mapper = function ($table, $key, $mapReduce) use ($modelName) {
+            $table->attaches = [];
+
+            // file attached
+            if ($table->attached_files)
+                $table->attaches['files'] = array_map(function ($f) use ($modelName) {
+                    $f->path = '/upload' . DS . $modelName . DS . $f->id . DS . 'files' . DS . $f->file_name;
+                    return $f;
+                }, $table->attached_files);
+
+            // images attached
+            if ($table->attached_images)
+                $table->attaches['images'] = array_map(function ($f) use ($modelName) {
+                    $f->path = '/upload' . DS . $modelName . DS . $f->id . DS . 'images' . DS . $f->file_name;
+                    $f->thumbnail = 'continue ////////';
+                    return $f;
+                }, $table->attached_images);
+
             $mapReduce->emit($table, $key);
         };
 
