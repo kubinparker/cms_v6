@@ -96,7 +96,7 @@ function uploadFile ( e )
     if ( files.length > 10 )
     {
         $( e )
-            .parent( 'td' )
+            .parents( 'td' )
             .append( `<div class="error-message">
                 <div class="error-message">最大１０ファイルまでしかアップロードできません。</div>
             </div>`);
@@ -124,7 +124,7 @@ function uploadFile ( e )
     if ( is_check_size )
     {
         $( e )
-            .parent( 'td' )
+            .parents( 'td' )
             .append( `<div class="error-message">
                 <div class="error-message">総容量は３２MBが超えました。</div>
             </div>`);
@@ -152,6 +152,79 @@ function uploadFile ( e )
                         </p>
                     `);
             }
+        }
+    } );
+}
+
+
+function uploadImages ( e )
+{
+    var fd = new FormData();
+    var files = $( e )[ 0 ].files;
+
+    $( e ).parent( 'td' ).find( '.error-message' ).remove();
+
+    if ( files.length > 10 )
+    {
+        $( e )
+            .parents( 'td' )
+            .append( `<div class="error-message">
+                <div class="error-message">最大１０ファイルまでしかアップロードできません。</div>
+            </div>`);
+
+        return false;
+    }
+
+    var total_size = 0;
+
+    var is_check_size = false;
+
+    for ( let i = 0; i < files.length; i++ )
+    {
+        const __size = ( files[ i ].size / 1024 / 1024 ).toFixed( 2 );
+        total_size += parseFloat( __size );
+
+        if ( __size > 32 || total_size > 32 )
+        {
+            is_check_size = true;
+            break;
+        }
+        fd.append( $( e ).attr( 'name' ), files[ i ] );
+    };
+
+    if ( is_check_size )
+    {
+        $( e )
+            .parents( 'td' )
+            .append( `<div class="error-message">
+                <div class="error-message">総容量は３２MBが超えました。</div>
+            </div>`);
+
+        return false;
+    }
+
+    $.ajax( {
+        'url': "/admin/configs/upload-image",
+        'contentType': false,
+        'processData': false,
+        'method': 'post',
+        'data': fd,
+        'dataType': 'json',
+        'success': function ( resp )
+        {
+            console.log( resp );
+            // if ( resp.success )
+            // {
+            //     for ( let i = 0; i < resp.data.length; i++ )
+            //         $( e ).parents( 'td' ).append( `
+            //             <p class="row_file">
+            //                 <a class="is_file ${ resp.data[ i ].class }" href="${ resp.data[ i ].url }" target="_blank">${ resp.data[ i ].original_name }</a>
+            //                 <span onclick="removeFile(this)">削除</span>
+            //                 <input type="hidden" name="__files[${ resp.data[ i ].original_name }][path]" value="${ resp.data[ i ].url }"/>
+            //                 <input type="hidden" name="__files[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
+            //             </p>
+            //         `);
+            // }
         }
     } );
 }
@@ -224,7 +297,7 @@ $( function ()
                 //         ...
                 //     ]
                 // }
-                uploadUrl: '/admin/configs/upload-image-event',
+                uploadUrl: '/admin/configs/upload-image-ckeditor',
                 withCredentials: true,
                 headers: {
                     // フォームの「csrfToken」Input Hiddenのバリューと同じ

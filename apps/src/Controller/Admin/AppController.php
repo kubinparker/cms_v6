@@ -313,12 +313,27 @@ class AppController extends BaseController
     /**
      * Ckeditorからイメージのアップロード
      * */
-    public function uploadImageEvent()
+    public function uploadImageCkeditor()
     {
         if ($this->request->is(['post', 'put'])) {
             $upload_file = (array) $this->request->getData('upload');
             $data = $this->__uploadTmp('upload_tmp', 'upload', [$upload_file]);
             echo json_encode($data[0]);
+            exit();
+        }
+        return $this->redirect(['prefix' => 'admin', 'controller' => 'Admin', 'action' => 'logout']);
+    }
+
+    /**
+     * Ckeditorからイメージのアップロード
+     * */
+    public function uploadImage()
+    {
+        if ($this->request->is(['post', 'put'])) {
+            dd($this->request->getData());
+            $upload_file = (array) $this->request->getData('images');
+            $data = $this->__uploadTmp('upload_tmp', 'upload', $upload_file);
+            echo json_encode(['success' => true, 'data' => $data]);
             exit();
         }
         return $this->redirect(['prefix' => 'admin', 'controller' => 'Admin', 'action' => 'logout']);
