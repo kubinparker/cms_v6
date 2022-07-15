@@ -160,6 +160,7 @@ function uploadFile ( e )
 function removeFile ( e )
 {
     $( e ).parents( 'p' ).remove();
+    $( '#is-upload' ).val( 1 );
 }
 
 

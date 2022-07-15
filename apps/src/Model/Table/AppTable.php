@@ -115,7 +115,7 @@ class AppTable extends Table
      * */
     protected function _uploadForCkEditor(EntityInterface $entity)
     {
-        if (is_null($this->code_upload) || !$this->code_upload || is_null($this->slug)) return;
+        if (intval($entity->is_upload) !== 1 && (is_null($this->code_upload) || !$this->code_upload || is_null($this->slug))) return;
 
         $_id = $entity->id;
         $hash_code = $this->code_upload;
@@ -160,6 +160,12 @@ class AppTable extends Table
         // upload file
         $tmp_file = $this->__upload($dir_file, $tmp_upload_file, $data_file, 'files');
 
+        // Tmp folderのファイルも全て削除する
+        if (!is_null($this->code_upload) && $this->code_upload) {
+            if (is_dir(WWW_ROOT . $tmp_upload_image)) system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, $tmp_upload_image])));
+            if (is_dir(WWW_ROOT . $tmp_upload_file)) system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, $tmp_upload_file])));
+        }
+
         if ($entity->content) {
             foreach ($tmp_file['files_in_content'] as $tmp)
                 $entity->content = str_replace($tmp[1], $tmp[0], $entity->content);
@@ -193,7 +199,7 @@ class AppTable extends Table
     protected function __upload($dir, $dir_tmp, $data_upload, $type = 'image')
     {
         $result = [];
-        // dd($dir, $dir_tmp, $data_upload);
+
         if (!empty($data_upload)) {
             // 共通 folder
             $common_tmp = WWW_ROOT . md5($dir);
@@ -247,7 +253,7 @@ class AppTable extends Table
             if (is_dir($common_tmp)) system(escapeshellcmd(__('rm -rf {0}', [$common_tmp])));
 
             // Tmp folderのファイルも全て削除する
-            if (is_dir(WWW_ROOT . $dir_tmp)) system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, $dir_tmp])));
+            // if (is_dir(WWW_ROOT . $dir_tmp)) system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, $dir_tmp])));
         } else {
             // 存在しているファイルが削除する
             if (is_dir($dir)) array_map('unlink', array_filter((array) glob(__('{0}{1}*', [WWW_ROOT, $dir]))));

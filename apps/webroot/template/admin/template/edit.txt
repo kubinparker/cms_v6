@@ -19,6 +19,7 @@
 		<h3>新規登録</h3>
         <div class="table_area form_area">
             <?= $this->Form->create(@$entity, ['type' => 'file', 'id' => 'frm-form']); ?>
+            <?= $this->Form->control('is_upload', ['type' => 'hidden', 'value' => 0]) ?>
             <div class="table_area form_area">
                 <table class="vertical_table table__meta">
                 {1}
