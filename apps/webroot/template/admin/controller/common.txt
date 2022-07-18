@@ -38,11 +38,10 @@ class {0}Controller extends AppController
     =&
 
 
-    public function delete($id, $type="content")
+    public function delete($id)
     &=
-        $columns = null;
         $options = [];
-        parent::_delete($id, $type, $columns, $options);
+        parent::_delete($id, $options);
     =&
 
 

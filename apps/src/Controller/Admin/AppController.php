@@ -209,7 +209,7 @@ class AppController extends BaseController
      * @param string $type
      * @param \ArrayObject $options
      */
-    protected function _delete($id, $type, $columns = null, $options = [])
+    protected function _delete($id, $options = [])
     {
         $option = array_merge(
             ['redirect' => null],
@@ -218,49 +218,22 @@ class AppController extends BaseController
         extract($option);
 
         $data = $this->_detail($id);
-        if ($data && in_array($type, ['image', 'file', 'content'])) {
-            if ($type === 'image' && isset($this->{$this->modelName}->attaches['images'][$columns])) {
-                if (isset($data->attaches[$columns])) {
-                    foreach ($data->attaches[$columns] as $_) {
-                        $str_split = str_split($_);
-                        $str_split[0] = ($str_split[0] === DS) ? '' : DS;
-                        $_file = new File(WWW_ROOT . implode('', $str_split));
-                        if ($_file->exists()) $_file->delete();
-                    }
-                }
-                $data->{$columns} = null;
-                $this->{$this->modelName}->save($data);
-            } else if ($type === 'file' && isset($this->{$this->modelName}->attaches['files'][$columns])) {
-                if (isset($data->attaches[$columns])) {
-                    $str_split = str_split($data->attaches[$columns]);
-                    $str_split[0] = ($str_split[0] === DS) ? '' : DS;
-                    $_file = new File(WWW_ROOT . implode('', $str_split));
-                    if ($_file->exists()) $_file->delete();
+        if ($data) {
+            $this->{$this->modelName}->delete($data);
 
-                    $data->{$columns} = null;
-                    $data->{$columns . '_name'} = null;
-                    $data->{$columns . '_size'} = null;
-                    $this->{$this->modelName}->save($data);
+            $files = glob(WWW_ROOT . 'upload/' . $this->modelName . '/' . $id . '/files/*'); // file
+            foreach ($files as $file) { // iterate files
+                if (is_file($file)) {
+                    unlink($file); // delete file
                 }
-            } else if ($type === 'content') {
-                $image_index = array_keys($this->{$this->modelName}->attaches['images']);
-                $file_index = array_keys($this->{$this->modelName}->attaches['files']);
-
-                $arr_file = array_merge($image_index, $file_index);
-                foreach ($arr_file as $idx) {
-                    if (!isset($data->attaches[$idx])) continue;
-                    $data->attaches[$idx] = !is_array($data->attaches[$idx]) ? [$data->attaches[$idx]] : $data->attaches[$idx];
-
-                    foreach ($data->attaches[$idx] as $_) {
-                        $str_split = str_split($_);
-                        $str_split[0] = ($str_split[0] === DS) ? '' : DS;
-                        $_file = new File(WWW_ROOT . implode('', $str_split));
-                        if ($_file->exists()) $_file->delete();
-                    }
-                }
-                $this->{$this->modelName}->delete($data);
-                $id = null;
             }
+            $files = glob(WWW_ROOT . 'upload/' . $this->modelName . '/' . $id . '/image/*'); // image
+            foreach ($files as $file) { // iterate files
+                if (is_file($file)) {
+                    unlink($file); // delete file
+                }
+            }
+            $id = null;
         }
 
         if ($redirect !== false) {
