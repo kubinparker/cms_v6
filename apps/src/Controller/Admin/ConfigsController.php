@@ -32,9 +32,19 @@ class ConfigsController extends AppController
     {
         if (!$this->request->is(['ajax', 'post'])) $this->redirect('/admin/logout');
         $result = ['success' => false];
-        if ($this->request->getData('type') && is_file(DEFAULT_ADMIN_TEMP . __('form/{0}.txt', $this->request->getData('type')))) {
-            $result['success'] = true;
-            $result['data'] = __(file_get_contents(DEFAULT_ADMIN_TEMP . __('form/{0}.txt', $this->request->getData('type')), true), '<input type="hidden" value="' . $this->request->getData('type') . '" name="data_item[]">');
+        if ($this->request->getData('type')) {
+            $f = '';
+
+            if (is_file(DEFAULT_ADMIN_TEMP . __('form/{0}_ajax.txt', $this->request->getData('type'))))
+                $f = DEFAULT_ADMIN_TEMP . __('form/{0}_ajax.txt', $this->request->getData('type'));
+
+            else if (is_file(DEFAULT_ADMIN_TEMP . __('form/{0}.txt', $this->request->getData('type'))))
+                $f = DEFAULT_ADMIN_TEMP . __('form/{0}.txt', $this->request->getData('type'));
+
+            if ($f !== '') {
+                $result['success'] = true;
+                $result['data'] = __(file_get_contents($f, true), '<input type="hidden" value="' . $this->request->getData('type') . '" name="data_item[]">');
+            }
         }
         echo json_encode($result);
         exit();
@@ -68,7 +78,10 @@ class ConfigsController extends AppController
                 APP . 'Template/' . $slug . '/',
                 APP . 'Template/Admin/' . $slug . '/',
                 // upload
-                WWW_ROOT . 'upload/' . $slug . '/'
+                WWW_ROOT . 'upload/' . $slug . '/',
+                // template mail
+                WWW_ROOT . 'Template/Email/text/' . $slug . '.ctp',
+                WWW_ROOT . 'Template/Email/text/' . $slug . '_admin.ctp'
             ];
 
             system(escapeshellcmd(__('rm -rf {0}', implode(' ', $files))));

@@ -51,6 +51,22 @@ a.is_file:before {
     left: 15px;
 }
 
+.row_file.data_image{
+    position: relative;
+}
+
+.row_file.data_image span{
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+}
+
+.row_file.data_image img{
+    max-width: 300px;
+    border: 1px solid #ccc;
+}
+
 a.is_file.docx:before,
 a.is_file.doc:before {
     background: url(/assets/img/common/doc.svg) no-repeat 50%;

@@ -157,7 +157,7 @@ function uploadFile ( e )
 }
 
 
-function uploadImages ( e )
+function uploadImages ( e, slug )
 {
     var fd = new FormData();
     var files = $( e )[ 0 ].files;
@@ -202,6 +202,7 @@ function uploadImages ( e )
 
         return false;
     }
+    fd.append('slug', slug);
 
     $.ajax( {
         'url': "/admin/configs/upload-image",
@@ -213,18 +214,18 @@ function uploadImages ( e )
         'success': function ( resp )
         {
             console.log( resp );
-            // if ( resp.success )
-            // {
-            //     for ( let i = 0; i < resp.data.length; i++ )
-            //         $( e ).parents( 'td' ).append( `
-            //             <p class="row_file">
-            //                 <a class="is_file ${ resp.data[ i ].class }" href="${ resp.data[ i ].url }" target="_blank">${ resp.data[ i ].original_name }</a>
-            //                 <span onclick="removeFile(this)">削除</span>
-            //                 <input type="hidden" name="__files[${ resp.data[ i ].original_name }][path]" value="${ resp.data[ i ].url }"/>
-            //                 <input type="hidden" name="__files[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
-            //             </p>
-            //         `);
-            // }
+            if ( resp.success )
+            {
+                for ( let i = 0; i < resp.data.length; i++ )
+                    $( e ).parents( 'td' ).append( `
+                        <p class="row_file data_image">
+                            <img src="${ resp.data[ i ].url }" alt="${ resp.data[ i ].original_name }"/>
+                            <span onclick="removeFile(this)">削除</span>
+                            <input type="hidden" name="__files[${ resp.data[ i ].original_name }][path]" value="${ resp.data[ i ].url }"/>
+                            <input type="hidden" name="__files[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
+                        </p>
+                    `);
+            }
         }
     } );
 }

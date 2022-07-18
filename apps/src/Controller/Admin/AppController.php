@@ -18,8 +18,9 @@ namespace App\Controller\Admin;
 
 use Cake\Event\Event;
 use Cake\Core\Configure;
-use App\Model\Entity\User;
 use Cake\Filesystem\File;
+use App\Model\Entity\User;
+use Cake\ORM\TableRegistry;
 use App\Controller\AppController as BaseController;
 
 /**
@@ -36,7 +37,7 @@ class AppController extends BaseController
     const DEFAULT_CONFIG = 1;
     const PUBLISH_CONFIG = 2;
 
-
+    public $convertPath = '/usr/bin/convert';
     public $auth_storage_key = '';
 
     public $font_config = [
@@ -330,13 +331,110 @@ class AppController extends BaseController
     public function uploadImage()
     {
         if ($this->request->is(['post', 'put'])) {
-            dd($this->request->getData());
-            $upload_file = (array) $this->request->getData('images');
-            $data = $this->__uploadTmp('upload_tmp', 'upload', $upload_file);
-            echo json_encode(['success' => true, 'data' => $data]);
-            exit();
+            $data = (array) $this->request->getData();
+            if (isset($data['images'])) {
+                echo json_encode(['success' => true, 'data' => $this->__uploadTmpImages($data['images'], $data['slug'])]);
+                exit();
+            }
         }
         return $this->redirect(['prefix' => 'admin', 'controller' => 'Admin', 'action' => 'logout']);
+    }
+
+
+    protected function __uploadTmpImages($data, $model)
+    {
+        if (!$this->Session->check('code_upload')) $this->Session->write('code_upload', md5(round(microtime(true) * 10000)));
+        $folder_name = $this->Session->read('code_upload');
+
+        $model = TableRegistry::getTableLocator()->get($model);
+        $attaches_image = $model->attaches['images'];
+
+        if (isset($attaches_image['extensions']) && !empty($attaches_image['extensions']))
+            $this->image_extension = $attaches_image['extensions'];
+
+        $exts =  $this->image_extension;
+
+        $upload_file = $data;
+        $return = [];
+
+        for ($i = 0; $i < count($upload_file); $i++) {
+            $upload = $upload_file[$i];
+
+            if (!empty($upload['tmp_name']) && $upload['error'] === UPLOAD_ERR_OK) {
+
+                $ext = strtolower(substr(strrchr($upload['name'], '.'), 1));
+
+                if (in_array($ext, $exts)) {
+                    $newname = __('{0}_{1}.{2}', [$folder_name, round(microtime(true) * 10000), $ext]);
+                    $dir = __('{0}upload_tmp/{1}/', [WWW_ROOT, $folder_name]);
+
+                    if (Self::getOS() == Self::OS_WIN)
+                        $model->generate_thumbnail($upload['tmp_name'], $dir . $newname, $attaches_image['width'], $attaches_image['height']);
+
+                    if (Self::getOS() == Self::OS_LINUX)
+                        $this->convert_img(__('{0}x{1}', $attaches_image['width'], $attaches_image['height']), $upload['tmp_name'], $dir . $newname);
+
+                    if (isset($attaches_image['thumbnails']) && !empty($attaches_image['thumbnails']))
+                        foreach ($attaches_image['thumbnails'] as $suffix => $val) {
+                            if (Self::getOS() == Self::OS_LINUX)
+                                $this->convert_img(__('{0}x{1}', $attaches_image['width'], $attaches_image['height']), $upload['tmp_name'], $dir . $newname);
+
+                            if (Self::getOS() == Self::OS_WIN)
+                                $model->generate_thumbnail($upload['tmp_name'], $dir . $suffix . $newname, $val['width'], $val['height']);
+                        }
+
+                    $return[] = ['url' => __('/upload_tmp/{0}/{1}', [$folder_name, $newname]), 'original_name' => $upload['name'], 'size' => $upload['size'], 'class' => $ext, 'element' => [$upload['name']]];
+                }
+            }
+        }
+        return $return;
+    }
+
+
+    public function convert_img($size, $source, $dist, $method = 'fit')
+    {
+        list($ow, $oh, $info) = getimagesize($source);
+        $sz = explode('x', $size);
+        $cmdline = $this->convertPath;
+        //サイズ指定ありなら
+        if (0 < $sz[0] && 0 < $sz[1]) {
+            if ($ow <= $sz[0] && $oh <= $sz[1]) {
+                //枠より完全に小さければ、ただのコピー
+                $size = $ow . 'x' . $oh;
+                $option = '-thumbnail ' . $size . '>';
+            } else {
+                //枠をはみ出していれば、縮小
+                if ($method === 'cover' || $method === 'crop') {
+                    //中央切り取り
+                    $crop = $size;
+                    if (($ow / $oh) <= ($sz[0] / $sz[1])) {
+                        //横を基準
+                        $size = $sz[0] . 'x';
+                    } else {
+                        //縦を基準
+                        $size = 'x' . $sz[1];
+                    }
+
+                    //cover
+                    $option = '-thumbnail ' . $size . '>';
+
+                    //crop
+                    if ($method === 'crop') {
+                        $option .= ' -gravity center -crop ' . $crop . '+0+0';
+                    }
+                } else {
+                    //通常の縮小 拡大なし
+                    $option = '-thumbnail ' . $size . '>';
+                }
+            }
+        } else {
+            //サイズ指定なしなら 単なるコピー
+            $size = $ow . 'x' . $oh;
+            $option = '-thumbnail ' . $size . '>';
+        }
+        $a = system(escapeshellcmd($cmdline . ' ' . $option . ' ' . $source . ' ' . $dist));
+        @chmod($dist, 0666);
+        return $a;
     }
 
     /**

@@ -3,12 +3,9 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
-use Cake\ORM\Query;
 use Cake\Event\Event;
-use Cake\Utility\Text;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
-use Cake\Database\Schema\TableSchemaInterface;
 
 
 

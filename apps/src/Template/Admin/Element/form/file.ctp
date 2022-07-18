@@ -1,7 +1,3 @@
-<?php $this->start('css'); ?>
-<?= $this->Html->css(["/admin/assets/css/edit"]); ?>
-<?php $this->end(); ?>
-
 <?= $this->Form->input('files[]', ['type' => 'file', 'label' => false, 'onchange' => 'uploadFile(this)', 'multiple' => 'true', 'error' => false, 'accept' => '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel']); ?>
 <div class="remark">※ pdf, csv, xlsx, xls, doc, docx ファイルのみ</div>
 <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>

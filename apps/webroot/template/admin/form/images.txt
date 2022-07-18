@@ -1,10 +1,7 @@
 <tr>
     <td>Image <span class="remove_item" onclick="removeItem(this, '_images')"></span></td>
     <td class="edit_image_area">
-        <input type="file" accept="image/jpeg,image/png,image/gif">										
-        <div class="remark">※jpeg , jpg , gif , png ファイルのみ</div>
-        <div>※横幅700以上を推奨。1200x1200以内に縮小されます。</div>
-        <div>※ファイルサイズ５MB以内</div>
+        <?= $this->element('form/image') ?>
         {0}
     </td>
 </tr>

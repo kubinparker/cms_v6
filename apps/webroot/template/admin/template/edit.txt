@@ -3,6 +3,10 @@
 <script src="/admin/common/js/ja.js"></script>
 <?php $this->end(); ?>
 
+<?php $this->start('css'); ?>
+<?= $this->Html->css(["/admin/assets/css/edit"]); ?>
+<?php $this->end(); ?>
+
 <div class="title_area">
 	<h1>{0}管理</h1>
 	<div class="pankuzu">
