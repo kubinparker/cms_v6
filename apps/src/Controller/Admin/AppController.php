@@ -16,9 +16,9 @@
 
 namespace App\Controller\Admin;
 
+use Cake\ORM\Table;
 use Cake\Event\Event;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
 use App\Model\Entity\User;
 use Cake\ORM\TableRegistry;
 use App\Controller\AppController as BaseController;
@@ -167,6 +167,7 @@ class AppController extends BaseController
         extract($option);
 
         $data = $id &&  $this->_detail($id, $conditions, $options) ? $this->_detail($id, $conditions, $options) : $this->{$this->modelName}->newEntity();
+
         if ($this->request->is(['post', 'put']) && $this->request->getData()) {
             if ($saveMany) $data = $this->{$this->modelName}->patchEntity($data, $this->request->getData(), ['fields' => $saveMany]);
             else $data = $this->{$this->modelName}->patchEntity($data, $this->request->getData());
@@ -258,7 +259,8 @@ class AppController extends BaseController
         ], $options);
         extract($options);
 
-        if ($this->_detail($id)) $this->{$this->modelName}->movePosition($id, $pos);
+        if (get_class($this->{$this->modelName}) !== \Cake\ORM\Table::class && $this->_detail($id))
+            $this->{$this->modelName}->movePosition($this->{$this->modelName}, $id, $pos);
 
         if ($redirect)  $this->redirect($redirect);
     }
@@ -475,15 +477,15 @@ class AppController extends BaseController
 
     protected function setList()
     {
+        parent::setList();
         $list = [];
-
-        $ds = $this->loadModel('configs')->find('all')
-            ->where(['is_default !=' => self::DEFAULT_CONFIG])
-            ->toArray();
 
         $role = @$this->Session->read($this->auth_storage_key)['role'];
 
-        $list['ds'] = $ds;
+        $list['config_list'] = $this->loadModel('configs')->find('all')
+            ->where(['is_default !=' => self::DEFAULT_CONFIG])
+            ->toArray();
+
         $list['role'] = $role;
         $list['role_list'] = User::$role_list;
         $list['user_site_list'] = [];

@@ -23,7 +23,7 @@ class {0}Controller extends AppController
     public function index()
     &=
         $conditions = [];
-        $options = ['limit' => null];
+        $options = ['limit' => null, 'order' => [$this->modelName . '.position ASC']];
         parent::_lists($conditions, $options);
     =&
 

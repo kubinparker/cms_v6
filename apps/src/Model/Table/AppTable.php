@@ -16,6 +16,10 @@ class AppTable extends Table
 
     public $attaches = ['images' => [], 'files' => []];
 
+    public function initialize(array $config)
+    {
+        $this->addBehavior('Position');
+    }
 
     /**
      * 
@@ -152,10 +156,10 @@ class AppTable extends Table
             // }
         }
 
-        if ($entity->image) $this->__upload($dir_img, $tmp_upload_image, $entity->image);
+        if ($entity->image) $this->__upload($dir_img, $entity->image);
 
         // upload file
-        $tmp_file = $this->__upload($dir_file, $tmp_upload_file, $data_file, 'files');
+        $tmp_file = $this->__upload($dir_file, $data_file, 'files');
 
         // Tmp folderのファイルも全て削除する
         if (!is_null($this->code_upload) && $this->code_upload) {
@@ -193,7 +197,7 @@ class AppTable extends Table
     }
 
 
-    protected function __upload($dir, $dir_tmp, $data_upload, $type = 'image')
+    protected function __upload($dir, $data_upload, $type = 'image')
     {
         $result = [];
 

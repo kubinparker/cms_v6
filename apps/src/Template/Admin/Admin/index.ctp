@@ -46,7 +46,7 @@
 	<div class="box">
 		<h3 style="margin-bottom:20px;">コンテンツ</h3>
 		<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
-			<?php foreach ($ds as $menu) : ?>
+			<?php foreach ($config_list as $menu) : ?>
 				<?= $this->Html->link(
 					$menu->title,
 					['prefix' => 'admin', 'controller' => strtolower($menu->slug), 'action' => 'index'],

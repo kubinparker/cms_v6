@@ -217,3 +217,7 @@ if (Configure::read('debug')) {
 
 // Plugin::load('Admin');
 \App\Application::addPlugin('DebugKit');
+
+// define
+define('PUBLISH', 'publish');
+define('DRAFT', 'draft');

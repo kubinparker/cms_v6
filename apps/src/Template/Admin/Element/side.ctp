@@ -28,7 +28,7 @@ use App\Model\Entity\User;
                 <span class="parent_link">メニュー</span>
                 <ul class="submenu">
                     <li>
-                        <?php foreach ($ds as $menu) : ?>
+                        <?php foreach ($config_list as $menu) : ?>
                             <?= $this->Html->link($menu->title, ['prefix' => 'admin', 'controller' => strtolower($menu->slug), 'action' => 'index']); ?>
                         <?php endforeach; ?>
                     </li>

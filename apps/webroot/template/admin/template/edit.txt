@@ -13,16 +13,16 @@
 		<ul>
 			<?= $this->element('pankuzu_home'); ?>
 			<li><?= $this->Html->link('一覧画面',['action'=>'index']); ?></li>
-			<li>新規登録</li>
+			<li><?= $entity->isNew() ? '新規登録' : '更新' ?></li>
 		</ul>
 	</div>
 </div>
 
 <div class="content_inr">
 	<div class="box config">
-		<h3>新規登録</h3>
+		<h3><?= $entity->isNew() ? '新規登録' : '更新' ?></h3>
         <div class="table_area form_area">
-            <?= $this->Form->create(@$entity, ['type' => 'file', 'id' => 'frm-form']); ?>
+            <?= $this->Form->create($entity, ['type' => 'file', 'id' => 'frm-form']); ?>
             <?= $this->Form->control('is_upload', ['type' => 'hidden', 'value' => 0]) ?>
             <div class="table_area form_area">
                 <table class="vertical_table table__meta">
@@ -31,8 +31,10 @@
             </div>
             <?= $this->Form->end(); ?>
             <div class="btn_area btn_area--center">
-                <a href="#" class="btn_confirm submitButton"><?= @$data->id > 0 ? '変更する' : '登録する' ?></a>
-                <?php if (@$data->id > 0) ?><a href="javascript:kakunin('データを完全に削除します。よろしいですか？','<?= $this->Url->build(['action' => 'delete', @$data['id'], 'content']) ?>')" class="btn_delete">削除する</a>
+                <a href="#" class="btn_confirm submitButton"><?= $entity->isNew() ? '登録する' : '変更する' ?></a>
+                <?php if (!$entity->isNew()) : ?>
+                    <a href="javascript:kakunin('データを完全に削除します。よろしいですか？','<?= $this->Url->build(['action' => 'delete', $entity['id'], 'content']) ?>')" class="btn_delete">削除する</a>
+                <?php endif; ?>
             </div>
         </div>
 	</div>

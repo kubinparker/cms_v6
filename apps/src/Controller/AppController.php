@@ -137,7 +137,7 @@ class AppController extends Controller
         } else $lists = $this->{$this->modelName}->find('all')->mapReduce($mapper, $reducer);
 
         $this->set('total_count', $lists->count());
-        $datas = ($this->paginate['limit'] === null) ? $lists->toArray() : $this->paginate($lists, $options);
+        $datas = ($this->paginate['limit'] === null) ? $lists : $this->paginate($lists, $options);
         $this->set($this->{$this->modelName}->getTable(), $datas);
         return $datas;
     }
@@ -228,5 +228,20 @@ class AppController extends Controller
             default:
                 return self::OS_UNKNOWN;
         }
+    }
+
+
+    protected function setList()
+    {
+        $list = [];
+
+        $list['status'] = [
+            PUBLISH => '掲載中',
+            DRAFT => '下書き'
+        ];
+
+        if (!empty($list)) $this->set(array_keys($list), $list);
+        $this->list = $list;
+        return $list;
     }
 }
