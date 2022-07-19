@@ -2,6 +2,7 @@
 $slug = strtolower($ModelName);
 $count = isset($total_count) ? $total_count : 0;
 $has_status = $$slug->getRepository()->getSchema()->hasColumn('status');
+$has_position = $$slug->getRepository()->getSchema()->hasColumn('position');
 $datas = $$slug->toArray();
 ?>
 
@@ -27,20 +28,20 @@ $datas = $$slug->toArray();
 		<div class="table_area">
 			<table class="table__list" style="table-layout: fixed;">
 				<colgroup>
-					<?= $has_status ? '<col style="width: 135px;">' : '' ?>
+					<?= $has_status ? '<col style="width: 135px;">' : "" ?>
 					<col>
 					<col>
 					<col>
 					<col style="width: 80px;">
-					<col style="width: 150px;">
+					<?= $has_position ? '<col style="width: 150px;">' : "" ?>
 				</colgroup>
 				<tr>
-					<?= $has_status ? '<th>ステイタス</th>' : '' ?>
+					<?= $has_status ? '<th>ステイタス</th>' : "" ?>
 					<th>項目１</th>
 					<th>項目２</th>
 					<th>項目３</th>
 					<th style="text-align:center;">確認</th>
-					<th style="text-align:center;">順序の変更</th>
+					<?= $has_position ? '<th style="text-align:center;">順序の変更</th>' : "" ?>
 				</tr>
                 <?php foreach ($datas as $key => $data) : ?>
                     <?php
@@ -71,33 +72,35 @@ $datas = $$slug->toArray();
                             </div>
                         </td>
 
-                        <td>
-                            <ul class="ctrlis">
-                                <?php if ($key == 0) : ?>
-                                    <li class="non">&nbsp;</li>
-                                    <li class="non">&nbsp;</li>
-                                <?php else : ?>
-                                    <li class="cttop">
-                                        <?= $this->Html->link('top', ['action' => 'position', $data->id, 'top'], ['class' => 'scroll_pos']) ?>
-                                    </li>
-                                    <li class="ctup">
-                                        <?= $this->Html->link('top', ['action' => 'position', $data->id, 'up'], ['class' => 'scroll_pos']) ?>
-                                    </li>
-                                <?php endif; ?>
+                        <?php if ($has_position) : ?>
+                            <td>
+                                <ul class="ctrlis">
+                                    <?php if ($key == 0) : ?>
+                                        <li class="non">&nbsp;</li>
+                                        <li class="non">&nbsp;</li>
+                                    <?php else : ?>
+                                        <li class="cttop">
+                                            <?= $this->Html->link('top', ['action' => 'position', $data->id, 'top'], ['class' => 'scroll_pos']) ?>
+                                        </li>
+                                        <li class="ctup">
+                                            <?= $this->Html->link('top', ['action' => 'position', $data->id, 'up'], ['class' => 'scroll_pos']) ?>
+                                        </li>
+                                    <?php endif; ?>
 
-                                <?php if ($key == $count - 1) : ?>
-                                    <li class="non">&nbsp;</li>
-                                    <li class="non">&nbsp;</li>
-                                <?php else : ?>
-                                    <li class="ctdown">
-                                        <?= $this->Html->link('top', ['action' => 'position', $data->id, 'down'], ['class' => 'scroll_pos']) ?>
-                                    </li>
-                                    <li class="ctend">
-                                        <?= $this->Html->link('bottom', ['action' => 'position', $data->id, 'bottom'], ['class' => 'scroll_pos']) ?>
-                                    </li>
-                                <?php endif; ?>
-                            </ul>
-                        </td>
+                                    <?php if ($key == $count - 1) : ?>
+                                        <li class="non">&nbsp;</li>
+                                        <li class="non">&nbsp;</li>
+                                    <?php else : ?>
+                                        <li class="ctdown">
+                                            <?= $this->Html->link('top', ['action' => 'position', $data->id, 'down'], ['class' => 'scroll_pos']) ?>
+                                        </li>
+                                        <li class="ctend">
+                                            <?= $this->Html->link('bottom', ['action' => 'position', $data->id, 'bottom'], ['class' => 'scroll_pos']) ?>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </td>
+                        <?php endif; ?>
 
                     </tr>
                 <?php endforeach; ?>

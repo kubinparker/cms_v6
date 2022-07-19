@@ -23,7 +23,10 @@ class {0}Controller extends AppController
     public function index()
     &=
         $conditions = [];
-        $options = ['limit' => null, 'order' => [$this->modelName . '.position ASC']];
+        $options = ['limit' => null];
+
+        if ($this->&=$this->modelName=&->hasField('position')) $options['order'] = [$this->modelName . '.position ASC'];
+
         parent::_lists($conditions, $options);
     =&
 
