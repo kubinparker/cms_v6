@@ -9,8 +9,22 @@ use App\Model\Table\AppTable;
 class {0}Table extends AppTable
 &=
 
+    public $attaches = ['images' => [
+        //'extensions' => ['jpg', 'jpeg', 'gif', 'png'],
+        //'width' => 430,
+        //'height' => 290,
+        //'thumbnails' => [
+        //    's' => [
+        //        'width' => 123,
+        //        'height' => 123
+        //    ]
+        //],
+    ], 'files' => []];
+
+
     public function initialize(array $config)
     &=
+        parent::initialize($config);
         $this->slug = "{0}";
         {contain}
     =&

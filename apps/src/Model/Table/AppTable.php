@@ -116,77 +116,133 @@ class AppTable extends Table
      * */
     protected function _uploadForCkEditor(EntityInterface $entity)
     {
-        if (intval($entity->is_upload) !== 1 && (is_null($this->code_upload) || !$this->code_upload || is_null($this->slug))) return;
+        if (is_null($this->slug)) return;
 
-        $_id = $entity->id;
-        $hash_code = $this->code_upload;
-
-        $slug = $this->slug;
-
-        $this->slug = null;
-
-        // Ckeditorの各ファイル
-        $files_in_content = @$entity->_files;
-        // 添付ファイル
-        $files_attach = @$entity->__files;
-
-        $data_file = [
-            'files_in_content' => $files_in_content,
-            'files_attach' => $files_attach,
+        $datas = [
+            'files' => [
+                'content' => $entity->_files ?? [], // Ckeditorの
+                'attach' => $entity->__files ?? [] // 添付
+            ],
+            'images' => [
+                'content' => $entity->_images ?? [], // Ckeditorの
+                'attach' => $entity->__images ?? [] // 添付
+            ]
         ];
 
-        // 館毎のイメージ保存パス
-        $dir_img = 'upload/' . $slug . '/' . $_id . '/image/';
-        // イベント毎のイメージ保存仮パス
-        $tmp_upload_image = 'upload_tmp/' . $hash_code . '/';
+        $entity = $this->process_upload($entity, $datas['files'], 'files');
+        $entity = $this->process_upload($entity, $datas['images'], 'images');
 
-        // 館毎のファイル保存パス
-        $dir_file = 'upload/' . $slug . '/' . $_id . '/files/';
-        // イベント毎のファイル保存仮パス
-        $tmp_upload_file = 'upload_file_tmp/' . $hash_code . '/';
-
-        if ($entity->content) {
-            // upload image
-            $entity->content = str_replace($tmp_upload_image, $dir_img, $entity->content);
-
-            // old id edit
-            // if ($save->__id) {
-            //     $entity->content = str_replace(__($dir_image, [$save->__id]), $dir_img, $entity->content);
-            //     $entity->content = str_replace(__($dir_files, [$save->__id]), $dir_file, $entity->content);
-            // }
+        if ($this->code_upload) {
+            if (is_dir(WWW_ROOT . 'upload_tmp' . DS . $this->code_upload)) {
+                array_map('unlink', array_filter((array) glob(WWW_ROOT . 'upload_tmp' . DS . $this->code_upload . DS . '*')));
+                rmdir(WWW_ROOT . 'upload_tmp' . DS . $this->code_upload);
+            }
+            if (is_dir(WWW_ROOT . 'upload_file_tmp' . DS . $this->code_upload)) {
+                array_map('unlink', array_filter((array) glob(WWW_ROOT . 'upload_file_tmp' . DS . $this->code_upload . DS . '*')));
+                rmdir(WWW_ROOT . 'upload_file_tmp' . DS . $this->code_upload);
+            }
         }
-
-        if ($entity->image) $this->__upload($dir_img, $entity->image);
-
-        // upload file
-        $tmp_file = $this->__upload($dir_file, $data_file, 'files');
-
-        // Tmp folderのファイルも全て削除する
-        if (!is_null($this->code_upload) && $this->code_upload) {
-            if (is_dir(WWW_ROOT . $tmp_upload_image)) system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, $tmp_upload_image])));
-            if (is_dir(WWW_ROOT . $tmp_upload_file)) system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, $tmp_upload_file])));
-        }
-
         if ($entity->content) {
-            foreach ($tmp_file['files_in_content'] as $tmp)
-                $entity->content = str_replace($tmp[1], $tmp[0], $entity->content);
-
+            $this->slug = null;
             $this->save($entity);
         }
 
-        $model_attached = TableRegistry::getTableLocator()->get('Attached');
-        $model_attached->deleteAll(['table_id' => $_id, 'slug' => $slug]);
+        return true;
+    }
 
-        if (!empty($tmp_file['files_attach'])) {
-            $data_files = array_map(function ($dt) use ($_id, $slug) {
-                $dt['table_id'] = $_id;
-                $dt['slug'] = $slug;
-                $dt['type'] = 'files';
-                return $dt;
-            }, $tmp_file['files_attach']);
-            $entities = $model_attached->newEntities($data_files);
-            $model_attached->saveMany($entities);
+
+    protected function process_upload($entity, $datas, $type)
+    {
+        $dir = __('upload/{slug}/{id}/{type}/', ['slug' => $this->slug, 'id' => $entity->id, 'type' => $type]);
+
+        $common_tmp = WWW_ROOT . md5($dir);
+        (new \Cake\Filesystem\Folder())->create($common_tmp, 0777);
+
+        $content = $this->__upload_content($dir, $common_tmp, $datas['content']);
+        $attach = $this->__upload_attach($dir, $common_tmp, $datas['attach'], $entity->id, $type);
+
+        // 存在しているファイルが削除する
+        if (is_dir(WWW_ROOT . $dir)) array_map('unlink', array_filter((array) glob(__('{0}{1}*', [WWW_ROOT, $dir]))));
+        // 逆に、新しいフォルダを作成する
+        else (new \Cake\Filesystem\Folder())->create(__('{0}{1}', [WWW_ROOT, $dir]), 0777);
+
+        rename($common_tmp . DS, WWW_ROOT . $dir);
+
+        $attached = TableRegistry::getTableLocator()->get('Attached');
+        $attached->deleteAll(['table_id' => $entity->id, 'slug' => $this->slug, 'type' => $type]);
+
+        if (!empty($attach)) {
+            $entities = $attached->newEntities($attach);
+            $attached->saveMany($entities);
         }
+
+        if ($entity->content) {
+            foreach ($content as $replace) {
+                $entity->content = str_replace($replace[1], $replace[0], $entity->content);
+            }
+        }
+
+        return $entity;
+    }
+
+
+    protected function __upload_content($dir, $common_tmp, $data)
+    {
+        $result = [];
+        foreach ($data as $data_content) {
+            $file = explode(DS, $data_content);
+
+            if (count($file) > 2 && in_array($file[1], ['upload_file_tmp', 'upload_tmp', 'upload'], true)) {
+                // $result配列に入れる
+                if (in_array($file[1], ['upload_file_tmp', 'upload_tmp']))
+                    $result[] = [DS . $dir . end($file), $data_content];
+                // Postしてくれるファイルは共通 folderに移動する
+                if (is_file(WWW_ROOT . ltrim($data_content, DS)))
+                    copy(WWW_ROOT . ltrim($data_content, DS), $common_tmp . DS . end($file));
+            }
+        }
+        return $result;
+    }
+
+
+    protected function __upload_attach($dir, $common_tmp, $data, $id, $type)
+    {
+        $result = [];
+
+        foreach ($data as $original_name => $data_content) {
+
+            $file = explode(DS, $data_content['path']);
+            $file_name = end($file);
+            // Attachedテーブルに保存するデータ
+            $_data_file['table_id'] = intval($id);
+            $_data_file['slug'] = $this->slug;
+            $_data_file['file_name'] = $file_name;
+            $_data_file['original_file_name'] = str_replace('=&', ']', $original_name);
+            $_data_file['size'] = intval($data_content['size']);
+            $_data_file['extension'] = getExtension($file_name);
+            $_data_file['type'] = $type;
+
+            $result[] = $_data_file;
+            // Postしてくれるファイルは共通 folderに移動する
+            if (is_file(WWW_ROOT . ltrim($data_content['path'], DS)))
+                copy(WWW_ROOT . ltrim($data_content['path'], DS), $common_tmp . DS . $file_name);
+
+            // mover thumbnail to 共通 folder
+            if ($type == 'images' && !empty($this->attaches[$type]['thumbnails'])) {
+                $tmp_dir = WWW_ROOT . 'upload_tmp' . DS . $this->code_upload . DS;
+
+                foreach ($this->attaches[$type]['thumbnails'] as $prefix => $_) {
+                    $thumb_file = $prefix . $file_name;
+
+                    if (is_file($tmp_dir . $thumb_file))
+                        copy($tmp_dir . $thumb_file, $common_tmp . DS . $thumb_file);
+
+                    if (is_file($dir . $thumb_file))
+                        copy($dir . $thumb_file, $common_tmp . DS . $thumb_file);
+                }
+            }
+        }
+        return $result;
     }
 
 
@@ -194,71 +250,5 @@ class AppTable extends Table
     {
         $this->_uploadForCkEditor($entity);
         return true;
-    }
-
-
-    protected function __upload($dir, $data_upload, $type = 'image')
-    {
-        $result = [];
-
-        if (!empty($data_upload)) {
-            // 共通 folder
-            $common_tmp = WWW_ROOT . md5($dir);
-            (new \Cake\Filesystem\Folder())->create($common_tmp, 0777);
-
-            // 共通 folderにファイルを移動する
-            if ($type == 'image')
-                for ($i = 0; $i < count($data_upload); $i++) system(escapeshellcmd(__('cp -f {0} {1}/', [WWW_ROOT . ltrim($data_upload[$i], '/'), $common_tmp])));
-            else if ($type == 'files') {
-
-                foreach ($data_upload as $place => $place_data) {
-                    $result[$place] = [];
-
-                    if (empty($place_data) || is_null($place_data) || !$place_data) continue;
-
-                    foreach ($place_data as $orignal_file_name => $file_info) { //$path_tmp
-
-                        $path_tmp = $file_info['path'];
-
-                        $file = explode('/', $path_tmp);
-
-                        if ($place == 'files_in_content') {
-                            if (count($file) > 2 && in_array($file[1], ['upload_file_tmp', 'upload'])) {
-                                // Postしてくれるファイルは共通 folderに移動する
-                                if ($file[1] === 'upload_file_tmp') $result[$place][] = ['/' . $dir . end($file), $path_tmp];
-                                system(escapeshellcmd(__('cp -f {0} {1}/', [WWW_ROOT . ltrim($path_tmp, '/'), $common_tmp])));
-                            }
-                        } else {
-                            $_data_file['file_name'] = end($file);
-                            $_data_file['original_file_name'] = $orignal_file_name;
-                            $file_exp = explode('.', $_data_file['file_name']);
-                            $_data_file['extension'] = end($file_exp);
-                            $_data_file['size'] = intval($file_info['size']);
-
-                            $result[$place][] = $_data_file;
-                            // Postしてくれるファイルは共通 folderに移動する
-                            system(escapeshellcmd(__('cp -f {0} {1}/', [WWW_ROOT . ltrim($path_tmp, '/'), $common_tmp])));
-                        }
-                    }
-                };
-            }
-            // 存在しているファイルが削除する
-            if (is_dir($dir)) array_map('unlink', array_filter((array) glob(__('{0}{1}*', [WWW_ROOT, $dir]))));
-            // 逆に、新しいフォルダを作成する
-            else (new \Cake\Filesystem\Folder())->create(__('{0}{1}', [WWW_ROOT, $dir]), 0777);
-
-            // 共通 folderから実パスにファイルを移動する
-            rename($common_tmp . '/', WWW_ROOT . $dir);
-
-            // 共通 folderのファイルを全て削除する
-            if (is_dir($common_tmp)) system(escapeshellcmd(__('rm -rf {0}', [$common_tmp])));
-
-            // Tmp folderのファイルも全て削除する
-            // if (is_dir(WWW_ROOT . $dir_tmp)) system(escapeshellcmd(__('rm -rf {0}{1}', [WWW_ROOT, $dir_tmp])));
-        } else {
-            // 存在しているファイルが削除する
-            if (is_dir($dir)) array_map('unlink', array_filter((array) glob(__('{0}{1}*', [WWW_ROOT, $dir]))));
-        }
-        return $result;
     }
 }

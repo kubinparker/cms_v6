@@ -159,19 +159,26 @@ class AppController extends Controller
 
         $mapper = function ($table, $key, $mapReduce) use ($modelName) {
             $table->attaches = [];
+            $id = $table->id;
 
             // file attached
             if ($table->attached_files)
-                $table->attaches['files'] = array_map(function ($f) use ($modelName) {
-                    $f->path = '/upload' . DS . $modelName . DS . $f->id . DS . 'files' . DS . $f->file_name;
+                $table->attaches['files'] = array_map(function ($f) use ($modelName, $id) {
+                    $f->path = '/upload' . DS . $modelName . DS . $id . DS . 'files' . DS . $f->file_name;
                     return $f;
                 }, $table->attached_files);
 
             // images attached
             if ($table->attached_images)
-                $table->attaches['images'] = array_map(function ($f) use ($modelName) {
-                    $f->path = '/upload' . DS . $modelName . DS . $f->id . DS . 'images' . DS . $f->file_name;
-                    $f->thumbnail = 'continue ////////';
+                $table->attaches['images'] = array_map(function ($f) use ($modelName, $id) {
+                    $f->path = '/upload' . DS . $modelName . DS . $id . DS . 'images' . DS . $f->file_name;
+                    $thumb = [];
+                    if (isset($this->{$modelName}->attaches['images']['thumbnails']) && !empty($this->{$modelName}->attaches['images']['thumbnails'])) {
+                        foreach ($this->{$modelName}->attaches['images']['thumbnails'] as $prefix => $_) {
+                            $thumb[$prefix] = '/upload' . DS . $modelName . DS . $id . DS . 'images' . DS . $prefix . $f->file_name;
+                        }
+                    }
+                    $f->thumbnail = $thumb;
                     return $f;
                 }, $table->attached_images);
 

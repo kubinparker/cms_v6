@@ -9,8 +9,8 @@
         <p class="row_file">
             <a class="is_file <?= $classFile ?>" href="<?= $att->path ?>" target="_blank"><?= h($att->original_file_name) ?></a>
             <span onclick="removeFile(this)">削除</span>
-            <input type="hidden" name="__files[<?= h($att->original_file_name) ?>][path]" value="<?= $att->path ?>">
-            <input type="hidden" name="__files[<?= h($att->original_file_name) ?>][size]" value="<?= $att->size ?>">
+            <input type="hidden" name="__files[<?= h(str_replace(']', '=&', $att->original_file_name)) ?>][path]" value="<?= $att->path ?>">
+            <input type="hidden" name="__files[<?= h(str_replace(']', '=&', $att->original_file_name)) ?>][size]" value="<?= $att->size ?>">
         </p>
     <?php endforeach; ?>
 <?php endif ?>

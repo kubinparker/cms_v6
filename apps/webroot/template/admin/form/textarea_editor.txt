@@ -2,8 +2,8 @@
     <td>Textarea editor iframe<span class="remove_item" onclick="removeItem(this, 'textarea_editor')"></span></td>
     <td>
         <div id="toolbar-container"></div>
-        <div id="editor" style="border: 1px solid #ccc !important;"><?= "" ?></div>
-        <textarea style="display:none;" id="event-content"></textarea>
+        <div id="editor" style="border: 1px solid #ccc !important;"><?= @$entity->content ?></div>
+        <textarea name="content" style="display:none;" id="event-content"></textarea>
         {0}
     </td>
 </tr>

@@ -142,10 +142,11 @@ function uploadFile ( e )
         {
             if ( resp.success )
             {
+                let re = /=&/gi;
                 for ( let i = 0; i < resp.data.length; i++ )
                     $( e ).parents( 'td' ).append( `
                         <p class="row_file">
-                            <a class="is_file ${ resp.data[ i ].class }" href="${ resp.data[ i ].url }" target="_blank">${ resp.data[ i ].original_name }</a>
+                            <a class="is_file ${ resp.data[ i ].class }" href="${ resp.data[ i ].url }" target="_blank">${ resp.data[ i ].original_name.replace( re, ']' ) }</a>
                             <span onclick="removeFile(this)">削除</span>
                             <input type="hidden" name="__files[${ resp.data[ i ].original_name }][path]" value="${ resp.data[ i ].url }"/>
                             <input type="hidden" name="__files[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
@@ -202,7 +203,7 @@ function uploadImages ( e, slug )
 
         return false;
     }
-    fd.append('slug', slug);
+    fd.append( 'slug', slug );
 
     $.ajax( {
         'url': "/admin/configs/upload-image",
@@ -213,16 +214,16 @@ function uploadImages ( e, slug )
         'dataType': 'json',
         'success': function ( resp )
         {
-            console.log( resp );
             if ( resp.success )
             {
+                let re = /=&/gi;
                 for ( let i = 0; i < resp.data.length; i++ )
                     $( e ).parents( 'td' ).append( `
                         <p class="row_file data_image">
-                            <img src="${ resp.data[ i ].url }" alt="${ resp.data[ i ].original_name }"/>
+                            <img src="${ resp.data[ i ].url }" alt="${ resp.data[ i ].original_name.replace( re, ']' ) }"/>
                             <span onclick="removeFile(this)">削除</span>
-                            <input type="hidden" name="__files[${ resp.data[ i ].original_name }][path]" value="${ resp.data[ i ].url }"/>
-                            <input type="hidden" name="__files[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
+                            <input type="hidden" name="__images[${ resp.data[ i ].original_name }][path]" value="${ resp.data[ i ].url }"/>
+                            <input type="hidden" name="__images[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
                         </p>
                     `);
             }
@@ -234,7 +235,6 @@ function uploadImages ( e, slug )
 function removeFile ( e )
 {
     $( e ).parents( 'p' ).remove();
-    $( '#is-upload' ).val( 1 );
 }
 
 
@@ -252,7 +252,7 @@ function handleSaveButton ( editor )
                     .parseFromString( editor.getData(), 'text/html' )
                     .querySelectorAll( 'img' )
             )
-                .map( img => `<input type="hidden" name="image[]" value="${ img.getAttribute( 'src' ) }">` );
+                .map( img => `<input type="hidden" name="_images[]" value="${ img.getAttribute( 'src' ) }">` );
 
 
             const file_list = Array.from(
