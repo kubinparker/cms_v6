@@ -379,5 +379,9 @@ $( function ()
             // console.log( error );
         } );
 
-    handleSaveButton( false );
+    if ( $( document ).find( '#editor' ).length == 0 )
+    {
+        handleSaveButton( false );
+    }
+
 } );
