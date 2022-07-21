@@ -216,6 +216,11 @@ function uploadImages ( e, slug )
         {
             if ( resp.success )
             {
+                if ( resp.data.setting )
+                {
+                    window.alert( resp.data.setting );
+                    return false;
+                }
                 let re = /=&/gi;
                 for ( let i = 0; i < resp.data.length; i++ )
                     $( e ).parents( 'td' ).append( `

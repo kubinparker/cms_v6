@@ -323,6 +323,7 @@ class AppController extends BaseController
 
         $model = TableRegistry::getTableLocator()->get($model);
         $attaches_image = $model->attaches['images'];
+        if (empty($attaches_image)) return ['setting' => '\App\Model\Table\〇〇Table ファイルの「$attaches」が設定されていません。'];
 
         if (isset($attaches_image['extensions']) && !empty($attaches_image['extensions']))
             $this->image_extension = $attaches_image['extensions'];
