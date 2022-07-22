@@ -1,5 +1,5 @@
 <tr>
-    <td>Radio <span class="remove_item" onclick="removeItem(this, 'radio')"></span></td>
+    <td>Radio</td>
     <td>
         <div class="radio">
             <input type="radio" name="radio" value="0" id="radio-0"><label class="mar_r20" for="radio-0">Radio 1</label>

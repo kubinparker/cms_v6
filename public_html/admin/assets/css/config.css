@@ -63,7 +63,9 @@
     right: 0;
 }
 
-.list-box-item li .plus_icon {
+.list-box-item li .plus_icon,
+.box_options .plus_icon,
+.box_options .move_icon {
     padding: 0px 8px;
     cursor: pointer;
     border: 1px dashed #c7c7c7;
@@ -99,4 +101,39 @@
 
 .admin_table td:nth-of-type(1) {
     position: relative;
+}
+
+
+.admin_table tbody {
+    position: relative;
+}
+
+.box_item_main {
+    width: calc(100% - 80px);
+    display: inline-block;
+}
+
+
+.box_item_main .ck-editor__editable_inline {
+    min-height: 200px;
+}
+
+
+.box_options {
+    display: inline-block;
+    position: relative;
+}
+
+.box_options .plus_icon,
+.box_options .move_icon {
+    position: initial;
+    right: 0;
+    top: 0;
+    display: inline-block;
+    user-select: none;
+    height: 30px;
+    text-align: center;
+    padding: 0 5px;
+    line-height: 25px;
+    background: #edf6fb;
 }

@@ -71,7 +71,8 @@
 </div>
 
 <?php $this->start('beforeBodyClose'); ?>
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="/admin/assets/js/drag-arrange.js"></script>
 <script>
 	function renderCkeditor() {
 		DecoupledEditor
@@ -114,7 +115,14 @@
 				if (type == 'textarea_editor') renderCkeditor();
 				b.text(countB + 1);
 				$(".list-box-item-content").scrollTop($(".list-box-item-content")[0].scrollHeight);
+				dragDrop();
 			}
+		});
+	}
+
+	function dragDrop() {
+		$('.list-box-item-content table tr').arrangeable({
+			dragSelector: '.move_icon'
 		});
 	}
 

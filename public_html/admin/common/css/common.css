@@ -1141,6 +1141,26 @@ footer {
 	padding-bottom: 25px !important;
 }
 
+/* padding */
+.pad_r40 {
+	padding-right: 40px !important;
+}
+
+
+.pad_r50 {
+	padding-right: 50px !important;
+}
+
+
+.pad_r60 {
+	padding-right: 60px !important;
+}
+
+
+.pad_r70 {
+	padding-right: 70px !important;
+}
+
 /* float */
 .fl_l {
 	float: left !important;
@@ -1152,6 +1172,13 @@ footer {
 
 .fl_n {
 	float: none !important;
+}
+
+.fl_c::after {
+	clear: both;
+	content: ' ';
+	display: block;
+	height: 1px;
 }
 
 /* font color */

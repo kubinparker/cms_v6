@@ -1,5 +1,5 @@
 <tr>
-    <td>Input text <span class="remove_item" onclick="removeItem(this, 'input_text')"></span></td>
+    <td>Input text</td>
     <td>
         <div>
             <input type="text">

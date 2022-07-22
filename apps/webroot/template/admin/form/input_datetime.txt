@@ -1,5 +1,5 @@
 <tr>
-    <td>Input datetime <span class="remove_item" onclick="removeItem(this, 'input_datetime')"></span></td>
+    <td>Input datetime</td>
     <td>
         <div>
             <input type="datetime-local">

@@ -35,11 +35,12 @@ class ConfigsController extends AppController
         if ($this->request->getData('type')) {
             $f = '';
 
-            if (is_file(DEFAULT_ADMIN_TEMP . __('form/{0}_ajax.txt', $this->request->getData('type'))))
-                $f = DEFAULT_ADMIN_TEMP . __('form/{0}_ajax.txt', $this->request->getData('type'));
+            // if (is_file(DEFAULT_ADMIN_TEMP . __('form/{0}_ajax.txt', $this->request->getData('type'))))
+            //     $f = DEFAULT_ADMIN_TEMP . __('form/{0}_ajax.txt', $this->request->getData('type'));
 
-            else if (is_file(DEFAULT_ADMIN_TEMP . __('form/{0}.txt', $this->request->getData('type'))))
-                $f = DEFAULT_ADMIN_TEMP . __('form/{0}.txt', $this->request->getData('type'));
+            // else 
+            if (is_file(DEFAULT_ADMIN_TEMP . __('form/ajax/{0}.txt', $this->request->getData('type'))))
+                $f = DEFAULT_ADMIN_TEMP . __('form/ajax/{0}.txt', $this->request->getData('type'));
 
             if ($f !== '') {
                 $result['success'] = true;

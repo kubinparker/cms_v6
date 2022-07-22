@@ -1,5 +1,5 @@
 <tr>
-    <td>SelectBox <span class="remove_item" onclick="removeItem(this, 'selectbox')"></span></td>
+    <td>SelectBox</td>
     <td>
         <div>
             <select>

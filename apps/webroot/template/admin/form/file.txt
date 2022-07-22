@@ -1,5 +1,5 @@
 <tr>
-    <td>File <span class="remove_item" onclick="removeItem(this, '_file')"></span></td>
+    <td>File</td>
     <td class="edit_image_area">
         <?= $this->element('form/file') ?>
         {0}

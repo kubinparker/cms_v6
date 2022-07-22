@@ -1,5 +1,5 @@
 <tr>
-    <td>Checkbox <span class="remove_item" onclick="removeItem(this, 'checkbox')"></span></td>
+    <td>Checkbox</td>
     <td>
         <div class="checkbox">
             <input type="checkbox" name="checkbox" value="0" id="checkbox-0"><label class="mar_r20" for="checkbox-0">Checkbox 1</label>
