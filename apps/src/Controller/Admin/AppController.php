@@ -228,7 +228,7 @@ class AppController extends BaseController
                     unlink($file); // delete file
                 }
             }
-            $files = glob(WWW_ROOT . 'upload/' . $this->modelName . '/' . $id . '/image/*'); // image
+            $files = glob(WWW_ROOT . 'upload/' . $this->modelName . '/' . $id . '/images/*'); // image
             foreach ($files as $file) { // iterate files
                 if (is_file($file)) {
                     unlink($file); // delete file
@@ -315,7 +315,9 @@ class AppController extends BaseController
         return $this->redirect(['prefix' => 'admin', 'controller' => 'Admin', 'action' => 'logout']);
     }
 
-
+    /**
+     * Inputファイルから
+     */
     protected function __uploadTmpImages($data, $model)
     {
         if (!$this->Session->check('code_upload')) $this->Session->write('code_upload', md5(round(microtime(true) * 10000)));
@@ -364,55 +366,6 @@ class AppController extends BaseController
             }
         }
         return $return;
-    }
-
-
-    public function convert_img($size, $source, $dist, $method = 'fit')
-    {
-        list($ow, $oh, $info) = getimagesize($source);
-        $sz = explode('x', $size);
-        $cmdline = $this->convertPath;
-
-        $is_local = strpos(env('HTTP_HOST'), 'local') !== false;
-        if ($is_local) {
-            $cmdline = '/usr/local/bin/convert';
-        }
-        //サイズ指定ありなら
-        if (0 < $sz[0] && 0 < $sz[1]) {
-
-            //枠をはみ出していれば、縮小
-            if ($method === 'cover' || $method === 'crop') {
-                //中央切り取り
-                $crop = $size;
-                if (($ow / $oh) <= ($sz[0] / $sz[1])) {
-                    //横を基準
-                    $size = $sz[0] . 'x';
-                } else {
-                    //縦を基準
-                    $size = 'x' . $sz[1];
-                }
-
-                //cover
-                $option = '-resize ' . $size;
-
-                //crop
-                if ($method === 'crop') {
-                    $option .= ' -gravity center -crop ' . $crop . '+0+0';
-                }
-                // convert /Applications/MAMP/tmp/php/phpaEoIyy -resize  new.png
-            } else {
-                //通常の縮小 拡大なし
-                $option = '-resize ' . $size;
-            }
-        } else {
-            //サイズ指定なしなら 単なるコピー
-            $size = $ow . 'x' . $oh;
-            $option = '-resize ' . $size . '>';
-        }
-
-        $a = system(escapeshellcmd($cmdline . ' ' . $option . ' ' . $source . ' ' . $dist));
-        @chmod($dist, 0666);
-        return $a;
     }
 
     /**
@@ -476,6 +429,55 @@ class AppController extends BaseController
                 return $q->where(['slug' => $slug]);
             }
         ];
+    }
+
+
+    public function convert_img($size, $source, $dist, $method = 'fit')
+    {
+        list($ow, $oh, $info) = getimagesize($source);
+        $sz = explode('x', $size);
+        $cmdline = $this->convertPath;
+
+        $is_local = strpos(env('HTTP_HOST'), 'local') !== false;
+        if ($is_local) {
+            $cmdline = '/usr/local/bin/convert';
+        }
+        //サイズ指定ありなら
+        if (0 < $sz[0] && 0 < $sz[1]) {
+
+            //枠をはみ出していれば、縮小
+            if ($method === 'cover' || $method === 'crop') {
+                //中央切り取り
+                $crop = $size;
+                if (($ow / $oh) <= ($sz[0] / $sz[1])) {
+                    //横を基準
+                    $size = $sz[0] . 'x';
+                } else {
+                    //縦を基準
+                    $size = 'x' . $sz[1];
+                }
+
+                //cover
+                $option = '-resize ' . $size;
+
+                //crop
+                if ($method === 'crop') {
+                    $option .= ' -gravity center -crop ' . $crop . '+0+0';
+                }
+                // convert /Applications/MAMP/tmp/php/phpaEoIyy -resize  new.png
+            } else {
+                //通常の縮小 拡大なし
+                $option = '-resize ' . $size;
+            }
+        } else {
+            //サイズ指定なしなら 単なるコピー
+            $size = $ow . 'x' . $oh;
+            $option = '-resize ' . $size . '>';
+        }
+
+        $a = system(escapeshellcmd($cmdline . ' ' . $option . ' ' . $source . ' ' . $dist));
+        @chmod($dist, 0666);
+        return $a;
     }
 
 
