@@ -22,6 +22,7 @@
         "/admin/common/js/jquery-3.5.1.min",
         "/admin/common/js/jquery.datetimepicker.full.min",
         "/admin/common/js/common",
+        "/assets/js/js_library",
     ]); ?>
 
     <?= $this->fetch('beforeHeaderClose'); ?>

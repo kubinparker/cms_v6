@@ -1,5 +1,8 @@
 <tr>
-    <td>Image <span class="remove_item" onclick="removeItem(this, '_images')"></span></td>
+    <td>
+        <b class="item_label">Image</b> 
+        <span class="remove_item" onclick="removeItem(this, '_images')"></span>
+    </td>
     <td class="edit_image_area fl_c">
         <div class="box_item_main fl_l">
             <input type='file'/>
@@ -9,7 +12,7 @@
             {0}
         </div>
         <div class="box_options fl_r">
-            <span class="icon plus_icon mar_b5">
+            <span class="icon plus_icon mar_b5" data-toggle="modal" data-target="#modal-option" data-whatever="image">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                     <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
                 </svg>

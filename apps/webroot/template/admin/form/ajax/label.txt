@@ -1,8 +1,12 @@
 <tr>
-    <td>Label <span class="remove_item" onclick="removeItem(this, '_label')"></span></td>
+    <td>
+        <b class="item_label">Label</b> 
+        <span class="remove_item" onclick="removeItem(this, '_label')"></span>
+    </td>
     <td class="fl_c">
         <div class="box_item_main fl_l">
-            新規 {0}
+            <span class="item_text">新規</span>
+            {0}
         </div>
         <div class="box_options fl_r">
             <span class="icon plus_icon mar_b5" data-toggle="modal" data-target="#modal-option" data-whatever="label">

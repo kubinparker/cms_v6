@@ -23,7 +23,7 @@
 			<div class="list-box-item-content">
 				<table class="vertical_table table__meta admin_table">
 
-					<tr>
+					<!-- <tr>
 						<td><b class="item_label">Label</b> <span class="remove_item" onclick="removeItem(this, '_label')"></span></td>
 						<td class="fl_c">
 							<div class="box_item_main fl_l">
@@ -43,7 +43,7 @@
 								</span>
 							</div>
 						</td>
-					</tr>
+					</tr> -->
 
 				</table>
 			</div>
