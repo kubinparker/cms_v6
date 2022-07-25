@@ -70,9 +70,41 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modal-option" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">項目設定</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<!-- <div class="form-group">
+						<label for="recipient-name" class="col-form-label">Recipient:</label>
+						<input type="text" class="form-control" id="recipient-name">
+					</div>
+					<div class="form-group">
+						<label for="message-text" class="col-form-label">Message:</label>
+						<textarea class="form-control" id="message-text"></textarea>
+					</div> -->
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+				<button type="button" class="btn btn-primary">同意する</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php $this->start('beforeBodyClose'); ?>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="/admin/assets/js/drag-arrange.js"></script>
+<?= $this->Html->script([
+	"/admin/common/js/popper.min",
+	"/admin/common/js/bootstrap.min",
+	'/admin/assets/js/drag-arrange'
+]); ?>
 <script>
 	function renderCkeditor() {
 		DecoupledEditor
@@ -151,6 +183,22 @@
 
 		$('.list-box-item .btn').click(function() {
 			$(this).parent('.list-box-item').toggleClass('active');
+		});
+
+		// add more option for item (MODAL)
+		$('#modal-option').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget);
+			var recipient = button.data('whatever');
+
+			var modal = $(this);
+			modal.find('.modal-title').text(`項目設定（${recipient}）`);
+			button.addClass('btn-active');
+			// modal.find('.modal-body input').val(recipient);
+		});
+
+		// close MODAL event
+		$('#modal-option').on('hidden.bs.modal', function(event) {
+			$('span.plus_icon').removeClass('btn-active');
 		});
 	});
 </script>

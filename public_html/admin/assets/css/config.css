@@ -137,3 +137,8 @@
     line-height: 25px;
     background: #edf6fb;
 }
+
+.box_options .plus_icon.btn-active {
+    background-color: #505050;
+    color: #fff;
+}
