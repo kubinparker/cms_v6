@@ -103,7 +103,8 @@
 <?= $this->Html->script([
 	"/admin/common/js/popper.min",
 	"/admin/common/js/bootstrap.min",
-	'/admin/assets/js/drag-arrange'
+	'/admin/assets/js/drag-arrange',
+	'/admin/assets/js/build-modal',
 ]); ?>
 <script>
 	function renderCkeditor() {
@@ -189,16 +190,19 @@
 		$('#modal-option').on('show.bs.modal', function(event) {
 			var button = $(event.relatedTarget);
 			var recipient = button.data('whatever');
+			var tr = button.parents('tr');
 
 			var modal = $(this);
 			modal.find('.modal-title').text(`項目設定（${recipient}）`);
 			button.addClass('btn-active');
-			// modal.find('.modal-body input').val(recipient);
+
+			new BuildModalContent(modal, recipient, tr).__run__();
 		});
 
 		// close MODAL event
 		$('#modal-option').on('hidden.bs.modal', function(event) {
 			$('span.plus_icon').removeClass('btn-active');
+			$(this).find('form').trigger('reset');
 		});
 	});
 </script>

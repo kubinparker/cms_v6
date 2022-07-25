@@ -1,4 +1,4 @@
-<div class="box box-id-1 display_none">
+<div class="box box-id-1">
 	<h3>管理側</h3>
 	<div class="table_area form_area">
 		<div class="admin-box">
@@ -21,7 +21,31 @@
 				</ul>
 			</div>
 			<div class="list-box-item-content">
-				<table class="vertical_table table__meta admin_table"></table>
+				<table class="vertical_table table__meta admin_table">
+
+					<tr>
+						<td><b class="item_label">Label</b> <span class="remove_item" onclick="removeItem(this, '_label')"></span></td>
+						<td class="fl_c">
+							<div class="box_item_main fl_l">
+								<span class="item_text">新規</span>
+								<input type="hidden" value="label" name="data_item[]">
+							</div>
+							<div class="box_options fl_r">
+								<span class="icon plus_icon mar_b5" data-toggle="modal" data-target="#modal-option" data-whatever="label">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+										<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"></path>
+									</svg>
+								</span>
+								<span class="icon move_icon mar_b5">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-move" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10zM.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708l-2-2zM10 8a.5.5 0 0 1 .5-.5h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5A.5.5 0 0 1 10 8z"></path>
+									</svg>
+								</span>
+							</div>
+						</td>
+					</tr>
+
+				</table>
 			</div>
 		</div>
 	</div>

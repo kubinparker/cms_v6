@@ -1,4 +1,4 @@
-<div class="box box-id-0">
+<div class="box box-id-0 display_none">
 	<h3>表側</h3>
 	<div class="table_area">
 		<table>
