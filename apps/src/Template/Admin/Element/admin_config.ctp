@@ -21,7 +21,7 @@
 				</ul>
 			</div>
 			<div class="list-box-item-content">
-				<table class="vertical_table table__meta admin_table">
+				<table class="vertical_table table__meta admin_table" style="position: relative;">
 
 					<!-- <tr>
 						<td><b class="item_label">Label</b> <span class="remove_item" onclick="removeItem(this, '_label')"></span></td>
@@ -29,6 +29,7 @@
 							<div class="box_item_main fl_l">
 								<span class="item_text">新規</span>
 								<input type="hidden" value="label" name="data_item[]">
+								<input type="hidden" class="item_options">
 							</div>
 							<div class="box_options fl_r">
 								<span class="icon plus_icon mar_b5" data-toggle="modal" data-target="#modal-option" data-whatever="label">

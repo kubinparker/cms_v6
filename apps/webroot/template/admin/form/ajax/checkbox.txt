@@ -14,6 +14,7 @@
             <div class="checkbox">
                 <input type="checkbox" name="checkbox" value="2" id="checkbox-2"><label class="mar_r20" for="checkbox-2">Checkbox 3</label>
             </div>	
+            <input type="hidden" class="item_options">
         {0}
         </div>
         <div class="box_options fl_r">

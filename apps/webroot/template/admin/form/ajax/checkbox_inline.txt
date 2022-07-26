@@ -14,6 +14,7 @@
             <div class="checkbox checkbox-inline">
                 <input type="checkbox" name="checkbox" value="5" id="checkbox-5"><label class="mar_r20" for="checkbox-5">Checkbox 5</label>
             </div>
+            <input type="hidden" class="item_options">
             {0}
         </div>
         <div class="box_options fl_r">

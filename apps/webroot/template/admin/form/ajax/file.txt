@@ -8,6 +8,7 @@
             <input type='file'/>
             <div class="remark">※ pdf, csv, xlsx, xls, doc, docx ファイルのみ</div>
             <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>
+            <input type="hidden" class="item_options">
             {0}
         </div>
         <div class="box_options fl_r">

@@ -69,48 +69,48 @@ class BuildModalContent
         //     </div>`,
 
         'file_type': `<div class="form-group">
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox0" value="pdf">
+            <input type="checkbox" class="form-control" name="item_checkbox_pdf" id="item-checkbox0" value="pdf">
             <label for="item-checkbox0" class="col-form-label">.pdf</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox1" value="doc">
+            <input type="checkbox" class="form-control" name="item_checkbox_doc" id="item-checkbox1" value="doc">
             <label for="item-checkbox1" class="col-form-label">.doc</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox2" value="docx">
+            <input type="checkbox" class="form-control" name="item_checkbox_docx" id="item-checkbox2" value="docx">
             <label for="item-checkbox2" class="col-form-label">.docx</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox3" value="xls">
+            <input type="checkbox" class="form-control" name="item_checkbox_xls" id="item-checkbox3" value="xls">
             <label for="item-checkbox3" class="col-form-label">.xls</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox4" value="xlsx">
+            <input type="checkbox" class="form-control" name="item_checkbox_xlsx" id="item-checkbox4" value="xlsx">
             <label for="item-checkbox4" class="col-form-label">.xlsx</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox5" value="csv">
+            <input type="checkbox" class="form-control" name="item_checkbox_csv" id="item-checkbox5" value="csv">
             <label for="item-checkbox5" class="col-form-label">.csv</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox6" value="zip">
+            <input type="checkbox" class="form-control" name="item_checkbox_zip" id="item-checkbox6" value="zip">
             <label for="item-checkbox6" class="col-form-label">.zip</label>
         </div>`,
 
         'image_type': `<div class="form-group">
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox0" value="jpg">
+            <input type="checkbox" class="form-control" name="item_checkbox_jpg" id="item-checkbox0" value="jpg">
             <label for="item-checkbox0" class="col-form-label">.jpg</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox1" value="jpge">
+            <input type="checkbox" class="form-control" name="item_checkbox_jpge" id="item-checkbox1" value="jpge">
             <label for="item-checkbox1" class="col-form-label">.jpge</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox2" value="gif">
+            <input type="checkbox" class="form-control" name="item_checkbox_gif" id="item-checkbox2" value="gif">
             <label for="item-checkbox2" class="col-form-label">.gif</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox3" value="png">
+            <input type="checkbox" class="form-control" name="item_checkbox_png" id="item-checkbox3" value="png">
             <label for="item-checkbox3" class="col-form-label">.png</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox4" value="svg">
+            <input type="checkbox" class="form-control" name="item_checkbox_svg" id="item-checkbox4" value="svg">
             <label for="item-checkbox4" class="col-form-label">.svg</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox5" value="ico">
+            <input type="checkbox" class="form-control" name="item_checkbox_ico" id="item-checkbox5" value="ico">
             <label for="item-checkbox5" class="col-form-label">.ico</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox" id="item-checkbox6" value="pjpeg">
+            <input type="checkbox" class="form-control" name="item_checkbox_pjpeg" id="item-checkbox6" value="pjpeg">
             <label for="item-checkbox6" class="col-form-label">.pjpeg</label>
         </div>`,
 
@@ -176,15 +176,14 @@ class BuildModalContent
     change_item_label ( modal, tr )
     {
         const data_option = modal.find( 'form' ).serializeArray();
-        console.log( data_option );
+
         for ( let i in data_option )
         {
             if ( tr.find( `.${ data_option[ i ][ 'name' ] }` ).length > 0 )
-            {
                 tr.find( `.${ data_option[ i ][ 'name' ] }` ).text( data_option[ i ][ 'value' ] );
-                // continue add input hidden and hide modal
-            }
         }
+        // hide modal
+        modal.find( '.btn-secondary' ).trigger( 'click' );
     }
 
 
@@ -194,15 +193,57 @@ class BuildModalContent
     }
 
 
+    setValue ()
+    {
+        var modal = this.__modal__;
+
+        var attrs = [].filter.call( this.__tr__.find( '.item_options' )[ 0 ].attributes, function ( at ) { return at.name } );
+
+        attrs.forEach( ( element ) =>
+        {
+            let el = modal.find( `*[name="${ element.name }"]` );
+            if ( el.length > 0 )
+            {
+                if ( ( el[ 0 ].type === 'checkbox' || el[ 0 ].type === 'radio' ) )
+                {
+                    if ( el.val() === element.value ) el.attr( 'checked', 'checked' );
+                    else return;
+                }
+                else el.val( element.value );
+            }
+        } );
+    }
+
+
+    change_item ( modal, type, tr )
+    {
+        const data_option = modal.find( 'form' ).serializeArray();
+
+        for ( let i in data_option )
+        {
+            if ( tr.find( `.${ data_option[ i ][ 'name' ] }` ).length > 0 )
+                tr.find( `.${ data_option[ i ][ 'name' ] }` ).text( data_option[ i ][ 'value' ] );
+
+            tr.find( '.item_options' ).attr( `${ data_option[ i ][ 'name' ] }`, data_option[ i ][ 'value' ] );
+        }
+        // hide modal
+        modal.find( '.btn-secondary' ).trigger( 'click' );
+    }
+
+
     [ '__run__' ] ()
     {
         this.setHeader();
         this.build();
+        this.setValue();
+
         var self = this;
+
+        // ok btn
+        this.__modal__.find( '.btn-primary' ).unbind( 'click' );
         this.__modal__.find( '.btn-primary' ).on( 'click', function ()
         {
-            if ( typeof self[ `change_item_${ self.__item__ }` ] === 'function' )
-                self[ `change_item_${ self.__item__ }` ]( self.__modal__, self.__tr__ );
+            self[ `change_item` ]( self.__modal__, self.__item__, self.__tr__ );
         } );
     }
 }

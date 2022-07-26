@@ -6,6 +6,7 @@
     <td class="fl_c">
         <div class="box_item_main fl_l">
             <textarea rows="4" cols="100"></textarea>
+            <input type="hidden" class="item_options">
             {0}
         </div>		
         <div class="box_options fl_r">

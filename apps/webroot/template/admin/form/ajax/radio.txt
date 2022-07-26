@@ -14,6 +14,7 @@
             <div class="radio">
                 <input type="radio" name="radio" value="2" id="radio-2"><label class="mar_r20" for="radio-2">Radio 3</label>
             </div>
+            <input type="hidden" class="item_options">
             {0}
         </div>
         <div class="box_options fl_r">

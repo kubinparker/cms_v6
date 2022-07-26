@@ -8,6 +8,7 @@
             <div id="toolbar-container"></div>
             <div id="editor" style="border: 1px solid #ccc !important;"></div>
             <textarea name="content" style="display:none;" id="event-content"></textarea>
+            <input type="hidden" class="item_options">
             {0}
         </div>
         <div class="box_options fl_r">
