@@ -191,9 +191,7 @@
 			var button = $(event.relatedTarget);
 			var recipient = button.data('whatever');
 			var tr = button.parents('tr');
-
 			var modal = $(this);
-			modal.find('.modal-title').text(`項目設定（${recipient}）`);
 			button.addClass('btn-active');
 
 			new BuildModalContent(modal, recipient, tr).__run__();

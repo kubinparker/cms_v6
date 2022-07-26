@@ -141,13 +141,16 @@ class MyBehavior extends Behavior
         $controller = __(file_get_contents(DEFAULT_FRONT_TEMP . 'controller/common.txt', true), $slug, $content);
         $file = APP . 'Controller/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+        $this->path[] = $file;
 
 
         // template
         $folder = APP . 'Template/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
         file_put_contents($folder . 'index.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/index.txt', true));
+        $this->path[] = $folder . 'index.ctp';
         if ($this->is_detail_page) file_put_contents($folder . 'detail.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/detail.txt', true));
+        $this->path[] = $folder . 'detail.ctp';
     }
 
 
@@ -167,23 +170,29 @@ class MyBehavior extends Behavior
         $controller = __(file_get_contents(DEFAULT_FRONT_TEMP . 'controller/common.txt', true), $slug, $content);
         $file = APP . 'Controller/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+        $this->path[] = $file;
 
         // template
         $folder = APP . 'Template/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
 
         file_put_contents($folder . 'index.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/form_index.txt', true));
+        $this->path[] = $folder . 'index.ctp';
         if ($this->is_form_3_step || $this->is_form_3_step_save) {
             file_put_contents($folder . 'confirm.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/form_confirm.txt', true));
             file_put_contents($folder . 'complete.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/form_complete.txt', true));
+            $this->path[] = $folder . 'confirm.ctp';
+            $this->path[] = $folder . 'complete.ctp';
         }
 
         // class form
         file_put_contents(APP . 'Form/' .  $slug . 'Form.php', str_replace(['&=', '=&'], ['{', '}'], __(file_get_contents(DEFAULT_FRONT_TEMP . 'form/form.txt', true), [$slug, $this->slug])));
-
+        $this->path[] = APP . 'Form/' .  $slug . 'Form.php';
         // email template
         file_put_contents(APP . 'Template/Email/text/' . $this->slug . '.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'mail/user.txt', true));
         file_put_contents(APP . 'Template/Email/text/' . $this->slug . '_admin.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'mail/admin.txt', true));
+        $this->path[] = APP . 'Template/Email/text/' . $this->slug . '.ctp';
+        $this->path[] = APP . 'Template/Email/text/' . $this->slug . '_admin.ctp';
     }
 
 
@@ -232,12 +241,12 @@ class MyBehavior extends Behavior
 
         $edit = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/edit.txt', true), $this->title, $edit_content);
         file_put_contents($folder . 'edit.ctp', $edit);
-
+        $this->path[] = $folder . 'edit.ctp';
 
         // index file content
         $index = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/index.txt', true), $this->title, $this->slug);
         file_put_contents($folder . 'index.ctp', $index);
-
+        $this->path[] = $folder . 'index.ctp';
     }
 
 

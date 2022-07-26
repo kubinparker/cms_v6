@@ -24,18 +24,12 @@ class ConfigsController extends AppController
     public function index()
     {
         $this->setList();
-        $view  = 'index';
+        $view  = 'created';
 
-        parent::_edit(0, ['redirect' => false]);
-        if ($this->request->is(['post', 'put'])) {
-            $view = 'created';
-        }
+        $data = $this->codeBlocks(parent::_edit(0, ['redirect' => false]));
+        $view = $this->request->is(['post', 'put']) && $data->create_data ? $view : 'index';
+
         $this->render($view);
-    }
-
-    public function created()
-    {
-        $this->set('data', $this->index());
     }
 
 
@@ -106,6 +100,34 @@ class ConfigsController extends AppController
             $this->{$this->modelName}->delete($cf);
         }
         $this->redirect('/admin');
+    }
+
+
+    protected function codeBlocks($data)
+    {
+        if ($this->request->is(['post', 'put'])) {
+            $create_datas = $data->create_data ?? [];
+
+            foreach ($create_datas as $k => $path) {
+                $handle = fopen($path, "r");
+
+                $pre = '<pre>{0}</pre>';
+
+                if ($handle) {
+                    $str = '';
+                    while (($line = fgets($handle)) !== false) {
+                        $str .= __('<code>{0}</code>', str_replace(['<', '>'], ['&lt;', '&gt;'], $line));
+                    }
+
+                    fclose($handle);
+                    $pre = __($pre, $str);
+                }
+                $data->create_data[$k] = [$path, $pre];
+            }
+        }
+
+        $this->set('entity', $data);
+        return $data;
     }
 
 
