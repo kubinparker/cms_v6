@@ -20,12 +20,12 @@ class BuildModalContent
 
         'max-length': `<div class="form-group">
                 <label for="item-max-length" class="col-form-label">文字数（上限）</label>
-                <input type="text" class="form-control" name="item_max_length" id="item-max-length" value="0">
+                <input type="text" pattern="\d*" maxlength="4" class="form-control" name="item_max_length" id="item-max-length" value="0">
             </div>`,
 
         'min-length': `<div class="form-group">
                 <label for="item-min-length" class="col-form-label">文字数（下限）</label>
-                <input type="text" class="form-control" name="item_min_length" id="item-min-length" value="0">
+                <input type="text" pattern="\d*" maxlength="4" class="form-control" name="item_min_length" id="item-min-length" value="0">
             </div>`,
 
         'require': `<div class="form-group">
@@ -57,16 +57,6 @@ class BuildModalContent
                 <label for="item-size" class="col-form-label">サイズ</label>
                 <input type="text" class="form-control" name="item_size" id="item-size" value="デフォルト">
             </div>`,
-
-        // 'date': `<div class="form-group">
-        //         <input type="checkbox" class="form-control" name="item_date" id="item-date" value="1">
-        //         <label for="item-date" class="col-form-label">日付</label>
-        //     </div>`,
-
-        // 'datetime': `<div class="form-group">
-        //         <input type="checkbox" class="form-control" name="item_datetime" id="item-datetime" value="1">
-        //         <label for="item-datetime" class="col-form-label">日時</label>
-        //     </div>`,
 
         'file_type': `<div class="form-group">
             <input type="checkbox" class="form-control" name="item_checkbox_pdf" id="item-checkbox0" value="pdf">
@@ -206,8 +196,11 @@ class BuildModalContent
             {
                 if ( ( el[ 0 ].type === 'checkbox' || el[ 0 ].type === 'radio' ) )
                 {
-                    if ( el.val() === element.value ) el.attr( 'checked', 'checked' );
-                    else return;
+                    el.each( function ()
+                    {
+                        if ( $( this ).val() === element.value ) $( this ).attr( 'checked', 'checked' );
+                        else return;
+                    } );
                 }
                 else el.val( element.value );
             }
