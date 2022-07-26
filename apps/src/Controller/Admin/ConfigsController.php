@@ -106,7 +106,7 @@ class ConfigsController extends AppController
     protected function codeBlocks($data)
     {
         if ($this->request->is(['post', 'put'])) {
-            $create_datas = $data->create_data ?? [];
+            $create_datas = $data->create_data ?? $this->redirect(['action' => 'index']);
 
             foreach ($create_datas as $k => $path) {
                 $handle = fopen($path, "r");
