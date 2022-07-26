@@ -39,6 +39,7 @@ class MyBehavior extends Behavior
     public $is_detail_page = false;
 
     public $data_item = [];
+    public $path = [];
 
 
     public function setSlug($slug)
@@ -134,11 +135,13 @@ class MyBehavior extends Behavior
         $content_controller = [DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt')];
         if ($this->is_detail_page) $content_controller[] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
 
+
         $content = '';
         foreach ($content_controller as $p) $content .= __(file_get_contents($p, true), $slug);
         $controller = __(file_get_contents(DEFAULT_FRONT_TEMP . 'controller/common.txt', true), $slug, $content);
         $file = APP . 'Controller/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+
 
         // template
         $folder = APP . 'Template/' . $slug . '/';
@@ -204,11 +207,13 @@ class MyBehavior extends Behavior
         $controller = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'controller/common.txt', true), [$slug, 'contain' => $model_contain]);
         $file = APP . 'Controller/Admin/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));
+        $this->path[] = $file;
 
         // model
         $model = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/common.txt', true), [$slug, 'contain' => $model_contain]);
         $file = APP . 'Model/Table/' . $slug . 'Table.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $model));
+        $this->path[] = $file;
 
         // table
         $table = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/table.txt', true), $this->slug);
@@ -219,16 +224,20 @@ class MyBehavior extends Behavior
         $folder = APP . 'Template/Admin/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
 
+
         // edit file content
         $edit_content = '';
         if ($this->data_item) foreach ($this->data_item as $item) $edit_content .= __(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), '');
 
+
         $edit = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/edit.txt', true), $this->title, $edit_content);
         file_put_contents($folder . 'edit.ctp', $edit);
+
 
         // index file content
         $index = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/index.txt', true), $this->title, $this->slug);
         file_put_contents($folder . 'index.ctp', $index);
+
     }
 
 
@@ -236,6 +245,7 @@ class MyBehavior extends Behavior
     {
         $this->__setConfig($entity);
         $this->__runBuild();
+        $entity->set('create_data', $this->path);
         return true;
     }
 }

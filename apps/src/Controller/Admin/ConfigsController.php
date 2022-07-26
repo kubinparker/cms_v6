@@ -24,7 +24,18 @@ class ConfigsController extends AppController
     public function index()
     {
         $this->setList();
-        parent::_edit(0, ['redirect' => '/admin']);
+        $view  = 'index';
+
+        parent::_edit(0, ['redirect' => false]);
+        if ($this->request->is(['post', 'put'])) {
+            $view = 'created';
+        }
+        $this->render($view);
+    }
+
+    public function created()
+    {
+        $this->set('data', $this->index());
     }
 
 
