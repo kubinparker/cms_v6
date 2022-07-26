@@ -1,8 +1,8 @@
 <tr>
-    <td>Input text</td>
+    <td>{item_label}</td>
     <td>
         <div>
-            <input type="text">
+            <input type="text" name="{item_name}" maxlength="{item_max_length}" minlength="{item_min_length}">
             {0}
         </div>						
     </td>

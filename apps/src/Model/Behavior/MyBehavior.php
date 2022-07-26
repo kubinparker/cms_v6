@@ -40,6 +40,7 @@ class MyBehavior extends Behavior
 
     public $data_item = [];
     public $path = [];
+    public $item_options = [];
 
 
     public function setSlug($slug)
@@ -100,6 +101,11 @@ class MyBehavior extends Behavior
         $this->data_item = $data_item;
     }
 
+    public function setItemOptions($item_options)
+    {
+        $this->item_options = $item_options;
+    }
+
 
     protected function __setConfig(EntityInterface $entity)
     {
@@ -117,6 +123,7 @@ class MyBehavior extends Behavior
         $this->setIsForm3StepSave($entity->font_type_options_1 && in_array(strval($this::$FORM_3_STEP_SAVE), $entity->font_type_options_1, true));
 
         $this->setDataFormItem($entity->data_item);
+        $this->setItemOptions($entity->data_options);
     }
 
 
@@ -236,10 +243,17 @@ class MyBehavior extends Behavior
 
         // edit file content
         $edit_content = '';
-        if ($this->data_item) foreach ($this->data_item as $item) $edit_content .= __(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), '');
+        if ($this->data_item) {
+            foreach ($this->data_item as $i => $item) {
+                $value = $this->item_options[$i] ?? [];
+                $value[0] = '';
+                $edit_content .= @__(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), $value);
+            }
+        }
 
 
         $edit = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/edit.txt', true), $this->title, $edit_content);
+
         file_put_contents($folder . 'edit.ctp', $edit);
         $this->path[] = $folder . 'edit.ctp';
 

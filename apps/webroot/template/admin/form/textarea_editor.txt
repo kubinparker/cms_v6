@@ -1,9 +1,9 @@
  <tr>
-    <td>Textarea editor iframe</td>
+    <td>{item_label}</td>
     <td>
         <div id="toolbar-container"></div>
         <div id="editor" style="border: 1px solid #ccc !important;"><?= @$entity->content ?></div>
-        <textarea name="content" style="display:none;" id="event-content"></textarea>
+        <textarea name="{item_name}" maxlength="{item_max_length}" minlength="{item_min_length}" style="display:none;" id="event-content"></textarea>
         {0}
     </td>
 </tr>

@@ -1,14 +1,14 @@
 <tr>
-    <td>Checkbox inline</td>
+    <td>{item_label}</td>
     <td>
         <div class="checkbox checkbox-inline">
-            <input type="checkbox" name="checkbox" value="3" id="checkbox-3"><label class="mar_r20" for="checkbox-3">Checkbox 3</label>
+            <input type="checkbox" name="{item_name}" value="3" id="checkbox-3"><label class="mar_r20" for="checkbox-3">Checkbox 3</label>
         </div>
         <div class="checkbox checkbox-inline">
-            <input type="checkbox" name="checkbox" value="4" id="checkbox-4"><label class="mar_r20" for="checkbox-4">Checkbox 4</label>
+            <input type="checkbox" name="{item_name}" value="4" id="checkbox-4"><label class="mar_r20" for="checkbox-4">Checkbox 4</label>
         </div>	
         <div class="checkbox checkbox-inline">
-            <input type="checkbox" name="checkbox" value="5" id="checkbox-5"><label class="mar_r20" for="checkbox-5">Checkbox 5</label>
+            <input type="checkbox" name="{item_name}" value="5" id="checkbox-5"><label class="mar_r20" for="checkbox-5">Checkbox 5</label>
         </div>
         {0}				
     </td>

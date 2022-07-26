@@ -1,8 +1,8 @@
 <tr>
-    <td>Input date</td>
+    <td>{item_label}</td>
     <td>
         <div>
-            <input type="date">
+            <input type="date" name="{item_name}">
             {0}
         </div>						
     </td>

@@ -1,7 +1,7 @@
 <tr>
-    <td>Image</td>
+    <td>{item_label}</td>
     <td class="edit_image_area">
-        <?= $this->element('form/image') ?>
+        <?= $this->element('form/image', ["name" => "{item_name}", "accept"=> ["{item_checkbox_jpg}","{item_checkbox_jpge}","{item_checkbox_gif}","{item_checkbox_png}","{item_checkbox_svg}","{item_checkbox_ico}","{item_checkbox_pjpeg}"]]) ?>
         {0}
     </td>
 </tr>

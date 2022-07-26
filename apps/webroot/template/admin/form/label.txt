@@ -1,4 +1,4 @@
 <tr>
-    <td>Label</td>
-    <td>新規 {0}</td>
+    <td>{item_label}</td>
+    <td>{item_text} {0}</td>
 </tr>

@@ -1,14 +1,14 @@
 <tr>
-    <td>Radio inline</td>
+    <td>{item_label}</td>
     <td>
         <div class="radio checkbox-inline">
-            <input type="radio" name="radio" value="0" id="radio-4"><label class="mar_r20" for="radio-4">Radio 1</label>
+            <input type="radio" name="{item_name}" value="0" id="radio-4"><label class="mar_r20" for="radio-4">Radio 1</label>
         </div>
         <div class="radio checkbox-inline">
-            <input type="radio" name="radio" value="1" id="radio-5"><label class="mar_r20" for="radio-5">Radio 2</label>
+            <input type="radio" name="{item_name}" value="1" id="radio-5"><label class="mar_r20" for="radio-5">Radio 2</label>
         </div>	
         <div class="radio checkbox-inline">
-            <input type="radio" name="radio" value="2" id="radio-6"><label class="mar_r20" for="radio-6">Radio 3</label>
+            <input type="radio" name="{item_name}" value="2" id="radio-6"><label class="mar_r20" for="radio-6">Radio 3</label>
         </div>
         {0}				
     </td>

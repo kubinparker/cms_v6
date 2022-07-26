@@ -1,14 +1,14 @@
 <tr>
-    <td>Radio</td>
+    <td>{item_label}</td>
     <td>
         <div class="radio">
-            <input type="radio" name="radio" value="0" id="radio-0"><label class="mar_r20" for="radio-0">Radio 1</label>
+            <input type="radio" name="{item_name}" value="0" id="radio-0"><label class="mar_r20" for="radio-0">Radio 1</label>
         </div>
         <div class="radio ">
-            <input type="radio" name="radio" value="1" id="radio-1"><label class="mar_r20" for="radio-1">Radio 2</label>
+            <input type="radio" name="{item_name}" value="1" id="radio-1"><label class="mar_r20" for="radio-1">Radio 2</label>
         </div>	
         <div class="radio">
-            <input type="radio" name="radio" value="2" id="radio-2"><label class="mar_r20" for="radio-2">Radio 3</label>
+            <input type="radio" name="{item_name}" value="2" id="radio-2"><label class="mar_r20" for="radio-2">Radio 3</label>
         </div>
         {0}			
     </td>

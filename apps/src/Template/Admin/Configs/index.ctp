@@ -173,7 +173,21 @@
 				alert('※Slugはアンファーベストと数字だけで入力してください。')
 				return false;
 			}
-			$('#frm-form').submit();
+
+			$('table.admin_table tr').each(function(i) {
+				var attrs = [].filter.call($(this).find('.item_options')[0].attributes, function(at) {
+					return at.name !== 'type' && at.name !== 'class';
+				});
+				var tr = $(this);
+				tr.find('.data_options').remove();
+
+				attrs.forEach(element => {
+					tr.append(`<input type="hidden" class="data_options" name="data_options[${i}][${element.name}]" value="${element.value}"/>`);
+				});
+			});
+			setTimeout(() => {
+				$('#frm-form').submit();
+			}, 800);
 		});
 
 		$('.management_part').change(function() {

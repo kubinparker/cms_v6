@@ -20,12 +20,26 @@ class BuildModalContent
 
         'max-length': `<div class="form-group">
                 <label for="item-max-length" class="col-form-label">文字数（上限）</label>
-                <input type="text" pattern="\d*" maxlength="4" class="form-control" name="item_max_length" id="item-max-length" value="0">
+                <input name="item_max_length"
+                    class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    type = "number"
+                    maxlength = "4"
+                    id="item-max-length"
+                    value="0"
+                />
             </div>`,
 
         'min-length': `<div class="form-group">
                 <label for="item-min-length" class="col-form-label">文字数（下限）</label>
-                <input type="text" pattern="\d*" maxlength="4" class="form-control" name="item_min_length" id="item-min-length" value="0">
+                <input name="item_min_length"
+                    class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    type = "number"
+                    maxlength = "4"
+                    id="item-min-length"
+                    value="0"
+                />
             </div>`,
 
         'require': `<div class="form-group">
@@ -59,48 +73,48 @@ class BuildModalContent
             </div>`,
 
         'file_type': `<div class="form-group">
-            <input type="checkbox" class="form-control" name="item_checkbox_pdf" id="item-checkbox0" value="pdf">
+            <input type="checkbox" class="form-control" name="item_checkbox_pdf" id="item-checkbox0" value=".pdf">
             <label for="item-checkbox0" class="col-form-label">.pdf</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_doc" id="item-checkbox1" value="doc">
+            <input type="checkbox" class="form-control" name="item_checkbox_doc" id="item-checkbox1" value=".doc">
             <label for="item-checkbox1" class="col-form-label">.doc</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_docx" id="item-checkbox2" value="docx">
+            <input type="checkbox" class="form-control" name="item_checkbox_docx" id="item-checkbox2" value=".docx">
             <label for="item-checkbox2" class="col-form-label">.docx</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_xls" id="item-checkbox3" value="xls">
+            <input type="checkbox" class="form-control" name="item_checkbox_xls" id="item-checkbox3" value=".xls">
             <label for="item-checkbox3" class="col-form-label">.xls</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_xlsx" id="item-checkbox4" value="xlsx">
+            <input type="checkbox" class="form-control" name="item_checkbox_xlsx" id="item-checkbox4" value=".xlsx">
             <label for="item-checkbox4" class="col-form-label">.xlsx</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_csv" id="item-checkbox5" value="csv">
+            <input type="checkbox" class="form-control" name="item_checkbox_csv" id="item-checkbox5" value=".csv">
             <label for="item-checkbox5" class="col-form-label">.csv</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_zip" id="item-checkbox6" value="zip">
+            <input type="checkbox" class="form-control" name="item_checkbox_zip" id="item-checkbox6" value=".zip">
             <label for="item-checkbox6" class="col-form-label">.zip</label>
         </div>`,
 
         'image_type': `<div class="form-group">
-            <input type="checkbox" class="form-control" name="item_checkbox_jpg" id="item-checkbox0" value="jpg">
+            <input type="checkbox" class="form-control" name="item_checkbox_jpg" id="item-checkbox0" value=".jpg">
             <label for="item-checkbox0" class="col-form-label">.jpg</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_jpge" id="item-checkbox1" value="jpge">
+            <input type="checkbox" class="form-control" name="item_checkbox_jpge" id="item-checkbox1" value=".jpge">
             <label for="item-checkbox1" class="col-form-label">.jpge</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_gif" id="item-checkbox2" value="gif">
+            <input type="checkbox" class="form-control" name="item_checkbox_gif" id="item-checkbox2" value=".gif">
             <label for="item-checkbox2" class="col-form-label">.gif</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_png" id="item-checkbox3" value="png">
+            <input type="checkbox" class="form-control" name="item_checkbox_png" id="item-checkbox3" value=".png">
             <label for="item-checkbox3" class="col-form-label">.png</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_svg" id="item-checkbox4" value="svg">
+            <input type="checkbox" class="form-control" name="item_checkbox_svg" id="item-checkbox4" value=".svg">
             <label for="item-checkbox4" class="col-form-label">.svg</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_ico" id="item-checkbox5" value="ico">
+            <input type="checkbox" class="form-control" name="item_checkbox_ico" id="item-checkbox5" value=".ico">
             <label for="item-checkbox5" class="col-form-label">.ico</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_pjpeg" id="item-checkbox6" value="pjpeg">
+            <input type="checkbox" class="form-control" name="item_checkbox_pjpeg" id="item-checkbox6" value=".pjpeg">
             <label for="item-checkbox6" class="col-form-label">.pjpeg</label>
         </div>`,
 
@@ -163,20 +177,6 @@ class BuildModalContent
     }
 
 
-    change_item_label ( modal, tr )
-    {
-        const data_option = modal.find( 'form' ).serializeArray();
-
-        for ( let i in data_option )
-        {
-            if ( tr.find( `.${ data_option[ i ][ 'name' ] }` ).length > 0 )
-                tr.find( `.${ data_option[ i ][ 'name' ] }` ).text( data_option[ i ][ 'value' ] );
-        }
-        // hide modal
-        modal.find( '.btn-secondary' ).trigger( 'click' );
-    }
-
-
     setHeader ()
     {
         this.__modal__.find( '.modal-title' ).text( `項目設定（${ this.__item__ }）` );
@@ -211,6 +211,7 @@ class BuildModalContent
     change_item ( modal, type, tr )
     {
         const data_option = modal.find( 'form' ).serializeArray();
+        // tr.find( '.item_element' ).remove();
 
         for ( let i in data_option )
         {
@@ -218,6 +219,7 @@ class BuildModalContent
                 tr.find( `.${ data_option[ i ][ 'name' ] }` ).text( data_option[ i ][ 'value' ] );
 
             tr.find( '.item_options' ).attr( `${ data_option[ i ][ 'name' ] }`, data_option[ i ][ 'value' ] );
+            // tr.append( `<input type="hidden" class="item_element" data-item="${ data_option[ i ][ 'name' ] }" data-value="${ data_option[ i ][ 'value' ] }">` );
         }
         // hide modal
         modal.find( '.btn-secondary' ).trigger( 'click' );

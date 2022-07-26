@@ -1,14 +1,14 @@
 <tr>
-    <td>Checkbox</td>
+    <td>{item_label}</td>
     <td>
         <div class="checkbox">
-            <input type="checkbox" name="checkbox" value="0" id="checkbox-0"><label class="mar_r20" for="checkbox-0">Checkbox 1</label>
+            <input type="checkbox" name="{item_name}" value="0" id="checkbox-0"><label class="mar_r20" for="checkbox-0">Checkbox 1</label>
         </div>
         <div class="checkbox">
-            <input type="checkbox" name="checkbox" value="1" id="checkbox-1"><label class="mar_r20" for="checkbox-1">Checkbox 2</label>
+            <input type="checkbox" name="{item_name}" value="1" id="checkbox-1"><label class="mar_r20" for="checkbox-1">Checkbox 2</label>
         </div>	
         <div class="checkbox">
-            <input type="checkbox" name="checkbox" value="2" id="checkbox-2"><label class="mar_r20" for="checkbox-2">Checkbox 3</label>
+            <input type="checkbox" name="{item_name}" value="2" id="checkbox-2"><label class="mar_r20" for="checkbox-2">Checkbox 3</label>
         </div>	
         {0}				
     </td>
