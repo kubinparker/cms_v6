@@ -153,8 +153,8 @@ class BuildModalContent
     checkbox_inline () { this.option = [ 'label', 'name', 'require' ]; }
     radio () { this.option = [ 'label', 'name', 'require' ]; }
     radio_inline () { this.option = [ 'label', 'name', 'require' ]; }
-    file () { this.option = [ 'label', 'name', 'require', 'size', 'file_type' ]; }
-    image () { this.option = [ 'label', 'name', 'require', 'size', 'image_type' ]; }
+    file () { this.option = [ 'label', 'require', 'size', 'file_type' ]; }
+    image () { this.option = [ 'label', 'require', 'size', 'image_type' ]; }
 
 
     get_temp_option ( option )

@@ -121,7 +121,6 @@ class MyBehavior extends Behavior
         ],
         'file' => [
             "item_label" => "",
-            "item_name" => "",
             "item_require" => 0,
             "item_size" => "デフォルト",
             "item_checkbox_pdf" => ".pdf",
@@ -134,7 +133,6 @@ class MyBehavior extends Behavior
         ],
         'images' => [
             "item_label" => "",
-            "item_name" => "",
             "item_require" => 0,
             "item_size" => "デフォルト",
             "item_checkbox_jpg" => ".jpg",

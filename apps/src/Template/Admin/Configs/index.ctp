@@ -133,7 +133,7 @@
 			b = parentLi.find('b'),
 			countB = parseInt(b.text());
 
-		if (type == 'textarea_editor' && countB >= 1) return false;
+		if (__._array.in_array(type, ['textarea_editor', 'file', 'images']) && countB >= 1) return false;
 
 		$.ajax({
 			url: '/admin/configs/getItem',
@@ -152,6 +152,7 @@
 			}
 		});
 	}
+
 
 	function dragDrop() {
 		$('.list-box-item-content table tr').arrangeable({

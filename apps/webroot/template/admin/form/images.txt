@@ -1,7 +1,7 @@
 <tr>
     <td>{item_label}</td>
     <td class="edit_image_area">
-        <?= $this->element('form/image', ["name" => "{item_name}", "accept"=> "{accept}"]) ?>
+        <?= $this->element('form/image', ["accept"=> "{accept}"]) ?>
         {0}
     </td>
 </tr>
