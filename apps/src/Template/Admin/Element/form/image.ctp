@@ -4,6 +4,9 @@
 <?php if ($accept) : ?><div class="remark">※ <?= $accept ?> ファイルのみ</div><?php endif ?>
 <div class="remark">※横幅700以上を推奨。1200x1200以内に縮小されます</div>
 <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>
+<div class="progress display_none">
+    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+</div>
 
 <?php if (isset($entity->attaches['images'])) :
     foreach ($entity->attaches['images'] as $att) : ?>
