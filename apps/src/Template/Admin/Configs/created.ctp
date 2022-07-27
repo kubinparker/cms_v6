@@ -60,7 +60,7 @@
                 </div>
             <?php endforeach; ?>
         </div>
-        <div class="btn_area" style="padding-top:100px;"><a href="<?= $this->Url->build(['action' => 'index']); ?>" class="btn_confirm btn_post">ページ作成へ</a></div>
+        <div class="btn_area" style="padding-top:100px;"><a href="<?= $this->Url->build(['prefix' => 'admin', 'controller' => $entity->slug, 'action' => 'index']); ?>" class="btn_confirm btn_post">【<?= h($entity->title) ?>】へ</a></div>
     </div>
 </div>
 <?php $this->start('beforeBodyClose'); ?>
