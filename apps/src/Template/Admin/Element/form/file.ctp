@@ -3,6 +3,9 @@
 <?= $this->Form->input('files[]', ['type' => 'file', 'label' => false, 'onchange' => 'uploadFile(this)', 'multiple' => 'true', 'error' => false, 'accept' => $accept]); ?>
 <?php if ($accept) : ?><div class="remark">※ <?= $accept ?> ファイルのみ</div><?php endif ?>
 <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>
+<div class="progress display_none">
+    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+</div>
 
 <?php if (isset($entity->attaches['files'])) :
     foreach ($entity->attaches['files'] as $att) : ?>

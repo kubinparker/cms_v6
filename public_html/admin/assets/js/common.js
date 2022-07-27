@@ -91,7 +91,7 @@ function uploadFile ( e )
     var fd = new FormData();
     var files = $( e )[ 0 ].files;
 
-    $( e ).parent( 'td' ).find( '.error-message' ).remove();
+    $( e ).parents( 'td' ).find( '.error-message' ).remove();
 
     if ( files.length > 10 )
     {
@@ -131,6 +131,9 @@ function uploadFile ( e )
 
         return false;
     }
+
+    $( e ).parents( 'td' ).find( '.progress' ).removeClass( 'display_none' );
+
     $.ajax( {
         'url': "/admin/configs/upload-files",
         'contentType': false,
@@ -138,6 +141,25 @@ function uploadFile ( e )
         'method': 'post',
         'data': fd,
         'dataType': 'json',
+        'xhr': function ()
+        {
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener( "progress", function ( evt )
+            {
+                if ( evt.lengthComputable )
+                {
+                    var percentComplete = ( ( evt.loaded / evt.total ) * 100 );
+                    $( e ).parents( 'td' ).find( ".progress-bar" ).width( percentComplete + '%' );
+                    $( e ).parents( 'td' ).find( ".progress-bar" ).html( percentComplete + '%' );
+                }
+            }, false );
+
+            return xhr;
+        },
+        'beforeSend': function ()
+        {
+            $( e ).parents( 'td' ).find( ".progress-bar" ).width( '0%' );
+        },
         'success': function ( resp )
         {
             if ( resp.success )
@@ -152,8 +174,14 @@ function uploadFile ( e )
                             <input type="hidden" name="__files[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
                         </p>
                     `);
+
+                $( e ).parents( 'td' ).find( '.progress' ).addClass( 'display_none' ).find( '.progress-bar' ).attr( 'style', 'width:0%' ).html( '0%' );
             }
-        }
+        },
+        'error': function ()
+        {
+            window.alert( '失敗しました。' );
+        },
     } );
 }
 
@@ -163,7 +191,7 @@ function uploadImages ( e, slug )
     var fd = new FormData();
     var files = $( e )[ 0 ].files;
 
-    $( e ).parent( 'td' ).find( '.error-message' ).remove();
+    $( e ).parents( 'td' ).find( '.error-message' ).remove();
 
     if ( files.length > 10 )
     {
@@ -205,6 +233,8 @@ function uploadImages ( e, slug )
     }
     fd.append( 'slug', slug );
 
+    $( e ).parents( 'td' ).find( '.progress' ).removeClass( 'display_none' ).find( '.progress-bar' ).attr( 'style', 'width:0%' ).html( '0%' );
+
     $.ajax( {
         'url': "/admin/configs/upload-image",
         'contentType': false,
@@ -212,6 +242,25 @@ function uploadImages ( e, slug )
         'method': 'post',
         'data': fd,
         'dataType': 'json',
+        'xhr': function ()
+        {
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener( "progress", function ( evt )
+            {
+                if ( evt.lengthComputable )
+                {
+                    var percentComplete = ( ( evt.loaded / evt.total ) * 100 );
+                    $( e ).parents( 'td' ).find( ".progress-bar" ).width( percentComplete + '%' );
+                    $( e ).parents( 'td' ).find( ".progress-bar" ).html( percentComplete + '%' );
+                }
+            }, false );
+
+            return xhr;
+        },
+        'beforeSend': function ()
+        {
+            $( e ).parents( 'td' ).find( ".progress-bar" ).width( '0%' );
+        },
         'success': function ( resp )
         {
             if ( resp.success )
@@ -231,8 +280,14 @@ function uploadImages ( e, slug )
                             <input type="hidden" name="__images[${ resp.data[ i ].original_name }][size]" value="${ resp.data[ i ].size }"/>
                         </p>
                     `);
+
+                $( e ).parents( 'td' ).find( '.progress' ).addClass( 'display_none' ).find( '.progress-bar' ).attr( 'style', 'width:0%' ).html( '0%' );
             }
-        }
+        },
+        'error': function ()
+        {
+            window.alert( '失敗しました。' );
+        },
     } );
 }
 
