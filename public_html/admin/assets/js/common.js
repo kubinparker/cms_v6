@@ -86,7 +86,7 @@ function __uploadFile ( files, editor, htmlDP )
 }
 
 
-function uploadFile ( e )
+function uploadFile ( e, slug )
 {
     var fd = new FormData();
     var files = $( e )[ 0 ].files;
@@ -131,6 +131,8 @@ function uploadFile ( e )
 
         return false;
     }
+
+    fd.append( 'slug', slug );
 
     $( e ).parents( 'td' ).find( '.progress' ).removeClass( 'display_none' );
 
@@ -268,6 +270,7 @@ function uploadImages ( e, slug )
                 if ( resp.data.setting )
                 {
                     window.alert( resp.data.setting );
+                    $( e ).parents( 'td' ).find( '.progress' ).addClass( 'display_none' ).find( '.progress-bar' ).attr( 'style', 'width:0%' ).html( '0%' );
                     return false;
                 }
                 let re = /=&/gi;

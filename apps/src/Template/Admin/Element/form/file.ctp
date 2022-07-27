@@ -1,6 +1,6 @@
 <?php $accept = isset($accept) && $accept != '' ? $accept : false ?>
 <!-- '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel' -->
-<?= $this->Form->input('files[]', ['type' => 'file', 'label' => false, 'onchange' => 'uploadFile(this)', 'multiple' => 'true', 'error' => false, 'accept' => $accept]); ?>
+<?= $this->Form->input('files[]', ['type' => 'file', 'label' => false, 'onchange' => 'uploadFile(this, "' . $ModelName . '")', 'multiple' => 'true', 'error' => false, 'accept' => $accept]); ?>
 <?php if ($accept) : ?><div class="remark">※ <?= $accept ?> ファイルのみ</div><?php endif ?>
 <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>
 <div class="progress display_none">
@@ -20,8 +20,8 @@
     <?php endforeach; ?>
 <?php endif ?>
 
-<?php if ($this->Form->isFieldError('files')) : ?>
+<?php if ($this->Form->isFieldError('files') || $this->Form->isFieldError('__files')) : ?>
     <div class="error-message">
-        <div class="error-message"><?= $this->Form->error('files') ?></div>
+        <div class="error-message"><?= $this->Form->error('files') . $this->Form->error('__files') ?></div>
     </div>
 <?php endif ?>

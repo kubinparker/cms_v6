@@ -375,7 +375,8 @@ class AppController extends BaseController
     {
         if ($this->request->is(['post', 'put'])) {
             $upload_file = (array) $this->request->getData('files');
-            $data = $this->__uploadTmp('upload_file_tmp', 'files', $upload_file);
+            $slug = $this->request->getData('slug') ?? false;
+            $data = $this->__uploadTmp('upload_file_tmp', 'files', $upload_file, $slug);
             echo json_encode(['success' => true, 'data' => $data]);
             exit();
         }
@@ -383,11 +384,18 @@ class AppController extends BaseController
     }
 
 
-    protected function __uploadTmp($tmpFolder = 'upload_tmp', $type, $datas)
+    protected function __uploadTmp($tmpFolder = 'upload_tmp', $type, $datas, $slug = false)
     {
         if (!$this->Session->check('code_upload')) $this->Session->write('code_upload', md5(round(microtime(true) * 10000)));
 
         $folder_name = $this->Session->read('code_upload');
+
+        $model = TableRegistry::getTableLocator()->get($slug);
+        $attaches_files = $model->attaches['files'];
+        if (empty($attaches_files)) return ['setting' => '\App\Model\Table\〇〇Table ファイルの「$attaches」が設定されていません。'];
+
+        if (isset($attaches_files['extensions']) && !empty($attaches_files['extensions']))
+            $this->image_extension = $attaches_files['extensions'];
 
         $exts = $type == 'files' ? $this->file_extension : $this->image_extension;
 

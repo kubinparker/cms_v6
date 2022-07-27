@@ -21,8 +21,8 @@
     <?php endforeach; ?>
 <?php endif ?>
 
-<?php if ($this->Form->isFieldError('images')) : ?>
+<?php if ($this->Form->isFieldError('images') || $this->Form->isFieldError('__images')) : ?>
     <div class="error-message">
-        <div class="error-message"><?= $this->Form->error('images') ?></div>
+        <div class="error-message"><?= @$this->Form->error('images') . $this->Form->error('__images') ?></div>
     </div>
 <?php endif ?>

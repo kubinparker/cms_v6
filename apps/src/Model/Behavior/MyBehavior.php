@@ -48,9 +48,14 @@ class MyBehavior extends Behavior
         '.jpg', '.jpge', '.gif', '.png', '.svg', '.ico', '.pjpeg'
     ];
 
+    public $template_setting = [];
+
     static $TEMPLATE_SETTING = [
         'item_label', 'item_name', 'item_text', 'item_min_length', 'item_max_length', 'accept'
     ];
+
+    public $model_setting = [];
+
     static $MODEL_SETTING = [
         'item_require', 'item_unique', 'item_type', 'item_min_length', 'item_max_length', 'accept', 'item_size'
     ];
@@ -276,7 +281,7 @@ class MyBehavior extends Behavior
     protected function __convertSetting()
     {
         $this->__convertSettingForTemplate();
-        // $this->__convertSettingForModel();
+        $this->__convertSettingForModel();
     }
 
 
@@ -307,11 +312,13 @@ class MyBehavior extends Behavior
                     case 'accept':
                         $options[$i][$opt] = !empty($val) ? implode(',', $val) : '';
                         break;
+                    default:
+                        $options[$i][$opt] = $val;
                 }
             }
         }
 
-        $this->option_setting = $options;
+        $this->template_setting = $options;
     }
 
 
@@ -321,8 +328,13 @@ class MyBehavior extends Behavior
         foreach ($this->data_item as $i => $item) {
             if (!isset($this->option_setting[$i])) continue;
 
-            $setting = $this->option_setting[$i];
+            if ($item == 'file' || $item == 'images') {
+                $accept = str_replace('.', '', $this->template_setting[$i]['accept']);
+                $accept = empty($this->template_setting[$i]['accept']) ? '[]' : "['" . str_replace(',', "','", $accept) . "']";
+                $this->model_setting[$item . '_extension'] = $accept;
+            }
 
+            $setting = $this->option_setting[$i];
             foreach ($setting as $opt => $val) {
                 if (!in_array($opt, self::$MODEL_SETTING, true)) continue;
 
@@ -339,10 +351,16 @@ class MyBehavior extends Behavior
 
                             $act = $func != 'notEmptyString' ? 'ご選択' : $act;
 
+                            $item_name = isset($setting['item_name']) ? $setting['item_name'] : '';
+                            $item_name = $item == 'file' ? '__files' : $item_name;
+                            $item_name = $item == 'images' ? '__images' :  $item_name;
+
+                            if ($item_name == '') break;
+
                             $options[] = __(
                                 'notBlank("{item_name}", "※ {item_label}を{act}ください。")',
                                 [
-                                    'item_name' => $setting['item_name'],
+                                    'item_name' => $item_name,
                                     'item_label' => $setting['item_label'],
                                     'act' => $act
                                 ]
@@ -352,7 +370,7 @@ class MyBehavior extends Behavior
                                 '{func}("{item_name}", "※ {item_label}を{act}てください。")',
                                 [
                                     'func' => $func,
-                                    'item_name' => $setting['item_name'],
+                                    'item_name' => $item_name,
                                     'item_label' => $setting['item_label'],
                                     'act' => $act
                                 ]
@@ -382,8 +400,7 @@ class MyBehavior extends Behavior
         }
 
 
-
-        $this->option_setting = $options;
+        $this->model_setting['validate'] = empty($options) ? '' : __('$validator->{0};', implode('->', $options));
     }
 
 
@@ -488,7 +505,11 @@ class MyBehavior extends Behavior
         $this->path[] = $file;
 
         // model
-        $model = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/common.txt', true), [$slug, 'contain' => $model_contain]);
+        $value = $this->model_setting;
+        $value[0] = $slug;
+        $value['contain'] = $model_contain;
+
+        $model = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/common.txt', true), $value);
         $file = APP . 'Model/Table/' . $slug . 'Table.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $model));
         $this->path[] = $file;
@@ -507,7 +528,7 @@ class MyBehavior extends Behavior
         $edit_content = '';
         if ($this->data_item) {
             foreach ($this->data_item as $i => $item) {
-                $value = isset($this->option_setting[$i]) ? $this->option_setting[$i] : [];
+                $value = isset($this->template_setting[$i]) ? $this->template_setting[$i] : [];
                 $value[0] = '';
                 $edit_content .= @__(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), $value);
             }

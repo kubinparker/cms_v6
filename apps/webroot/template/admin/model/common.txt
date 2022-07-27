@@ -9,17 +9,22 @@ use App\Model\Table\AppTable;
 class {0}Table extends AppTable
 &=
 
-    public $attaches = ['images' => [
-        //'extensions' => ['jpg', 'jpeg', 'gif', 'png'],
-        //'width' => 430,
-        //'height' => 290,
-        //'thumbnails' => [
-        //    's' => [
-        //        'width' => 123,
-        //        'height' => 123
-        //    ]
-        //],
-    ], 'files' => []];
+    public $attaches = [
+        'images' => [
+            'extensions' => {images_extension},
+            'width' => 430,
+            'height' => 290,
+            'thumbnails' => [
+                's' => [
+                    'width' => 123,
+                    'height' => 123
+                ]
+            ],
+        ], 
+        'files' => [
+            'extensions' => {file_extension}
+        ]
+    ];
 
 
     public function initialize(array $config)
@@ -31,7 +36,7 @@ class {0}Table extends AppTable
 
     public function validationDefault(Validator $validator)
     &=
-        // any validation
+        {validate}
         return $validator;
     =&
 =&
