@@ -204,12 +204,12 @@ class MyBehavior extends Behavior
 
     public function setDataFormItem($data_item)
     {
-        $this->data_item = $data_item;
+        $this->data_item = $data_item ?? [];
     }
 
     public function setItemOptions($item_options)
     {
-        $this->item_options = $item_options;
+        $this->item_options = $item_options ?? [];
     }
 
 
@@ -310,6 +310,78 @@ class MyBehavior extends Behavior
                 }
             }
         }
+
+        $this->option_setting = $options;
+    }
+
+
+    protected function __convertSettingForModel()
+    {
+        $options = [];
+        foreach ($this->data_item as $i => $item) {
+            if (!isset($this->option_setting[$i])) continue;
+
+            $setting = $this->option_setting[$i];
+
+            foreach ($setting as $opt => $val) {
+                if (!in_array($opt, self::$MODEL_SETTING, true)) continue;
+
+                switch ($opt) {
+                    case 'item_require':
+                        if (intval($val) == 1) {
+
+                            $act = 'ご入力';
+
+                            $func = 'notEmptyString';
+                            $func = $item == 'input_date' ? 'notEmptyDate' : $func;
+                            $func = $item == 'input_datetime' ? 'notEmptyDateTime' : $func;
+                            $func = $item == 'file' || $item == 'images' ? 'notEmptyArray' : $func;
+
+                            $act = $func != 'notEmptyString' ? 'ご選択' : $act;
+
+                            $options[] = __(
+                                'notBlank("{item_name}", "※ {item_label}を{act}ください。")',
+                                [
+                                    'item_name' => $setting['item_name'],
+                                    'item_label' => $setting['item_label'],
+                                    'act' => $act
+                                ]
+                            );
+
+                            $options[] = __(
+                                '{func}("{item_name}", "※ {item_label}を{act}てください。")',
+                                [
+                                    'func' => $func,
+                                    'item_name' => $setting['item_name'],
+                                    'item_label' => $setting['item_label'],
+                                    'act' => $act
+                                ]
+                            );
+                        }
+                        break;
+
+                    case 'item_unique':
+                        break;
+
+                    case 'item_type':
+                        break;
+
+                    case 'item_min_length':
+                        break;
+
+                    case 'item_max_length':
+                        break;
+
+                    case 'accept':
+                        break;
+
+                    case 'item_size':
+                        break;
+                }
+            }
+        }
+
+
 
         $this->option_setting = $options;
     }

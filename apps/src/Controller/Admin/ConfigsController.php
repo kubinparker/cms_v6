@@ -27,7 +27,7 @@ class ConfigsController extends AppController
         $view  = 'created';
 
         $data = $this->codeBlocks(parent::_edit(0, ['redirect' => false]));
-        $view = $this->request->is(['post', 'put']) && $data->create_data ? $view : 'index';
+        $view = $this->request->is(['post', 'put']) && empty($data->getErrors()) ? $view : 'index';
 
         $this->render($view);
     }
