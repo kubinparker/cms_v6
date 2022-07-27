@@ -3,7 +3,7 @@
     <td>
         <div id="toolbar-container"></div>
         <div id="editor" style="border: 1px solid #ccc !important;"><?= @$entity->content ?></div>
-        <textarea name="{item_name}" maxlength="{item_max_length}" minlength="{item_min_length}" style="display:none;" id="event-content"></textarea>
+        <textarea name="{item_name}" {item_min_length} {item_max_length} style="display:none;" id="event-content"></textarea>
         {0}
     </td>
 </tr>

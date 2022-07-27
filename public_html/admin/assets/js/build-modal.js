@@ -119,16 +119,16 @@ class BuildModalContent
         </div>`,
 
         'options': `<div class="form-group">
-            <input type="radio" class="form-control" name="item_radio" id="item-radio0" value="0" checked>
+            <input type="radio" class="form-control" name="item_type" id="item-radio0" value="0" checked>
             <label for="item-radio0" class="col-form-label">普通</label>
             
-            <input type="radio" class="form-control" name="item_radio" id="item-radio1" value="kana">
+            <input type="radio" class="form-control" name="item_type" id="item-radio1" value="kana">
             <label for="item-radio1" class="col-form-label">フリガナ</label>
             
-            <input type="radio" class="form-control" name="item_radio" id="item-radio2" value="phone">
+            <input type="radio" class="form-control" name="item_type" id="item-radio2" value="phone">
             <label for="item-radio2" class="col-form-label">電話番号</label>
             
-            <input type="radio" class="form-control" name="item_radio" id="item-radio3" value="mail">
+            <input type="radio" class="form-control" name="item_type" id="item-radio3" value="mail">
             <label for="item-radio3" class="col-form-label">メールアドレス</label>
         </div>`,
     }

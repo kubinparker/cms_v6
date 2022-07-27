@@ -2,7 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <textarea rows="4" name="{item_name}" maxlength="{item_max_length}" minlength="{item_min_length}" cols="100"></textarea>
+            <textarea rows="4" name="{item_name}" {item_min_length} {item_max_length} cols="100"></textarea>
             {0}
         </div>						
     </td>

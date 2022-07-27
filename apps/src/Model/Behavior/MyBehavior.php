@@ -39,8 +39,116 @@ class MyBehavior extends Behavior
     public $is_detail_page = false;
 
     public $data_item = [];
-    public $path = [];
     public $item_options = [];
+    public $option_setting = [];
+
+    public $path = [];
+    static $ALL_FILE_TYPE = [
+        '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.csv', '.zip',
+        '.jpg', '.jpge', '.gif', '.png', '.svg', '.ico', '.pjpeg'
+    ];
+
+    static $TEMPLATE_SETTING = [
+        'item_label', 'item_name', 'item_text', 'item_min_length', 'item_max_length', 'accept'
+    ];
+    static $MODEL_SETTING = [
+        'item_require', 'item_unique', 'item_type', 'item_min_length', 'item_max_length', 'accept', 'item_size'
+    ];
+
+
+    public $default_options = [
+        'label' => [
+            "item_label" => "",
+            "item_text" => ""
+        ],
+        'input_text' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_type" => "",
+            "item_require" => 0,
+            "item_unique" => 0,
+            "item_min_length" => 0,
+            "item_max_length" => ""
+        ],
+        'input_date' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0
+        ],
+        'input_datetime' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0
+        ],
+        'selectbox' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0
+        ],
+        'textarea' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0,
+            "item_min_length" => 0,
+            "item_max_length" => ""
+        ],
+        'textarea_editor' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0,
+            "item_min_length" => 0,
+            "item_max_length" => ""
+        ],
+        'checkbox' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0
+        ],
+        'checkbox_inline' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0
+        ],
+        'radio' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0
+        ],
+        'radio_inline' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0
+        ],
+        'file' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0,
+            "item_size" => "デフォルト",
+            "item_checkbox_pdf" => ".pdf",
+            "item_checkbox_doc" => ".doc",
+            "item_checkbox_docx" => ".docx",
+            "item_checkbox_xls" => ".xls",
+            "item_checkbox_xlsx" => ".xlsx",
+            "item_checkbox_csv" => ".csv",
+            "item_checkbox_zip" => ".zip"
+        ],
+        'images' => [
+            "item_label" => "",
+            "item_name" => "",
+            "item_require" => 0,
+            "item_size" => "デフォルト",
+            "item_checkbox_jpg" => ".jpg",
+            "item_checkbox_jpge" => ".jpge",
+            "item_checkbox_gif" => ".gif",
+            "item_checkbox_png" => ".png",
+            "item_checkbox_svg" => ".svg",
+            "item_checkbox_ico" => ".ico",
+            "item_checkbox_pjpeg" => ".pjpeg"
+        ],
+    ];
+
+
+    public $file_upload_max_size = -1; // MB
 
 
     public function setSlug($slug)
@@ -107,6 +215,21 @@ class MyBehavior extends Behavior
     }
 
 
+    public function setUploadMaxFile()
+    {
+        if ($this->file_upload_max_size < 0) {
+
+            $post_max_size = ini_get('post_max_size');
+            if ($post_max_size > 0)
+                $this->file_upload_max_size = $post_max_size;
+
+            $upload_max = ini_get('upload_max_filesize');
+            if ($upload_max > 0 && $upload_max < $this->file_upload_max_size)
+                $this->file_upload_max_size = $upload_max;
+        }
+    }
+
+
     protected function __setConfig(EntityInterface $entity)
     {
         $this->setSlug($entity->slug);
@@ -124,6 +247,73 @@ class MyBehavior extends Behavior
 
         $this->setDataFormItem($entity->data_item);
         $this->setItemOptions($entity->data_options);
+    }
+
+
+    protected function __mergingSetting()
+    {
+        foreach ($this->data_item as $i => $item) {
+            if (!isset($this->default_options[$item])) continue;
+
+            $options = $this->default_options[$item];
+
+            if (in_array($item, ['file', 'images'], true)) $options['accept'] = [];
+
+            if (!isset($this->item_options[$i])) goto set_option;
+
+            foreach ($this->item_options[$i] as $opt => $val) {
+                if (!isset($options[$opt])) continue;
+                if (in_array($val, self::$ALL_FILE_TYPE, true))
+                    $options['accept'][] = $val;
+                else
+                    $options[$opt] = $val;
+            }
+
+            set_option:
+            $this->option_setting[$i] = $options;
+        }
+    }
+
+
+    protected function __convertSetting()
+    {
+        $this->__convertSettingForTemplate();
+        // $this->__convertSettingForModel();
+    }
+
+
+    protected function __convertSettingForTemplate()
+    {
+        $options = [];
+        foreach ($this->data_item as $i => $item) {
+            if (!isset($this->option_setting[$i])) continue;
+
+            foreach ($this->option_setting[$i] as $opt => $val) {
+                if (!in_array($opt, self::$TEMPLATE_SETTING, true)) continue;
+
+                switch ($opt) {
+                    case 'item_label':
+                    case 'item_name':
+                    case 'item_text':
+                        $options[$i][$opt] = trim($val) ?? ' ';
+                        break;
+
+                    case 'item_min_length':
+                        $options[$i][$opt] = (trim($val) !== '' && intval(trim($val)) > 0) ? __('minlength="{0}"', intval(trim($val))) : '';
+                        break;
+
+                    case 'item_max_length':
+                        $options[$i][$opt] = (trim($val) !== '' && intval(trim($val)) > 0) ? __('maxlength="{0}"', intval(trim($val))) : '';
+                        break;
+
+                    case 'accept':
+                        $options[$i][$opt] = !empty($val) ? implode(',', $val) : '';
+                        break;
+                }
+            }
+        }
+
+        $this->option_setting = $options;
     }
 
 
@@ -245,7 +435,7 @@ class MyBehavior extends Behavior
         $edit_content = '';
         if ($this->data_item) {
             foreach ($this->data_item as $i => $item) {
-                $value = $this->item_options[$i] ?? [];
+                $value = isset($this->option_setting[$i]) ? $this->option_setting[$i] : [];
                 $value[0] = '';
                 $edit_content .= @__(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), $value);
             }
@@ -267,7 +457,10 @@ class MyBehavior extends Behavior
     public function afterSave(Event $event, EntityInterface $entity, \ArrayObject $options)
     {
         $this->__setConfig($entity);
+        $this->__mergingSetting();
+        $this->__convertSetting();
         $this->__runBuild();
+
         $entity->set('create_data', $this->path);
         return true;
     }

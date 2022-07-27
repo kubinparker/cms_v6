@@ -1,7 +1,7 @@
 <tr>
     <td>{item_label}</td>
     <td class="edit_image_area">
-        <?= $this->element('form/file', ["name" => "{item_name}", "accept"=> ["{item_checkbox_pdf}","{item_checkbox_doc}","{item_checkbox_xls}","{item_checkbox_xlsx}","{item_checkbox_csv}","{item_checkbox_zip}"]]) ?>
+        <?= $this->element('form/file', ["name" => "{item_name}", "accept"=> "{accept}"]) ?>
         {0}
     </td>
 </tr>

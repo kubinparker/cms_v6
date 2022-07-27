@@ -1,5 +1,7 @@
-<?= $this->Form->input('files[]', ['type' => 'file', 'label' => false, 'onchange' => 'uploadFile(this)', 'multiple' => 'true', 'error' => false, 'accept' => '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel']); ?>
-<div class="remark">※ pdf, csv, xlsx, xls, doc, docx ファイルのみ</div>
+<?php $accept = isset($accept) && $accept != '' ? $accept : false ?>
+<!-- '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel' -->
+<?= $this->Form->input('files[]', ['type' => 'file', 'label' => false, 'onchange' => 'uploadFile(this)', 'multiple' => 'true', 'error' => false, 'accept' => $accept]); ?>
+<?php if ($accept) : ?><div class="remark">※ <?= $accept ?> ファイルのみ</div><?php endif ?>
 <div class="remark">※１度に10ファイル分（合計32MB以内）のアップロードが可能です</div>
 
 <?php if (isset($entity->attaches['files'])) :

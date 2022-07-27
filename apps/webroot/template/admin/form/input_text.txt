@@ -2,7 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <input type="text" name="{item_name}" maxlength="{item_max_length}" minlength="{item_min_length}">
+            <input type="text" name="{item_name}" {item_min_length} {item_max_length}>
             {0}
         </div>						
     </td>
