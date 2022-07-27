@@ -108,7 +108,7 @@
 		<div class="btn_area btn_area--center">
 			<!-- <a href="#" class="btn_confirm submitButton">作成する</a> -->
 
-			<button type="button" class="btn_confirm submitButton button" onclick="this.classList.toggle('button--loading')">
+			<button type="button" class="btn_confirm submitButton button">
 				<span class="button__text">作成する</span>
 			</button>
 		</div>
@@ -219,7 +219,7 @@
 				alert('※Slugはアンファーベストと数字だけで入力してください。')
 				return false;
 			}
-
+			$(this).addClass('button--loading');
 			$('table.admin_table tr').each(function(i) {
 				var attrs = [].filter.call($(this).find('.item_options')[0].attributes, function(at) {
 					return at.name !== 'type' && at.name !== 'class';
