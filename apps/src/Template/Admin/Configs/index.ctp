@@ -5,7 +5,48 @@
 <script src="/admin/common/js/ckeditor.js"></script>
 <script src="/admin/common/js/ja.js"></script>
 <?php $this->end(); ?>
+<style>
+	.button {
+		position: relative;
+		padding: 12px 24px;
+		background: #009579;
+		border: none;
+		outline: none;
+		border-radius: 2px;
+		cursor: pointer;
+	}
 
+	.button--loading .button__text {
+		visibility: hidden;
+		opacity: 0;
+	}
+
+	.button--loading::after {
+		content: "";
+		position: absolute;
+		width: 26px;
+		height: 26px;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+		border: 4px solid transparent;
+		border-top-color: #ffffff;
+		border-radius: 50%;
+		animation: button-loading-spinner 1s ease infinite;
+	}
+
+	@keyframes button-loading-spinner {
+		from {
+			transform: rotate(0turn);
+		}
+
+		to {
+			transform: rotate(1turn);
+		}
+	}
+</style>
 <div class="title_area">
 	<h1>ページ作成</h1>
 	<div class="pankuzu">
@@ -54,7 +95,7 @@
 							'default' => 0
 						]);
 						if (isset($entity->getErrors()['management_part'])) :
-						?>
+							?>
 							<div class="error-message"><?= array_values($entity->getErrors()['management_part'])[0] ?></div>
 						<?php endif ?>
 					</td>
@@ -65,7 +106,11 @@
 		<?= $this->element('admin_config') ?>
 		<?= $this->Form->end(); ?>
 		<div class="btn_area btn_area--center">
-			<a href="#" class="btn_confirm submitButton">作成する</a>
+			<!-- <a href="#" class="btn_confirm submitButton">作成する</a> -->
+
+			<button type="button" class="btn_confirm submitButton button" onclick="this.classList.toggle('button--loading')">
+				<span class="button__text">作成する</span>
+			</button>
 		</div>
 	</div>
 </div>
