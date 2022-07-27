@@ -344,8 +344,10 @@ class MyBehavior extends Behavior
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
         file_put_contents($folder . 'index.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/index.txt', true));
         $this->path[] = $folder . 'index.ctp';
-        if ($this->is_detail_page) file_put_contents($folder . 'detail.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/detail.txt', true));
-        $this->path[] = $folder . 'detail.ctp';
+        if ($this->is_detail_page) {
+            file_put_contents($folder . 'detail.ctp', file_get_contents(DEFAULT_FRONT_TEMP . 'template/detail.txt', true));
+            $this->path[] = $folder . 'detail.ctp';
+        }
     }
 
 
