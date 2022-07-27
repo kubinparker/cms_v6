@@ -58,12 +58,12 @@ class MyBehavior extends Behavior
 
     public $default_options = [
         'label' => [
-            "item_label" => "",
-            "item_text" => ""
+            "item_label" => "Label",
+            "item_text" => "新規"
         ],
         'input_text' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Input text",
+            "item_name" => "input_text",
             "item_type" => "",
             "item_require" => 0,
             "item_unique" => 0,
@@ -71,56 +71,56 @@ class MyBehavior extends Behavior
             "item_max_length" => ""
         ],
         'input_date' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Date",
+            "item_name" => "input_date",
             "item_require" => 0
         ],
         'input_datetime' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Datetime",
+            "item_name" => "input_datetime",
             "item_require" => 0
         ],
         'selectbox' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Selectbox",
+            "item_name" => "selectbox",
             "item_require" => 0
         ],
         'textarea' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Textarea",
+            "item_name" => "textarea",
             "item_require" => 0,
             "item_min_length" => 0,
             "item_max_length" => ""
         ],
         'textarea_editor' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Textarea_editor",
+            "item_name" => "textarea_editor",
             "item_require" => 0,
             "item_min_length" => 0,
             "item_max_length" => ""
         ],
         'checkbox' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Checkbox",
+            "item_name" => "checkbox",
             "item_require" => 0
         ],
         'checkbox_inline' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Checkbox inline",
+            "item_name" => "checkbox_inline",
             "item_require" => 0
         ],
         'radio' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Radio",
+            "item_name" => "radio",
             "item_require" => 0
         ],
         'radio_inline' => [
-            "item_label" => "",
-            "item_name" => "",
+            "item_label" => "Radio inline",
+            "item_name" => "radio_inline",
             "item_require" => 0
         ],
         'file' => [
-            "item_label" => "",
+            "item_label" => "File",
             "item_require" => 0,
             "item_size" => "デフォルト",
             "item_checkbox_pdf" => ".pdf",
@@ -132,7 +132,7 @@ class MyBehavior extends Behavior
             "item_checkbox_zip" => ".zip"
         ],
         'images' => [
-            "item_label" => "",
+            "item_label" => "Image",
             "item_require" => 0,
             "item_size" => "デフォルト",
             "item_checkbox_jpg" => ".jpg",
@@ -262,9 +262,9 @@ class MyBehavior extends Behavior
             foreach ($this->item_options[$i] as $opt => $val) {
                 if (!isset($options[$opt])) continue;
                 if (in_array($val, self::$ALL_FILE_TYPE, true))
-                    $options['accept'][] = $val;
+                    $options['accept'][] = trim($val) !== '' ? trim($val) : $options[$opt];
                 else
-                    $options[$opt] = $val;
+                    $options[$opt] =  trim($val) !== '' ? trim($val) : $options[$opt];
             }
 
             set_option:
