@@ -297,11 +297,11 @@ class MyBehavior extends Behavior
                         break;
 
                     case 'item_min_length':
-                        $options[$i][$opt] = (trim($val) !== '' && intval(trim($val)) > 0) ? __('minlength="{0}"', intval(trim($val))) : '';
+                        $options[$i][$opt] = (trim($val) !== '' && intval(trim($val)) > 0) ? __('"minlength"=>{0},', intval(trim($val))) : '';
                         break;
 
                     case 'item_max_length':
-                        $options[$i][$opt] = (trim($val) !== '' && intval(trim($val)) > 0) ? __('maxlength="{0}"', intval(trim($val))) : '';
+                        $options[$i][$opt] = (trim($val) !== '' && intval(trim($val)) > 0) ? __('"maxlength"=>{0},', intval(trim($val))) : '';
                         break;
 
                     case 'accept':
@@ -442,7 +442,7 @@ class MyBehavior extends Behavior
 
         $edit = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'template/edit.txt', true), $this->title, $edit_content);
 
-        file_put_contents($folder . 'edit.ctp', $edit);
+        file_put_contents($folder . 'edit.ctp', str_replace(['「', '」'], ['{{', '}}'], $edit));
         $this->path[] = $folder . 'edit.ctp';
 
         // index file content

@@ -2,7 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <input type="datetime-local" name="{item_name}">
+            <?= $this->Form->control("{item_name}", [ 'type'=>'datetime-local', 'label' => false])?>
             {0}
         </div>						
     </td>

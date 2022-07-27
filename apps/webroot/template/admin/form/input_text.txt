@@ -2,7 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <input type="text" name="{item_name}" {item_min_length} {item_max_length}>
+            <?= $this->Form->control("{item_name}", ['label' => false, {item_min_length} {item_max_length}])?>
             {0}
         </div>						
     </td>
