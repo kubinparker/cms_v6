@@ -45,7 +45,7 @@ class MyBehavior extends Behavior
     public $path = [];
     static $ALL_FILE_TYPE = [
         '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.csv', '.zip',
-        '.jpg', '.jpge', '.gif', '.png', '.svg', '.ico', '.pjpeg'
+        '.jpg', '.jpeg', '.gif', '.png', '.svg', '.ico', '.pjpeg'
     ];
 
     public $template_setting = [];
@@ -141,7 +141,7 @@ class MyBehavior extends Behavior
             "item_require" => 0,
             "item_size" => "デフォルト",
             "item_checkbox_jpg" => ".jpg",
-            "item_checkbox_jpge" => ".jpge",
+            "item_checkbox_jpeg" => ".jpeg",
             "item_checkbox_gif" => ".gif",
             "item_checkbox_png" => ".png",
             "item_checkbox_svg" => ".svg",
@@ -359,14 +359,17 @@ class MyBehavior extends Behavior
 
                             if ($item_name == '') break;
 
-                            $options[] = __(
-                                'notBlank("{item_name}", "※ {item_label}を{act}ください。")',
-                                [
-                                    'item_name' => $item_name,
-                                    'item_label' => $setting['item_label'],
-                                    'act' => $act
-                                ]
-                            );
+                            if ($item != 'file' && $item != 'images') {
+                                $options[] = __(
+                                    'notBlank("{item_name}", "※ {item_label}を{act}ください。")',
+                                    [
+                                        'item_name' => $item_name,
+                                        'item_label' => $setting['item_label'],
+                                        'act' => $act
+                                    ]
+                                );
+                            }
+
 
                             $options[] = __(
                                 '{func}("{item_name}", "※ {item_label}を{act}てください。")',
@@ -381,12 +384,14 @@ class MyBehavior extends Behavior
                         break;
 
                     case 'item_unique':
-                        $options[] = __(
-                            'add( "{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $cond = [ "{item_name}" => $value ]; if (!is_null($this->curent_id) && intval($this->curent_id) != 0) &= $cond["id !="] = intval($this->curent_id); =& if ($this->find("all", ["conditions" => $cond])->count() > 0) &= return "この表示場所は既にあります";=& return true; =& ] ] )',
-                            [
-                                'item_name' => $setting['item_name'],
-                            ]
-                        );
+                        if (intval($setting['item_min_length']) > 0) {
+                            $options[] = __(
+                                'add( "{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $cond = [ "{item_name}" => $value ]; if (!is_null($this->curent_id) && intval($this->curent_id) != 0) &= $cond["id !="] = intval($this->curent_id); =& if ($this->find("all", ["conditions" => $cond])->count() > 0) &= return "この表示場所は既にあります";=& return true; =& ] ] )',
+                                [
+                                    'item_name' => $setting['item_name'],
+                                ]
+                            );
+                        }
                         break;
 
                     case 'item_type':
@@ -418,34 +423,40 @@ class MyBehavior extends Behavior
                         break;
 
                     case 'item_min_length':
-                        $options[] = __(
-                            'minLength("{item_name}", {length}, "※ {length}字以上でご入力ください。")',
-                            [
-                                'item_name' => $setting['item_name'],
-                                'length' => $setting['item_min_length'],
-                            ]
-                        );
+                        if (intval($setting['item_min_length']) > 0) {
+                            $options[] = __(
+                                'minLength("{item_name}", {length}, "※ {length}字以上でご入力ください。")',
+                                [
+                                    'item_name' => $setting['item_name'],
+                                    'length' => $setting['item_min_length'],
+                                ]
+                            );
+                        }
                         break;
 
                     case 'item_max_length':
-                        $options[] = __(
-                            'maxLength("{item_name}", {length}, "※ {length}字以上でご入力ください。")',
-                            [
-                                'item_name' => $setting['item_name'],
-                                'length' => $setting['item_min_length'],
-                            ]
-                        );
+                        if (intval($setting['item_max_length']) > 0) {
+                            $options[] = __(
+                                'maxLength("{item_name}", {length}, "※ {length}字以上でご入力ください。")',
+                                [
+                                    'item_name' => $setting['item_name'],
+                                    'length' => $setting['item_max_length'],
+                                ]
+                            );
+                        }
                         break;
 
                     case 'accept':
-                        $options[] = __(
-                            'add("{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $ext_exp = explode(".", $value); $ext = end($ext_exp); if (!in_array(".".$ext, {list})) &= return "※ {accept}ファイルのみでご選択ください。";=& return true; =&, ], ], )',
-                            [
-                                'item_name' => $item == 'images' ? '__images' : '__files',
-                                'accept' => implode(',', $setting['accept']),
-                                'list' => "['" . implode("','", $setting['accept']) . "']",
-                            ]
-                        );
+                        if (!empty($setting['accept'])) {
+                            $options[] = __(
+                                'add("{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= foreach ($value as $original => $image_info) &= $ext_exp = explode(".", $value); $ext = end($ext_exp); if (!in_array(".".$ext, {list})) &= return "※ {accept}ファイルのみでご選択ください。";=& =& return true; =&, ], ], )',
+                                [
+                                    'item_name' => $item == 'images' ? '__images' : '__files',
+                                    'accept' => implode(',', $setting['accept']),
+                                    'list' => "['" . implode("','", $setting['accept']) . "']",
+                                ]
+                            );
+                        }
                         break;
 
                     case 'item_size':
@@ -454,8 +465,7 @@ class MyBehavior extends Behavior
             }
         }
 
-
-        $this->model_setting['validate'] = empty($options) ? '' : __('$validator->{0};', ltrim(implode('->', $options), '->'));
+        $this->model_setting['validate'] = empty($options) ? '' : __('$validator->{0};', str_replace('->->', '->', implode('->', $options)));
     }
 
 
@@ -563,6 +573,7 @@ class MyBehavior extends Behavior
         $value = $this->model_setting;
         $value[0] = $slug;
         $value['contain'] = $model_contain;
+        $value['table'] = $this->slug;
 
         $model = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/common.txt', true), $value);
         $file = APP . 'Model/Table/' . $slug . 'Table.php';

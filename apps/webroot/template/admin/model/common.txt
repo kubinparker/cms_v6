@@ -30,6 +30,7 @@ class {0}Table extends AppTable
     public function initialize(array $config)
     &=
         parent::initialize($config);
+        $this->setTable("{table}");
         $this->slug = "{0}";
         {contain}
     =&

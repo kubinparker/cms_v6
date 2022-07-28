@@ -99,8 +99,8 @@ class BuildModalContent
             <input type="checkbox" class="form-control" name="item_checkbox_jpg" id="item-checkbox0" value=".jpg">
             <label for="item-checkbox0" class="col-form-label">.jpg</label>
             
-            <input type="checkbox" class="form-control" name="item_checkbox_jpge" id="item-checkbox1" value=".jpge">
-            <label for="item-checkbox1" class="col-form-label">.jpge</label>
+            <input type="checkbox" class="form-control" name="item_checkbox_jpeg" id="item-checkbox1" value=".jpeg">
+            <label for="item-checkbox1" class="col-form-label">.jpeg</label>
             
             <input type="checkbox" class="form-control" name="item_checkbox_gif" id="item-checkbox2" value=".gif">
             <label for="item-checkbox2" class="col-form-label">.gif</label>
