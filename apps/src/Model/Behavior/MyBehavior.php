@@ -384,7 +384,7 @@ class MyBehavior extends Behavior
                         break;
 
                     case 'item_unique':
-                        if (intval($setting['item_min_length']) > 0) {
+                        if (intval($setting['item_unique']) > 0) {
                             $options[] = __(
                                 'add( "{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $cond = [ "{item_name}" => $value ]; if (!is_null($this->curent_id) && intval($this->curent_id) != 0) &= $cond["id !="] = intval($this->curent_id); =& if ($this->find("all", ["conditions" => $cond])->count() > 0) &= return "この表示場所は既にあります";=& return true; =& ] ] )',
                                 [
@@ -449,7 +449,7 @@ class MyBehavior extends Behavior
                     case 'accept':
                         if (!empty($setting['accept'])) {
                             $options[] = __(
-                                'add("{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= foreach ($value as $original => $image_info) &= $ext_exp = explode(".", $value); $ext = end($ext_exp); if (!in_array(".".$ext, {list})) &= return "※ {accept}ファイルのみでご選択ください。";=& =& return true; =&, ], ], )',
+                                'add("{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= foreach ($value as $original => $image_info) &= $ext_exp = explode(".", $original); $ext = end($ext_exp); if (!in_array(".".$ext, {list})) &= return "※ {accept}ファイルのみでご選択ください。";=& =& return true; =&, ], ], )',
                                 [
                                     'item_name' => $item == 'images' ? '__images' : '__files',
                                     'accept' => implode(',', $setting['accept']),

@@ -19,6 +19,8 @@
         </p>
 
     <?php endforeach; ?>
+<?php else : ?>
+    <input type="hidden" name="__images" value="" />
 <?php endif ?>
 
 <?php if ($this->Form->isFieldError('images') || $this->Form->isFieldError('__images')) : ?>
