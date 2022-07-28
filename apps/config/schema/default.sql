@@ -59,8 +59,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `created`, `modified`, `username`, `password`, `name`, `email`, `status`, `role`) VALUES
-(1, '2022-07-04 17:49:36', '2022-07-05 15:50:34', 'admin', '$2y$10$hp8PDeHBvG26x7c6nB.iVuB0rl0FGZXtirB15wnHWfwJ5GYKVMd0C', 'Admin', 'develop+cms6_admin@caters.co.jp', 'publish', 0);
-
+(1, '2022-07-04 17:49:36', '2022-07-05 15:50:34', 'admin', '$2y$10$hp8PDeHBvG26x7c6nB.iVuB0rl0FGZXtirB15wnHWfwJ5GYKVMd0C', 'Admin', 'develop+cms6_admin@caters.co.jp', 'publish', 0),
+(2, '2022-07-28 09:22:41', NULL, 'mizuha', '$2y$10$4jlEDUbYL7u2uE8hYo9jh.5h27c0FoXuPa5thO1zp7fdMbmsU1ceK', 'MIZ', 'miz-admin@mizuha-nippon.jp', 'publish', 1); -- qwerty1#--
 --
 -- Indexes for dumped tables
 --

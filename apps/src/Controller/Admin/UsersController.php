@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use Cake\Event\Event;
 use App\Controller\Admin\AppController;
 use Cake\Utility\Inflector;
+use App\Model\Entity\User;
 
 
 class UsersController extends AppController
@@ -22,6 +23,12 @@ class UsersController extends AppController
     public function index()
     {
         $this->setList();
+        $cond = [];
+
+        $role = @$this->Session->read($this->auth_storage_key)['role'];
+        if ($this->isLogin() && $role != User::ROLE_DEVELOP) {
+            $cond['role !='] = User::ROLE_DEVELOP;
+        }
         parent::_lists([], ['limit' => null]);
     }
 
