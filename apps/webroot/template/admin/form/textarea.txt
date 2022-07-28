@@ -2,7 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <textarea rows="4" name="{item_name}" {item_min_length} {item_max_length} cols="100"></textarea>
+            <?= $this->Form->textarea("{item_name}", ["rows"=>"4", 'label' => false, {item_min_length} {item_max_length}])?>
             {0}
         </div>						
     </td>
