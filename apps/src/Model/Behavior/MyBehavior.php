@@ -325,6 +325,8 @@ class MyBehavior extends Behavior
     protected function __convertSettingForModel()
     {
         $options = [];
+        $this->model_setting['file_extension'] = '[]';
+        $this->model_setting['images_extension'] = '[]';
         foreach ($this->data_item as $i => $item) {
             if (!isset($this->option_setting[$i])) continue;
 
@@ -379,18 +381,71 @@ class MyBehavior extends Behavior
                         break;
 
                     case 'item_unique':
+                        $options[] = __(
+                            'add( "{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $cond = [ "{item_name}" => $value ]; if (!is_null($this->curent_id) && intval($this->curent_id) != 0) &= $cond["id !="] = intval($this->curent_id); =& if ($this->find("all", ["conditions" => $cond])->count() > 0) &= return "この表示場所は既にあります";=& return true; =& ] ] )',
+                            [
+                                'item_name' => $setting['item_name'],
+                            ]
+                        );
                         break;
 
                     case 'item_type':
+                        $options[] = '';
+                        if ($setting['item_type'] == 'phone') {
+                            $options[] = __(
+                                'add("{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $v  = str_replace(["&nbsp;", "　", " "], "", $value); if (!preg_match("/^(0\d&=1,4=&[\s-]?\d&=1,4=&[\s-]?\d&=4=&)$/", $v)) &= return "電話番号を半角数字で正しく入力してください"; =& return true; =&, ], ], )',
+                                [
+                                    'item_name' => $setting['item_name'],
+                                ]
+                            );
+                        }
+                        if ($setting['item_type'] == 'mail') {
+                            $options[] = __(
+                                'email("{item_name}",false, "※ 正しい形式のメールアドレスをご入力ください。")',
+                                [
+                                    'item_name' => $setting['item_name'],
+                                ]
+                            );
+                        }
+                        if ($setting['item_type'] == 'kana') {
+                            $options[] = __(
+                                'add("{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= if (!preg_match("/^[\x&=30a1=&-\x&=30fc=&　 ]+$/u", $value)) &= return "※フリガナをご入力ください。";=& return true; =&, ], ], )',
+                                [
+                                    'item_name' => $setting['item_name'],
+                                ]
+                            );
+                        }
                         break;
 
                     case 'item_min_length':
+                        $options[] = __(
+                            'minLength("{item_name}", {length}, "※ {length}字以上でご入力ください。")',
+                            [
+                                'item_name' => $setting['item_name'],
+                                'length' => $setting['item_min_length'],
+                            ]
+                        );
                         break;
 
                     case 'item_max_length':
+                        $options[] = __(
+                            'maxLength("{item_name}", {length}, "※ {length}字以上でご入力ください。")',
+                            [
+                                'item_name' => $setting['item_name'],
+                                'length' => $setting['item_min_length'],
+                            ]
+                        );
                         break;
 
                     case 'accept':
+                        $options[] = __(
+                            'add("{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $ext_exp = explode(".", $value); $ext = end($ext_exp); if (!in_array(".".$ext, {list})) &= return "※ {accept}ファイルのみでご選択ください。";=& return true; =&, ], ], )',
+                            [
+                                'item_name' => $item == 'images' ? '__images' : '__files',
+                                'accept' => implode(',', $setting['accept']),
+                                'list' => "['" . implode("','", $setting['accept']) . "']",
+                            ]
+                        );
                         break;
 
                     case 'item_size':
@@ -400,7 +455,7 @@ class MyBehavior extends Behavior
         }
 
 
-        $this->model_setting['validate'] = empty($options) ? '' : __('$validator->{0};', implode('->', $options));
+        $this->model_setting['validate'] = empty($options) ? '' : __('$validator->{0};', ltrim(implode('->', $options), '->'));
     }
 
 

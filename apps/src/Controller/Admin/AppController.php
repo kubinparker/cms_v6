@@ -301,7 +301,7 @@ class AppController extends BaseController
     }
 
     /**
-     * Ckeditorからイメージのアップロード
+     * input から
      * */
     public function uploadImage()
     {
@@ -390,12 +390,14 @@ class AppController extends BaseController
 
         $folder_name = $this->Session->read('code_upload');
 
-        $model = TableRegistry::getTableLocator()->get($slug);
-        $attaches_files = $model->attaches['files'];
-        if (empty($attaches_files)) return ['setting' => '\App\Model\Table\〇〇Table ファイルの「$attaches」が設定されていません。'];
+        if ($slug) {
+            $model = TableRegistry::getTableLocator()->get($slug);
+            $attaches_files = $model->attaches['files'];
+            if (empty($attaches_files)) return ['setting' => '\App\Model\Table\〇〇Table ファイルの「$attaches」が設定されていません。'];
 
-        if (isset($attaches_files['extensions']) && !empty($attaches_files['extensions']))
-            $this->image_extension = $attaches_files['extensions'];
+            if (isset($attaches_files['extensions']) && !empty($attaches_files['extensions']))
+                $this->image_extension = $attaches_files['extensions'];
+        }
 
         $exts = $type == 'files' ? $this->file_extension : $this->image_extension;
 

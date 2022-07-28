@@ -3,7 +3,7 @@
     <td>
         <div id="toolbar-container"></div>
         <div id="editor" style="border: 1px solid #ccc !important;"><?= @$entity->content ?></div>
-        <textarea name="{item_name}" {item_min_length} {item_max_length} style="display:none;" id="event-content"></textarea>
+        <?= $this->Form->textarea("{item_name}", ['hidden' => 'hidden', 'id'=> 'event-content', 'error' => false, 'label' => false, {item_min_length} {item_max_length}])?>
         {0}
     </td>
 </tr>

@@ -13,6 +13,7 @@ class AppTable extends Table
 {
     public $code_upload = null;
     public $slug = null;
+    public $curent_id = 0;
 
     public $attaches = ['images' => [], 'files' => []];
 

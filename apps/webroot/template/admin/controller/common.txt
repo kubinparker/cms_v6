@@ -35,6 +35,7 @@ class {0}Controller extends AppController
     &=
         $option = [];
         $options = [];
+        $this->&=$this->modelName=&->curent_id = $id;
         {contain}
 
         parent::_edit($id, $option, $options);
