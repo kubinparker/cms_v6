@@ -107,15 +107,6 @@ class BuildModalContent
             
             <input type="checkbox" class="form-control" name="item_checkbox_png" id="item-checkbox3" value=".png">
             <label for="item-checkbox3" class="col-form-label">.png</label>
-            
-            <input type="checkbox" class="form-control" name="item_checkbox_svg" id="item-checkbox4" value=".svg">
-            <label for="item-checkbox4" class="col-form-label">.svg</label>
-            
-            <input type="checkbox" class="form-control" name="item_checkbox_ico" id="item-checkbox5" value=".ico">
-            <label for="item-checkbox5" class="col-form-label">.ico</label>
-            
-            <input type="checkbox" class="form-control" name="item_checkbox_pjpeg" id="item-checkbox6" value=".pjpeg">
-            <label for="item-checkbox6" class="col-form-label">.pjpeg</label>
         </div>`,
 
         'options': `<div class="form-group">

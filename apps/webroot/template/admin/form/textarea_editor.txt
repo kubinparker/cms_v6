@@ -2,8 +2,13 @@
     <td>{item_label}</td>
     <td>
         <div id="toolbar-container"></div>
-        <div id="editor" style="border: 1px solid #ccc !important;"><?= @$entity->content ?></div>
+        <div id="editor" style="border: 1px solid #ccc !important;"><?= @$data['content'] ?></div>
         <?= $this->Form->textarea("{item_name}", ['hidden' => 'hidden', 'id'=> 'event-content', 'error' => false, 'label' => false, {item_min_length} {item_max_length}])?>
+        <?php if ($this->Form->isFieldError('content')) : ?>
+            <div class="error-message">
+                <div class="error-message"><?= @$this->Form->error('content') ?></div>
+            </div>
+        <?php endif ?>
         {0}
     </td>
 </tr>

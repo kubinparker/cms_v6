@@ -45,7 +45,7 @@ class MyBehavior extends Behavior
     public $path = [];
     static $ALL_FILE_TYPE = [
         '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.csv', '.zip',
-        '.jpg', '.jpeg', '.gif', '.png', '.svg', '.ico', '.pjpeg'
+        '.jpg', '.jpeg', '.gif', '.png', '.ico', '.pjpeg'
     ];
 
     public $template_setting = [];
@@ -144,7 +144,6 @@ class MyBehavior extends Behavior
             "item_checkbox_jpeg" => ".jpeg",
             "item_checkbox_gif" => ".gif",
             "item_checkbox_png" => ".png",
-            "item_checkbox_svg" => ".svg",
             "item_checkbox_ico" => ".ico",
             "item_checkbox_pjpeg" => ".pjpeg"
         ],
@@ -372,7 +371,7 @@ class MyBehavior extends Behavior
 
 
                             $options[] = __(
-                                '{func}("{item_name}", "※ {item_label}を{act}てください。")',
+                                '{func}("{item_name}", "※ {item_label}を{act}ください。")',
                                 [
                                     'func' => $func,
                                     'item_name' => $item_name,
@@ -386,9 +385,10 @@ class MyBehavior extends Behavior
                     case 'item_unique':
                         if (intval($setting['item_unique']) > 0) {
                             $options[] = __(
-                                'add( "{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $cond = [ "{item_name}" => $value ]; if (!is_null($this->curent_id) && intval($this->curent_id) != 0) &= $cond["id !="] = intval($this->curent_id); =& if ($this->find("all", ["conditions" => $cond])->count() > 0) &= return "この表示場所は既にあります";=& return true; =& ] ] )',
+                                'add( "{item_name}", [ "custom" => [ "rule" => function ($value, $context) &= $cond = [ "{item_name}" => $value ]; if (!is_null($this->curent_id) && intval($this->curent_id) != 0) &= $cond["id !="] = intval($this->curent_id); =& if ($this->find("all", ["conditions" => $cond])->count() > 0) &= return "{item_label}は既にあります";=& return true; =& ] ] )',
                                 [
                                     'item_name' => $setting['item_name'],
+                                    'item_label' => $setting['item_label'],
                                 ]
                             );
                         }
@@ -437,7 +437,7 @@ class MyBehavior extends Behavior
                     case 'item_max_length':
                         if (intval($setting['item_max_length']) > 0) {
                             $options[] = __(
-                                'maxLength("{item_name}", {length}, "※ {length}字以上でご入力ください。")',
+                                'maxLength("{item_name}", {length}, "※ {length}字以下でご入力ください。")',
                                 [
                                     'item_name' => $setting['item_name'],
                                     'length' => $setting['item_max_length'],

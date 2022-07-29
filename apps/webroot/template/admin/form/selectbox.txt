@@ -2,12 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <select name="{item_name}">
-                <option value>選択してください</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
-            </select>
+            <?= $this->Form->control("{item_name}", ['type' => 'select', 'options' => [1 => 'Option 1', 2 => 'Option 2', 3 => 'Option 3', 4 => 'Option 4'], 'label' => false, 'empty' => '選択してください']) ?>
             {0}
         </div>						
     </td>

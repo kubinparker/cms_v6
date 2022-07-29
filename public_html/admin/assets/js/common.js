@@ -419,6 +419,19 @@ $( function ()
                         attributes: {
                             class: 'is_file csv',
                         }
+                    },
+                    buttonLink: {
+                        mode: 'manual',
+                        label: 'ボタンスタイル',
+                        defaultValue: false,
+                        attributes: {
+                            role: 'button',
+                        },
+                        classes: [ 'btn', 'btn-primary', 'link-button' ],
+                        styles: {
+                            'color': '#fff',
+                            'text-decoration': 'none',
+                        }
                     }
                 }
             }
