@@ -13,6 +13,15 @@
 		text-decoration: none !important;
 		color: #fff !important;
 	}
+
+	.user-layout #content .btn_area .btn_send,
+	.btn_area {
+		width: 100% !important;
+	}
+
+	.row {
+		margin: 0 !important;
+	}
 </style>
 <?php $this->end() ?>
 <div class="title_area">
@@ -30,14 +39,18 @@
 		<?php if (empty($menu)) continue; ?>
 		<div class="box">
 			<h3 style="margin-bottom:20px;"><?= $title == '設定' ? '<a href="/admin/configs/clear-config">設定</a>' : html_decode($title); ?></h3>
-			<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
-				<?php foreach ($menu as $slug => $name) : ?>
-					<?= $this->Html->link(
-						$name,
-						['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
-						['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
-					); ?>
-				<?php endforeach; ?>
+			<div class="row row-cols-4">
+				<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
+					<div class="col">
+						<?php foreach ($menu as $slug => $name) : ?>
+							<?= $this->Html->link(
+								$name,
+								['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
+								['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
+							); ?>
+						<?php endforeach; ?>
+					</div>
+				</div>
 			</div>
 		</div>
 	<?php endforeach; ?>
@@ -45,14 +58,18 @@
 
 	<div class="box">
 		<h3 style="margin-bottom:20px;">コンテンツ</h3>
-		<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
-			<?php foreach ($config_list as $menu) : ?>
-				<?= $this->Html->link(
-					$menu->title,
-					['prefix' => 'admin', 'controller' => strtolower($menu->slug), 'action' => 'index'],
-					['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
-				); ?>
-			<?php endforeach; ?>
+		<div class="row row-cols-4">
+			<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
+				<div class="col">
+					<?php foreach ($config_list as $menu) : ?>
+						<?= $this->Html->link(
+							$menu->title,
+							['prefix' => 'admin', 'controller' => strtolower($menu->slug), 'action' => 'index'],
+							['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
+						); ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -18,7 +18,7 @@ class User extends Entity
         self::ROLE_DEVELOP => '開発者',
         self::ROLE_ADMIN => '管理者',
         self::ROLE_STAFF => 'スタッフ',
-        self::ROLE_DEMO => 'デモ',
+        // self::ROLE_DEMO => 'デモ',
     ];
 
 
