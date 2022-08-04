@@ -57,7 +57,7 @@ class MyBehavior extends Behavior
     public $model_setting = [];
 
     static $MODEL_SETTING = [
-        'item_require', 'item_unique', 'item_type', 'item_min_length', 'item_max_length', 'accept', 'item_size'
+        'item_require', 'item_unique', 'item_type', 'item_min_length', 'item_max_length', 'accept'
     ];
 
 
@@ -127,7 +127,6 @@ class MyBehavior extends Behavior
         'file' => [
             "item_label" => "File",
             "item_require" => 0,
-            "item_size" => "デフォルト",
             "item_checkbox_pdf" => ".pdf",
             "item_checkbox_doc" => ".doc",
             "item_checkbox_docx" => ".docx",
@@ -139,7 +138,6 @@ class MyBehavior extends Behavior
         'images' => [
             "item_label" => "Image",
             "item_require" => 0,
-            "item_size" => "デフォルト",
             "item_checkbox_jpg" => ".jpg",
             "item_checkbox_jpeg" => ".jpeg",
             "item_checkbox_gif" => ".gif",
@@ -457,9 +455,6 @@ class MyBehavior extends Behavior
                                 ]
                             );
                         }
-                        break;
-
-                    case 'item_size':
                         break;
                 }
             }
