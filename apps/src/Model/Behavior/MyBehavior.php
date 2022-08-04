@@ -51,8 +51,10 @@ class MyBehavior extends Behavior
     public $template_setting = [];
 
     static $TEMPLATE_SETTING = [
-        'item_label', 'item_name', 'item_text', 'item_min_length', 'item_max_length', 'accept'
+        'item_label', 'item_name', 'item_text', 'item_min_length', 'item_max_length', 'accept', 'item_require'
     ];
+
+    static $SPAN_REQUIRE = '<span class="attent">必 須</span>';
 
     public $model_setting = [];
 
@@ -617,13 +619,13 @@ class MyBehavior extends Behavior
         $folder = APP . 'Template/Admin/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
 
-
         // edit file content
         $edit_content = '';
         if ($this->data_item) {
             foreach ($this->data_item as $i => $item) {
                 $value = isset($this->template_setting[$i]) ? $this->template_setting[$i] : [];
                 $value[0] = '';
+                $value['item_label'] .= (isset($value['item_require']) && intval($value['item_require']) == 1) ? self::$SPAN_REQUIRE : '';
                 $edit_content .= @__(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), $value);
             }
         }
