@@ -206,15 +206,27 @@ class BuildModalContent
         // モーダルには掲載されたデータ
         const data_option = modal.find( 'form' ).serializeArray();
 
+        const span_require = '<span class="attent">必 須</span>';
+
+        let lable = false;
+        let v = '';
+
         for ( let i in data_option )
         {
             if ( tr.find( `.${ data_option[ i ][ 'name' ] }` ).length > 0 )
-                // 項目名のテキスト交換
-                tr.find( `.${ data_option[ i ][ 'name' ] }` ).text( data_option[ i ][ 'value' ] );
+            {
+                lable = tr.find( `.${ data_option[ i ][ 'name' ] }` )
+                v = data_option[ i ][ 'value' ];
+            }
+
+            // 必須フラグ
+            if ( data_option[ i ][ 'name' ] == 'item_require' && parseInt( data_option[ i ][ 'value' ] ) == 1 ) v += span_require;
 
             // アトリビュートを追加
             tr.find( '.item_options' ).attr( `${ data_option[ i ][ 'name' ] }`, data_option[ i ][ 'value' ] );
         }
+        // 項目名のテキスト交換
+        if ( lable ) lable.html( v );
         // モーダル非表示
         modal.find( '.btn-secondary' ).trigger( 'click' );
     }
