@@ -10,7 +10,7 @@ class BuildModalContent
 
         'name': `<div class="form-group">
                 <label for="item-name" class="col-form-label">ネーム（カラム名）</label>
-                <input type="text" class="form-control" name="item_name" id="item-name" value="{name}">
+                <input type="text" class="form-control" name="item_name" id="item-name" value="">
             </div>`,
 
         'text': `<div class="form-group">

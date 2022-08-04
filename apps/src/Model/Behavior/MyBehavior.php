@@ -60,6 +60,14 @@ class MyBehavior extends Behavior
         'item_require', 'item_unique', 'item_type', 'item_min_length', 'item_max_length', 'accept'
     ];
 
+    public $table_setting = [];
+
+    static $TABLE_SETTING = [
+        'INT(11)' => ['radio_inline', 'radio', 'checkbox_inline', 'checkbox', 'selectbox'],
+        'TEXT' => ['textarea_editor', 'textarea', 'input_text'],
+        'DATE' => ['input_date'],
+        'DATETIME' => ['input_datetime']
+    ];
 
     public $default_options = [
         'label' => [
@@ -279,6 +287,7 @@ class MyBehavior extends Behavior
     {
         $this->__convertSettingForTemplate();
         $this->__convertSettingForModel();
+        $this->__convertSettingForTable();
     }
 
 
@@ -464,6 +473,30 @@ class MyBehavior extends Behavior
     }
 
 
+    protected function __convertSettingForTable()
+    {
+        foreach ($this->data_item as $i => $item) {
+            if (!isset($this->item_options[$i])) continue;
+
+            $col = '`{item_name}` {type} {require} COMMENT "{item_label}",';
+            $options = $this->item_options[$i];
+
+            foreach (self::$TABLE_SETTING as $_type => $_item) {
+                if (!in_array($item, $_item, true)) continue;
+
+                if ($_type == 'TEXT' && isset($options['item_max_length']) && intval($options['item_max_length']) > 0)
+                    $_type = intval($options['item_max_length']) <= 255 ? __('VARCHAR({0})', intval($options['item_max_length'])) : $_type;
+
+                $options['type'] = $_type;
+            }
+
+            $options['require'] = isset($options['item_require']) && intval($options['item_require']) == 1 ? 'NOT NULL' : 'NULL DEFAULT NULL';
+
+            $this->table_setting[] = @__($col, $options);
+        }
+    }
+
+
     protected function __runBuild()
     {
         $this->buildForFront();
@@ -576,7 +609,7 @@ class MyBehavior extends Behavior
         $this->path[] = $file;
 
         // table
-        $table = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/table.txt', true), $this->slug);
+        $table = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/table.txt', true), [$this->slug, 'sql_more' => implode('', $this->table_setting)]);
         $connection = ConnectionManager::get('default');
         $connection->execute($table);
 
