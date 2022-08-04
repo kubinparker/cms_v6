@@ -465,7 +465,7 @@ class MyBehavior extends Behavior
             }
         }
 
-        $this->model_setting['validate'] = empty($options) ? '' : __('$validator->{0};', str_replace('->->', '->', implode('->', $options)));
+        $this->model_setting['validate'] = empty($options) ? '' : str_replace('->->', '->', __('$validator->{0};', implode('->', $options)));
     }
 
 

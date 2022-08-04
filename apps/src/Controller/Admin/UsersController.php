@@ -29,7 +29,7 @@ class UsersController extends AppController
         if ($this->isLogin() && $role != User::ROLE_DEVELOP) {
             $cond['role !='] = User::ROLE_DEVELOP;
         }
-        parent::_lists([], ['limit' => null]);
+        parent::_lists($cond, ['limit' => null]);
     }
 
 

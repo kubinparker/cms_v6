@@ -137,6 +137,8 @@ class AppController extends Controller
         } else $lists = $this->{$this->modelName}->find('all')->mapReduce($mapper, $reducer);
 
         $this->set('total_count', $lists->count());
+        $this->set('datas', $lists);
+
         $datas = ($this->paginate['limit'] === null) ? $lists : $this->paginate($lists, $options);
         $this->set($this->{$this->modelName}->getTable(), $datas);
         return $datas;
@@ -215,8 +217,8 @@ class AppController extends Controller
     {
         $_title = \Cake\Core\Configure::read('App.headTitle');
         if ($title) {
-            $title = is_array($title) ? implode(' | ', $title) : $title;
-            $_title = $isFull ? $title : __('{0} | {1}', [$title, $_title]);
+            $title = is_array($title) ? implode('｜', $title) : $title;
+            $_title = $isFull ? $title : __('{0}｜{1}', [$title, $_title]);
         }
         $this->set('__title__', $_title);
         return $_title;
