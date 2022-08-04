@@ -11946,9 +11946,13 @@ function checkConditionTest(listCheckData) {
 /* Format function */
 String.prototype.format = function () {
     var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp("\\{" + i + "\\}", "gi");
-        formatted = formatted.replace(regexp, arguments[i]);
+    // for (var i = 0; i < arguments.length; i++) {
+    //     var regexp = new RegExp("\\{" + i + "\\}", "gi");
+    //     formatted = formatted.replace(regexp, arguments[i]);
+    // }
+    for (var __i__ in arguments) {
+        var regexp = new RegExp("\\{" + __i__ + "\\}", "gi");
+        formatted = formatted.replace(regexp, arguments[__i__]);
     }
     return formatted;
 };
