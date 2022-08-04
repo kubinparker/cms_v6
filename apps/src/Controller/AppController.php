@@ -265,6 +265,21 @@ class AppController extends Controller
     }
 
 
+    protected function _associations_attached()
+    {
+        $slug = $this->modelName;
+        return [
+            'AttachedFiles' => function ($q) use ($slug) {
+                return $q->where(['slug' => $slug]);
+            },
+            'AttachedImages' => function ($q) use ($slug) {
+                return $q->where(['slug' => $slug]);
+            }
+        ];
+    }
+
+
+
     protected function setList()
     {
         $list = [];

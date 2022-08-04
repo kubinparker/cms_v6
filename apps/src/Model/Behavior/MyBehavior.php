@@ -487,7 +487,7 @@ class MyBehavior extends Behavior
     protected function __convertSettingForTable()
     {
         foreach ($this->data_item as $i => $item) {
-            if (!isset($this->item_options[$i])) continue;
+            if (!isset($this->item_options[$i]) || in_array($item, ['images', 'file'], true)) continue;
 
             $col = '`{item_name}` {type} {require} COMMENT "{item_label}",';
             $options = $this->item_options[$i];
@@ -506,9 +506,7 @@ class MyBehavior extends Behavior
             $this->table_setting[] = @__($col, $options);
         }
 
-        if ($this->is_sort) {
-            $this->table_setting[] = '`position` INT(11) UNSIGNED NOT NULL DEFAULT "0" COMMENT "並び順",';
-        }
+        if ($this->is_sort) $this->table_setting[] = '`position` INT(11) UNSIGNED NOT NULL DEFAULT "0" COMMENT "並び順",';
     }
 
 
@@ -527,9 +525,11 @@ class MyBehavior extends Behavior
         $content_controller = [DEFAULT_FRONT_TEMP . ($this->is_list_page ? 'controller/index_list.txt' : 'controller/index.txt')];
         if ($this->is_detail_page) $content_controller[] = DEFAULT_FRONT_TEMP . 'controller/detail.txt';
 
+        $id_attached = ($this->data_item && (in_array('file', $this->data_item, true) || in_array('images', $this->data_item, true)));
+        $model_contain = $id_attached ? '$options["contain"] = $this->_associations_attached();' : '';
 
         $content = '';
-        foreach ($content_controller as $p) $content .= __(file_get_contents($p, true), $slug);
+        foreach ($content_controller as $p) $content .= @__(file_get_contents($p, true), [$slug, 'contain' => $model_contain]);
         $controller = __(file_get_contents(DEFAULT_FRONT_TEMP . 'controller/common.txt', true), $slug, $content);
         $file = APP . 'Controller/' . $slug . 'Controller.php';
         file_put_contents($file, str_replace(['&=', '=&'], ['{', '}'], $controller));

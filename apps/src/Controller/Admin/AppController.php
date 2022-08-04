@@ -438,21 +438,7 @@ class AppController extends BaseController
         }
         return $return;
     }
-
-
-    protected function _associations_attached()
-    {
-        $slug = $this->modelName;
-        return [
-            'AttachedFiles' => function ($q) use ($slug) {
-                return $q->where(['slug' => $slug]);
-            },
-            'AttachedImages' => function ($q) use ($slug) {
-                return $q->where(['slug' => $slug]);
-            }
-        ];
-    }
-
+    
 
     public function convert_img($size, $source, $dist, $method = 'fit')
     {

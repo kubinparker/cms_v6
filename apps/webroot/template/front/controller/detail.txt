@@ -2,6 +2,8 @@ public function detail($id = null)
     &=
         $cond = [];
         $options = [];
+        {contain}
+        
         parent::_detail($id, $cond, $options);
     =&
 
