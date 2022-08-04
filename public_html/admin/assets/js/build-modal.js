@@ -5,7 +5,7 @@ class BuildModalContent
     options = {
         'label': `<div class="form-group">
                 <label for="item-label" class="col-form-label">表示名</label>
-                <input type="text" class="form-control" name="item_label" id="item-label" value="Label">
+                <input type="text" class="form-control" name="item_label" id="item-label" placeholder="Label">
             </div>`,
 
         'name': `<div class="form-group">
@@ -15,7 +15,7 @@ class BuildModalContent
 
         'text': `<div class="form-group">
                 <label for="item-text" class="col-form-label">値</label>
-                <input type="text" class="form-control" name="item_text" id="item-text" value="新規">
+                <input type="text" class="form-control" name="item_text" id="item-text" placeholder="新規">
             </div>`,
 
         'max-length': `<div class="form-group">
@@ -144,8 +144,8 @@ class BuildModalContent
     checkbox_inline () { this.option = [ 'label', 'name', 'require' ]; }
     radio () { this.option = [ 'label', 'name', 'require' ]; }
     radio_inline () { this.option = [ 'label', 'name', 'require' ]; }
-    file () { this.option = [ 'label', 'require', 'size', 'file_type' ]; }
-    image () { this.option = [ 'label', 'require', 'size', 'image_type' ]; }
+    file () { this.option = [ 'label', 'require', 'file_type' ]; }
+    image () { this.option = [ 'label', 'require', 'image_type' ]; }
 
 
     get_temp_option ( option )
@@ -170,12 +170,14 @@ class BuildModalContent
 
     setHeader ()
     {
+        // ＊＊モーダルのタイトルをセット＊＊ //
         this.__modal__.find( '.modal-title' ).text( `項目設定（${ this.__item__ }）` );
     }
 
 
     setValue ()
     {
+        // ＊＊モーダルにデータをセット＊＊ //
         var modal = this.__modal__;
 
         var attrs = [].filter.call( this.__tr__.find( '.item_options' )[ 0 ].attributes, function ( at ) { return at.name } );
@@ -201,18 +203,31 @@ class BuildModalContent
 
     change_item ( modal, type, tr )
     {
+        // モーダルには掲載されたデータ
         const data_option = modal.find( 'form' ).serializeArray();
-        // tr.find( '.item_element' ).remove();
+
+        const span_require = '<span class="attent">必 須</span>';
+
+        let lable = false;
+        let v = '';
 
         for ( let i in data_option )
         {
             if ( tr.find( `.${ data_option[ i ][ 'name' ] }` ).length > 0 )
-                tr.find( `.${ data_option[ i ][ 'name' ] }` ).text( data_option[ i ][ 'value' ] );
+            {
+                lable = tr.find( `.${ data_option[ i ][ 'name' ] }` )
+                v = data_option[ i ][ 'value' ];
+            }
 
+            // 必須フラグ
+            if ( data_option[ i ][ 'name' ] == 'item_require' && parseInt( data_option[ i ][ 'value' ] ) == 1 ) v += span_require;
+
+            // アトリビュートを追加
             tr.find( '.item_options' ).attr( `${ data_option[ i ][ 'name' ] }`, data_option[ i ][ 'value' ] );
-            // tr.append( `<input type="hidden" class="item_element" data-item="${ data_option[ i ][ 'name' ] }" data-value="${ data_option[ i ][ 'value' ] }">` );
         }
-        // hide modal
+        // 項目名のテキスト交換
+        if ( lable ) lable.html( v );
+        // モーダル非表示
         modal.find( '.btn-secondary' ).trigger( 'click' );
     }
 
@@ -225,7 +240,7 @@ class BuildModalContent
 
         var self = this;
 
-        // ok btn
+        // 「　OK ・　同意する　」btn
         this.__modal__.find( '.btn-primary' ).unbind( 'click' );
         this.__modal__.find( '.btn-primary' ).on( 'click', function ()
         {

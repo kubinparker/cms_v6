@@ -339,7 +339,13 @@ function handleSaveButton ( editor )
 
 $( function ()
 {
-    /**
+    
+
+    if ( $( document ).find( '#editor' ).length == 0 )
+    {
+        handleSaveButton( false );
+    }else{
+        /**
          * CKeditor 設定
          */
     DecoupledEditor
@@ -449,10 +455,6 @@ $( function ()
         {
             // console.log( error );
         } );
-
-    if ( $( document ).find( '#editor' ).length == 0 )
-    {
-        handleSaveButton( false );
     }
 
 } );

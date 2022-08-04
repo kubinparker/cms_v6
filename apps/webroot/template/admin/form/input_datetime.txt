@@ -2,7 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <?= $this->Form->control("{item_name}", [ 'type'=>'datetime-local', 'label' => false, 'value' => is_null($entity->{item_name}) ? "" : str_replace(" ", 'T', $entity->{item_name}->format('Y-m-d H:i'))])?>
+            <?= $this->Form->control("{item_name}", [ 'type'=>'datetime-local', 'label' => false, 'value' => is_string($entity->{item_name}) ? $entity->{item_name} : (is_null($entity->{item_name}) ? "" : str_replace(" ", 'T', $entity->{item_name}->format('Y-m-d H:i')))])?>
             {0}
         </div>						
     </td>

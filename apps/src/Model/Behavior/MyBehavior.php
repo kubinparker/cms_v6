@@ -51,15 +51,25 @@ class MyBehavior extends Behavior
     public $template_setting = [];
 
     static $TEMPLATE_SETTING = [
-        'item_label', 'item_name', 'item_text', 'item_min_length', 'item_max_length', 'accept'
+        'item_label', 'item_name', 'item_text', 'item_min_length', 'item_max_length', 'accept', 'item_require'
     ];
+
+    static $SPAN_REQUIRE = '<span class="attent">必 須</span>';
 
     public $model_setting = [];
 
     static $MODEL_SETTING = [
-        'item_require', 'item_unique', 'item_type', 'item_min_length', 'item_max_length', 'accept', 'item_size'
+        'item_require', 'item_unique', 'item_type', 'item_min_length', 'item_max_length', 'accept'
     ];
 
+    public $table_setting = [];
+
+    static $TABLE_SETTING = [
+        'INT(11)' => ['radio_inline', 'radio', 'checkbox_inline', 'checkbox', 'selectbox'],
+        'TEXT' => ['textarea_editor', 'textarea', 'input_text'],
+        'DATE' => ['input_date'],
+        'DATETIME' => ['input_datetime']
+    ];
 
     public $default_options = [
         'label' => [
@@ -127,7 +137,6 @@ class MyBehavior extends Behavior
         'file' => [
             "item_label" => "File",
             "item_require" => 0,
-            "item_size" => "デフォルト",
             "item_checkbox_pdf" => ".pdf",
             "item_checkbox_doc" => ".doc",
             "item_checkbox_docx" => ".docx",
@@ -139,7 +148,6 @@ class MyBehavior extends Behavior
         'images' => [
             "item_label" => "Image",
             "item_require" => 0,
-            "item_size" => "デフォルト",
             "item_checkbox_jpg" => ".jpg",
             "item_checkbox_jpeg" => ".jpeg",
             "item_checkbox_gif" => ".gif",
@@ -281,6 +289,7 @@ class MyBehavior extends Behavior
     {
         $this->__convertSettingForTemplate();
         $this->__convertSettingForModel();
+        $this->__convertSettingForTable();
     }
 
 
@@ -458,14 +467,35 @@ class MyBehavior extends Behavior
                             );
                         }
                         break;
-
-                    case 'item_size':
-                        break;
                 }
             }
         }
 
-        $this->model_setting['validate'] = empty($options) ? '' : __('$validator->{0};', str_replace('->->', '->', implode('->', $options)));
+        $this->model_setting['validate'] = empty($options) ? '' : str_replace('->->', '->', __('$validator->{0};', implode('->', $options)));
+    }
+
+
+    protected function __convertSettingForTable()
+    {
+        foreach ($this->data_item as $i => $item) {
+            if (!isset($this->item_options[$i])) continue;
+
+            $col = '`{item_name}` {type} {require} COMMENT "{item_label}",';
+            $options = $this->item_options[$i];
+
+            foreach (self::$TABLE_SETTING as $_type => $_item) {
+                if (!in_array($item, $_item, true)) continue;
+
+                if ($_type == 'TEXT' && isset($options['item_max_length']) && intval($options['item_max_length']) > 0)
+                    $_type = intval($options['item_max_length']) <= 255 ? __('VARCHAR({0})', intval($options['item_max_length'])) : $_type;
+
+                $options['type'] = $_type;
+            }
+
+            $options['require'] = isset($options['item_require']) && intval($options['item_require']) == 1 ? 'NOT NULL' : 'NULL DEFAULT NULL';
+
+            $this->table_setting[] = @__($col, $options);
+        }
     }
 
 
@@ -581,7 +611,7 @@ class MyBehavior extends Behavior
         $this->path[] = $file;
 
         // table
-        $table = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/table.txt', true), $this->slug);
+        $table = __(file_get_contents(DEFAULT_ADMIN_TEMP . 'model/table.txt', true), [$this->slug, 'sql_more' => implode('', $this->table_setting)]);
         $connection = ConnectionManager::get('default');
         $connection->execute($table);
 
@@ -589,13 +619,13 @@ class MyBehavior extends Behavior
         $folder = APP . 'Template/Admin/' . $slug . '/';
         if (!is_dir($folder)) (new Folder())->create($folder, 0777);
 
-
         // edit file content
         $edit_content = '';
         if ($this->data_item) {
             foreach ($this->data_item as $i => $item) {
                 $value = isset($this->template_setting[$i]) ? $this->template_setting[$i] : [];
                 $value[0] = '';
+                $value['item_label'] .= (isset($value['item_require']) && intval($value['item_require']) == 1) ? self::$SPAN_REQUIRE : '';
                 $edit_content .= @__(file_get_contents(DEFAULT_ADMIN_TEMP . 'form/' . $item . '.txt', true), $value);
             }
         }

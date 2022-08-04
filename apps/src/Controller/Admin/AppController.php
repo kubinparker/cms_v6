@@ -134,7 +134,7 @@ class AppController extends BaseController
         if (!$this->request->getParam('prefix')) return true;
 
         // Only admins can access admin functions
-        if ($this->request->getParam('prefix') === 'admin')  return (bool)($this->isLogin());
+        if ($this->request->getParam('prefix') === 'admin')  return (bool) ($this->isLogin());
 
         // Default deny
         return false;
@@ -171,6 +171,7 @@ class AppController extends BaseController
         if ($this->request->is(['post', 'put']) && $this->request->getData()) {
             if ($saveMany) $data = $this->{$this->modelName}->patchEntity($data, $this->request->getData(), ['fields' => $saveMany]);
             else $data = $this->{$this->modelName}->patchEntity($data, $this->request->getData());
+
             $_data = $data;
             if (empty($data->getErrors())) {
                 if ($this->{$this->modelName}->save($data)) {
@@ -181,6 +182,10 @@ class AppController extends BaseController
                         exit();
                     }
                     if ($redirect) $this->redirect($redirect);
+                    $this->Flash->set('保存しました。', [
+                        'key' => 'success',
+                        'element' => 'error'
+                    ]);
                 }
             } else {
                 $this->set('list_errors', $data->getErrors());
@@ -222,18 +227,25 @@ class AppController extends BaseController
         if ($data) {
             $this->{$this->modelName}->delete($data);
 
-            $files = glob(WWW_ROOT . 'upload/' . $this->modelName . '/' . $id . '/files/*'); // file
+            $dir = WWW_ROOT . 'upload/' . $this->modelName . '/' . $id;
+
+            $files = glob($dir . '/files/*'); // file
             foreach ($files as $file) { // iterate files
                 if (is_file($file)) {
                     unlink($file); // delete file
                 }
             }
-            $files = glob(WWW_ROOT . 'upload/' . $this->modelName . '/' . $id . '/images/*'); // image
+            $files = glob($dir . '/images/*'); // image
             foreach ($files as $file) { // iterate files
                 if (is_file($file)) {
                     unlink($file); // delete file
                 }
             }
+            if (is_dir($dir . '/files')) rmdir($dir . '/files');
+
+            if (is_dir($dir . '/images')) rmdir($dir . '/images');
+            if (is_dir($dir)) rmdir($dir);
+
             $id = null;
         }
 
