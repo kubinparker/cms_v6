@@ -18,6 +18,7 @@
 					<li class="radio_inline"><span>Radio inline（<b>0</b>）</span><span class="icon plus_icon" onclick="addItem(this,'radio_inline')">+</span></li>
 					<li class="_file"><span>File（<b>0</b>）</span><span class="icon plus_icon" onclick="addItem(this,'file')">+</span></li>
 					<li class="_images"><span>Images（<b>0</b>）</span><span class="icon plus_icon" onclick="addItem(this,'images')">+</span></li>
+					<li><input type="checkbox" name="sort" value="1" id="sort"><label for="sort">一覧用並び順</label></li>
 				</ul>
 			</div>
 			<div class="list-box-item-content">

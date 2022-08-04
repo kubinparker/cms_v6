@@ -35,6 +35,8 @@ class MyBehavior extends Behavior
     public $is_front = false;
     public $is_admin = false;
 
+    public $is_sort = false;
+
     public $is_list_page = false;
     public $is_detail_page = false;
 
@@ -191,6 +193,12 @@ class MyBehavior extends Behavior
     }
 
 
+    public function setIsSort($sort)
+    {
+        $this->is_sort = $this->is_admin && !is_null($sort) && intval($sort) == 1;
+    }
+
+
     public function setIsListPage($bool)
     {
         $this->is_list_page = $bool;
@@ -248,6 +256,8 @@ class MyBehavior extends Behavior
 
         $this->setIsFront($entity->management_part && in_array(strval($this::$FRONT), $entity->management_part, true));
         $this->setIsAdmin($entity->management_part && in_array(strval($this::$ADMIN), $entity->management_part, true));
+
+        $this->setIsSort($entity->sort);
 
         $this->setIsListPage($entity->font_type_options_0 && in_array(strval($this::$LIST_PAGE), $entity->font_type_options_0, true));
         $this->setIsDetailPage($entity->font_type_options_0 && in_array(strval($this::$DETAIL_PAGE), $entity->font_type_options_0, true));
@@ -470,8 +480,7 @@ class MyBehavior extends Behavior
                 }
             }
         }
-
-        $this->model_setting['validate'] = empty($options) ? '' : str_replace('->->', '->', __('$validator->{0};', implode('->', $options)));
+        $this->model_setting['validate'] = (implode('->', $options) == '') ? '' : str_replace('->->', '->', __('$validator->{0};', implode('->', $options)));
     }
 
 
@@ -495,6 +504,10 @@ class MyBehavior extends Behavior
             $options['require'] = isset($options['item_require']) && intval($options['item_require']) == 1 ? 'NOT NULL' : 'NULL DEFAULT NULL';
 
             $this->table_setting[] = @__($col, $options);
+        }
+
+        if ($this->is_sort) {
+            $this->table_setting[] = '`position` INT(11) UNSIGNED NOT NULL DEFAULT "0" COMMENT "並び順",';
         }
     }
 
