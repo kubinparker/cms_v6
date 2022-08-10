@@ -18,7 +18,7 @@
 
 <div class="content_inr">
 	<div class="box config">
-		<h3>ページ作成</h3>
+		<h3 class="box_h3">ページ作成</h3>
 		<?php $this->Form->setTemplates([
 			'nestingLabel' => '{{hidden}}{{input}}<label{{attrs}}>{{text}}</label>',
 			'formGroup' => '{{input}}{{label}}',

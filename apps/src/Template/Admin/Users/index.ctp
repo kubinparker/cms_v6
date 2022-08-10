@@ -10,7 +10,7 @@
 
 <div class="content_inr">
 	<div class="box">
-		<h3 class="box__caption--count"><span>登録一覧</span><span class="count"><?= $total_count ?>件の登録</span></h3>
+		<h3 class="box__caption--count box_h3"><span>登録一覧</span><span class="count"><?= $total_count ?>件の登録</span></h3>
 		<div class="btn_area" style="margin-top:10px;"><a href="<?= $this->Url->build(['action' => 'edit']); ?>" class="btn_confirm btn_post">新規登録</a></div>
 		<div class="table_area">
 			<table class="table__list" style="table-layout: fixed;">

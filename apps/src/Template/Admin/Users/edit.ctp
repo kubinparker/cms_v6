@@ -15,7 +15,7 @@
 
 <div class="content_inr">
 	<div class="box">
-		<h3><?= (@$data->id > 0) ? '編集' : '新規登録'; ?></h3>
+		<h3 class="box_h3"><?= (@$data->id > 0) ? '編集' : '新規登録'; ?></h3>
 		<?= $this->Flash->render('post_fail') ?>
 		<div class="table_area form_area">
 			<?= $this->Form->create($entity, ['type' => 'file', 'id' => 'frm-form']); ?>

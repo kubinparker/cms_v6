@@ -46,7 +46,7 @@
 
 <div class="content_inr">
     <div class="box">
-        <h3 class="box__caption--count"><span>作成ファイル詳細</span></h3>
+        <h3 class="box__caption--count box_h3"><span>作成ファイル詳細</span></h3>
 
         <div class="table_area">
             <?php

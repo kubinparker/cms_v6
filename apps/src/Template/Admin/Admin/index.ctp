@@ -38,38 +38,23 @@
 	<?php foreach ($user_menu_list as $title => $menu) : ?>
 		<?php if (empty($menu)) continue; ?>
 		<div class="box">
-			<h3 style="margin-bottom:20px;"><?= $title == '設定' ? '<a href="/admin/configs/clear-config">設定</a>' : html_decode($title); ?></h3>
+			<h3 style="margin-bottom:20px;" class="box_h3"><?= $title == '設定' ? '<a href="/admin/configs/clear-config">設定</a>' : html_decode($title); ?></h3>
 			<div class="row row-cols-4">
-				<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
-					<div class="col">
-						<?php foreach ($menu as $slug => $name) : ?>
+				<?php foreach ($menu as $slug => $name) : ?>
+					<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;width: 280px!important;">
+						<div class="col">
 							<?= $this->Html->link(
 								$name,
 								['prefix' => 'admin', 'controller' => strtolower($slug), 'action' => 'index'],
 								['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
 							); ?>
-						<?php endforeach; ?>
+						</div>
 					</div>
-				</div>
+				<?php endforeach; ?>
 			</div>
 		</div>
 	<?php endforeach; ?>
 
-
-	<div class="box">
-		<h3 style="margin-bottom:20px;">コンテンツ</h3>
-		<div class="row row-cols-4">
-			<div class="btn_area" style="text-align:left;margin-left: 20px;margin-bottom: 10px !important;">
-				<div class="col">
-					<?php foreach ($config_list as $menu) : ?>
-						<?= $this->Html->link(
-							$menu->title,
-							['prefix' => 'admin', 'controller' => strtolower($menu->slug), 'action' => 'index'],
-							['class' => 'btn_send btn_search', 'style' => 'width:130px;text-align:center;']
-						); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</div>
-	</div>
+	<?= $this->element('menu_home', ['h3' => '日本語版', 'config_' => $config_list]); ?>
+	<?= $this->element('menu_home', ['h3' => 'ENGLISH', 'config_' => $config_list_en]); ?>
 </div>

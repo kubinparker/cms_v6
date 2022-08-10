@@ -1,5 +1,5 @@
 <div class="box box-id-1 display_none">
-	<h3>管理側</h3>
+	<h3 class="box_h3">管理側</h3>
 	<div class="table_area form_area">
 		<div class="admin-box">
 			<div class="list-box-item active">
