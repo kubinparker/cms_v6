@@ -18,7 +18,7 @@ $datas = $$slug->toArray();
 
 <div class="content_inr">
 	<div class="box">
-		<h3 class="box__caption--count">
+		<h3 class="box__caption--count box_h3">
             <span>登録一覧</span>
             <span class="count"><?= $count?>件の登録</span>
         </h3>

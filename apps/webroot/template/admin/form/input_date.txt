@@ -2,7 +2,7 @@
     <td>{item_label}</td>
     <td>
         <div>
-            <?= $this->Form->control("{item_name}", ['type'=>'date', 'label' => false])?>
+            <input type="date" name="{item_name}" value="<?= is_string($entity->{item_name}) ? $entity->{item_name} : (is_null($entity->{item_name}) ? '' :  $entity->{item_name}->format('Y-m-d')) ?>">
             {0}
         </div>						
     </td>

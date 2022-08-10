@@ -30,11 +30,14 @@ use Cake\ORM\Entity;
  */
 class AppController extends Controller
 {
-
     const OS_UNKNOWN = 1;
     const OS_WIN = 2;
     const OS_LINUX = 3;
     const OS_OSX = 4;
+
+    public $helpers = [
+        'Paginator' => ['templates' => 'paginator-templates']
+    ];
     /**
      * Initialization hook method.
      *
@@ -85,14 +88,23 @@ class AppController extends Controller
 
         $prefix = $this->request->getParam('prefix');
 
-
+        $is_en = $this->checkLang();
         if ($prefix === 'admin') {
             $this->auth_storage_key = 'Auth.Admin';
             $this->viewBuilder()->setLayout('common');
         } else {
-
-            $this->viewBuilder()->setLayout('simple');
+            $this->viewBuilder()->setLayout($is_en ? 'default_en' : 'default');
         }
+    }
+
+
+    protected function checkLang()
+    {
+        $url = $this->request->getRequestTarget();
+        $split_url = explode('/', $url);
+
+        $this->set('is_en', isset($split_url[1]) && $split_url[1] == 'en');
+        return isset($split_url[1]) && $split_url[1] == 'en';
     }
 
 
@@ -144,6 +156,7 @@ class AppController extends Controller
             $mapReduce->emit($table, $key);
         };
 
+
         $reducer = function ($table, $key, $mapReduce) {
             $mapReduce->emit($table, $key);
         };
@@ -178,8 +191,10 @@ class AppController extends Controller
      * */
     protected function _detail($id = null, $cond = [], $options = [])
     {
-        $cond = empty($cond) && !is_null($id) ? [$this->modelName . '.id' => $id] : $cond;
+        unset($cond['id']);
+        unset($cond[$this->modelName . '.id']);
 
+        $cond[$this->modelName . '.id'] = $id;
         if (empty($cond)) return null;
 
         $modelName = $this->modelName;
@@ -227,8 +242,8 @@ class AppController extends Controller
             ->find('all', $options)
             ->mapReduce($mapper, $reducer);
 
-        $assoctiation = $this->{$this->modelName}->associations()->keys();
-        if ($assoctiation) $data = $data->contain($assoctiation);
+        // $assoctiation = $this->{$this->modelName}->associations()->keys();
+        // if ($assoctiation) $data = $data->contain($assoctiation);
         $data = $data->first();
 
         $this->set(compact('data'));
@@ -277,7 +292,6 @@ class AppController extends Controller
             }
         ];
     }
-
 
 
     protected function setList()

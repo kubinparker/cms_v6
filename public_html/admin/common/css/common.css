@@ -738,7 +738,7 @@ header .status span.username em {
 	margin: 0 auto;*/
 }
 
-#content .content_inr h2 {
+#content .content_inr h2.box_h2 {
 	font-size: 2.2rem;
 	padding: 20px 40px;
 }
@@ -759,8 +759,9 @@ header .status span.username em {
 	margin-top: 35px;
 }
 
-#content .content_inr .box2 h3,
-#content .content_inr .box h3 {
+#content .content_inr .box2 h3.box_h3,
+#content .content_inr .box h3.box_h3,
+#content .content_inr .box h3.login__caption {
 	background: #297ac6;
 	font-size: 1.2rem;
 	color: #fff;

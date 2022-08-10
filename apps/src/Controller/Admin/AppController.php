@@ -182,10 +182,6 @@ class AppController extends BaseController
                         exit();
                     }
                     if ($redirect) $this->redirect($redirect);
-                    $this->Flash->set('保存しました。', [
-                        'key' => 'success',
-                        'element' => 'error'
-                    ]);
                 }
             } else {
                 $this->set('list_errors', $data->getErrors());
@@ -293,7 +289,7 @@ class AppController extends BaseController
         if ($data = $this->_detail($id)) {
             $status = $data->status != 'publish' ? 'publish' : 'draft';
             $model = $this->{$this->modelName};
-            $model->updateAll([$model->aliasField('status') => $status], [$model->aliasField($model->getPrimaryKey()) => $id]);
+            $model->updateAll(['status' => $status], [$model->aliasField($model->getPrimaryKey()) => $id]);
         }
         if ($redirect) $this->redirect($redirect);
     }
@@ -438,7 +434,7 @@ class AppController extends BaseController
         }
         return $return;
     }
-    
+
 
     public function convert_img($size, $source, $dist, $method = 'fit')
     {
@@ -497,7 +493,11 @@ class AppController extends BaseController
         $role = @$this->Session->read($this->auth_storage_key)['role'];
 
         $list['config_list'] = $this->loadModel('configs')->find('all')
-            ->where(['is_default !=' => self::DEFAULT_CONFIG])
+            ->where(['is_default !=' => self::DEFAULT_CONFIG, 'lang' => 'jp'])
+            ->toArray();
+
+        $list['config_list_en'] = $this->loadModel('configs')->find('all')
+            ->where(['is_default !=' => self::DEFAULT_CONFIG, 'lang' => 'en'])
             ->toArray();
 
         $list['role'] = $role;
@@ -509,13 +509,11 @@ class AppController extends BaseController
         ];
 
         if ($this->isLogin() && in_array($role, [User::ROLE_DEVELOP], true)) {
-            $list['user_site_list']['users'] = 'ユーザ管理';
             $list['user_menu_list']['設定']['configs'] = 'コンテンツ設定';
             $list['user_menu_list']['管理']['users'] = 'ユーザ管理';
         } else 
         if ($this->isLogin() && in_array($role, [User::ROLE_ADMIN], true)) {
             unset($list['role_list'][User::ROLE_DEVELOP]);
-            $list['user_site_list']['users'] = 'ユーザ管理';
             $list['user_menu_list']['管理']['users'] = 'ユーザ管理';
         }
         if ($this->Session->check('code_upload')) $this->{$this->modelName}->code_upload = $this->Session->read('code_upload');

@@ -10,6 +10,10 @@
     cursor: pointer;
 }
 
+#editor ul li {
+    list-style: inside;
+}
+
 
 a.is_file {
     position: relative;
@@ -51,18 +55,18 @@ a.is_file:before {
     left: 15px;
 }
 
-.row_file.data_image{
+.row_file.data_image {
     position: relative;
 }
 
-.row_file.data_image span{
+.row_file.data_image span {
     position: absolute;
     top: 0;
     left: 0;
     margin: 0;
 }
 
-.row_file.data_image img{
+.row_file.data_image img {
     max-width: 300px;
     border: 1px solid #ccc;
 }

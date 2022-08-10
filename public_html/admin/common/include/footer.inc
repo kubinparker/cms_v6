@@ -1,3 +1,3 @@
 <footer>
-  <div class="copy">&copy; CATERS Inc. All Rights Reserved.</div>
+  <div class="copy">&copy; Future Spirits Co,. Ltd.</div>
 </footer>

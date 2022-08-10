@@ -20,7 +20,7 @@
 
 <div class="content_inr">
 	<div class="box config">
-		<h3><?= $entity->isNew() ? '新規登録' : '更新' ?></h3>
+		<h3 class="box_h3"><?= $entity->isNew() ? '新規登録' : '更新' ?></h3>
         <div class="table_area form_area">
             <?php $this->Form->setTemplates(['dateWidget' => '<input type="date" name="「name」" value="「value」"「attrs」>']) ?>
             <?= $this->Form->create($entity, ['type' => 'file', 'id' => 'frm-form']); ?>

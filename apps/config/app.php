@@ -330,6 +330,17 @@ return [
         ],
     ],
 
+
+    'Trust' => [
+        'Admin' => [
+            'login_status' => [
+                'controller' => [
+                    'Admin' => ['index', 'logout']
+                ],
+            ]
+        ]
+    ],
+
     /*
      * Configures logging options
      */
@@ -401,5 +412,12 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+        'timeout' => 720,
+        'ini' => [
+            'session.cookie_lifetime' => 0,
+            'session.gc_maxlifetime' => 60 * 60 * 6,
+            'session.gc_probability' => 1,
+            'session.gc_divisor' => 100,
+        ]
     ],
 ];

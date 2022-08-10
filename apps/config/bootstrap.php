@@ -60,6 +60,49 @@ use Cake\Utility\Security;
 //         ->toServer();
 // }
 
+function is_included_host($targets = array())
+{
+    foreach ($targets as $target) {
+        if (strpos(env('HTTP_HOST'), $target) !== false) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+function is_included_docRoot($targets = array())
+{
+    foreach ($targets as $target) {
+        if (strpos(env('SCRIPT_FILENAME'), $target) !== false) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+//DBやdebugの切替
+function get_config_name()
+{
+
+    //ドメインでConfigを切り替える。
+    if (is_included_host(['localhost', 'local']) || file_exists(CONFIG . 'app_local.php')) {
+        return 'app_local';
+    }
+
+    //ドメインでConfigを切り替える。
+    if (is_included_host(['demo-v5m', 'dev', 'caters', 'test'])) {
+        return 'app_develop';
+    }
+    // //ドメインがない(コンソール処理)場合はドキュメントルートのパスで切り替える。
+    if (!env('HTTP_HOST') && is_included_docRoot(['_test'])) {
+        return 'app_develop';
+    }
+    return 'app_honban';
+}
+
+
 /*
  * Read configuration file and inject configuration into various
  * CakePHP classes.
@@ -72,6 +115,9 @@ use Cake\Utility\Security;
 try {
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
+
+    //環境ごとにDBやdebugを切り替える。
+    Configure::load(get_config_name(), 'default');
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
 }
@@ -80,9 +126,9 @@ try {
  * Load an environment local configuration file to provide overrides to your configuration.
  * Notice: For security reasons app_local.php will not be included in your git repo.
  */
-if (file_exists(CONFIG . 'app_local.php')) {
-    Configure::load('app_local', 'default');
-}
+// if (file_exists(CONFIG . 'app_local.php')) {
+//     Configure::load('app_local', 'default');
+// }
 
 /*
  * When debug = true the metadata cache should only last
@@ -210,13 +256,13 @@ $timestamp->useImmutable();
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
 
-if (Configure::read('debug')) {
-    Configure::write('DebugKit.forceEnable', true);
-    \App\Application::addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true]);
-}
+// if (Configure::read('debug')) {
+//     Configure::write('DebugKit.forceEnable', true);
+//     \App\Application::addPlugin('DebugKit', ['bootstrap' => true, 'routes' => true]);
+// }
 
-// Plugin::load('Admin');
-\App\Application::addPlugin('DebugKit');
+// // Plugin::load('Admin');
+// \App\Application::addPlugin('DebugKit');
 
 // define
 define('PUBLISH', 'publish');
